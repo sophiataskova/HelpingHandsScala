@@ -1,17 +1,22 @@
-package rest
+package rest.controller
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
+import javax.ws.rs.{POST, GET, Path, Produces}
 import javax.ws.rs.core.MediaType
+
+import com.mongodb.util.JSON
 
 @Path("/hello")
 class  ResourcesController {
 
+  @POST
+  @Produces(Array(MediaType.APPLICATION_JSON))
+  def registerUser(): JSON={
+
+
+    new JSON()
+  }
 
   // This method is called if TEXT_PLAIN is request
-
-
   @GET
   @Produces(Array(MediaType.TEXT_PLAIN))
   def sayPlainTextHello() :String= {

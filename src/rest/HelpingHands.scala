@@ -7,6 +7,8 @@ import java.net.URI
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory
 import java.io.IOException
 
+import rest.controller.ResourcesController
+
 @throws(classOf[IOException])
 @Path("/")
 object HelpingHands extends App{
