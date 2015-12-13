@@ -13,17 +13,16 @@
 </description>
 
     <servlet>
-        <servlet-name>HelloWorld</servlet-name>
+        <servlet-name>HelpingHands</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-        <!--<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>-->
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>example</param-value>
+            <param-value>rest.controller</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>HelloWorld</servlet-name>
+        <servlet-name>HelpingHands</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
