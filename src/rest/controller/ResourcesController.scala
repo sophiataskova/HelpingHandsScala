@@ -1,40 +1,74 @@
 package rest.controller
 
-import javax.ws.rs.{POST, GET, Path, Produces}
-import javax.ws.rs.core.MediaType
+import javax.ws.rs._
+import javax.ws.rs.core.Response
 
-import com.mongodb.util.JSON
+import rest.model.{UserLogin, UserRegistration}
 
-@Path("/hello")
-class  ResourcesController {
+
+@Path("/")
+class ResourcesController {
+
+  val userRegistration = new UserRegistration()
+  val userLogin = new UserLogin()
 
   @POST
-  @Produces(Array(MediaType.APPLICATION_JSON))
-  def registerUser(): JSON={
+  @Path("/register")
+  @Consumes(Array("application/json"))
+  @Produces(Array("application/json"))
+  def registerUser(request: String): Response = {
 
+    userRegistration.setMap(convertToMap(request))
 
-    new JSON()
+    val responseMessage = userRegistration.register()
+
+    if (responseMessage.matches("[a-zA-z]* Registered")) {
+      return Response.status(Response.Status.OK).entity("{\"message\" :\"" + responseMessage + "\" }").build()
+    }
+
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" : \"Registration Unsuccessful\" }").build()
   }
 
-  // This method is called if TEXT_PLAIN is request
-  @GET
-  @Produces(Array(MediaType.TEXT_PLAIN))
-  def sayPlainTextHello() :String= {
-    "Hello Jersey"
+
+  @POST
+  @Path("/login")
+  @Consumes(Array("application/json"))
+  @Produces(Array("application/json"))
+  def loginUser(request: String): Response = {
+
+    userLogin.setMap(convertToMap(request))
+
+    val responseMessage = userLogin.login()
+
+    if (responseMessage.matches("Student Login Successful")) {
+      return Response.status(Response.Status.OK).entity("{\"message\" :\"" + responseMessage + "\" }").build()
+    }
+
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + responseMessage + "\" }").build()
+
   }
 
-  // This method is called if XML is request
-  @GET
-  @Produces(Array(MediaType.TEXT_XML))
-  def sayXMLHello(): String = {
-    "<?xml version=\"1.0\"?>" + "<hello> Hello Jersey" + "</hello>"
+
+  private def convertToMap(request: String): Map[String, String] = {
+
+    var convertedMap: Map[String, String] = Map[String, String]()
+
+    val req = request.filter(_ >= ' ').replaceAll(" ", "")
+
+    val untidyMap = req.substring(1, req.length - 1)
+      .split(",")
+      .map(_.split(":"))
+      .map { case Array(k, v) => (k.substring(1, k.length - 1), v.substring(1, v.length - 1)) }
+      .toMap
+
+    for (x <- untidyMap) {
+
+      convertedMap += x._1 -> x._2
+
+    }
+
+    convertedMap
   }
 
-  // This method is called if HTML is request
-  @GET
-  @Produces(Array(MediaType.TEXT_HTML))
-  def sayHtmlHello():String= {
-    "<html> " + "<title>" + "Hello Jersey" + "</title>" + "<body><h1>" + "Hello Jersey" + "</body></h1>" + "</html> "
-  }
 }
 

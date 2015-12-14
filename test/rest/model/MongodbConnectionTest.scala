@@ -1,23 +1,22 @@
 package rest.model
 
-import org.junit.{Before, Test}
+import org.junit.{After, Before, Test}
 
-import scala.collection.mutable.HashMap
 
 class MongodbConnectionTest {
   
   val mongodb= new MongodbConnection()
 
-  val newObj = new HashMap[String, String]()
+  var newObj:Map[String,String] = Map[String, String]()
   
   @Before
-  def init {  
+  def init() {
     newObj += "name" -> "apurv"
     newObj += "username" -> "apurvnerlekar"
     newObj += "password" -> "password"
   }
     @Test
-    def itShouldInsertDataIntoMongoDb{
+    def itShouldInsertDataIntoMongoDb() {
       //given   
       //when
       mongodb.insert(newObj,"adminUsers")
@@ -26,14 +25,23 @@ class MongodbConnectionTest {
     }
   
     @Test
-    def itShouldGetDataFromMongoDb {
+    def itShouldGetDataFromMongoDb() {
       //given
-      val expected ="{ \"_id\" : { \"$oid\" : \"566a9061c22871f0ac11308a\"} , \"username\" : \"apurvnerlekar\" , \"name\" : \"apurv\" , \"password\" : \"password\"}"
-
+//      val expected ="{ \"_id\" : { \"$oid\" : \"566a9061c22871f0ac11308a\"} , \"username\" : \"apurvnerlekar\" , \"name\" : \"apurv\" , \"password\" : \"password\"}"
+      mongodb.insert(newObj,"adminUsers")
       //when
       val list = mongodb.get(newObj,"adminUsers")
       
       //then
       assert(list(0).contains("\"name\" : \"apurv\""))
     }
+
+  @After
+  def clearDataFromDb() {
+    mongodb.dropAllDataFrom("adminUsers")
+    mongodb.dropAllDataFrom("studentUsers")
+    mongodb.dropAllDataFrom("ngoUsers")
+
+  }
+
 }

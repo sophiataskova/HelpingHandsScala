@@ -1,12 +1,12 @@
 package rest.model
 
-import org.junit.{Before, Test}
-
-import scala.collection.mutable.HashMap
+import org.junit.{After, Before, Test}
 
 class UserRegistrationTest {
 
-  var map: HashMap[String, String] = new HashMap[String, String]()
+  val userRegistration = new UserRegistration()
+
+  var map: Map[String, String] = Map[String, String]()
 
   @Before
   def init() {
@@ -25,12 +25,12 @@ class UserRegistrationTest {
   }
 
   @Test
-  def itShouldTakeMapOfUserDetailsForRegistrationAndCheckIfTheUserIsStudent {
+  def itShouldTakeMapOfUserDetailsForRegistrationAndCheckIfTheUserIsStudent() {
     //given
     map += "emailId" -> "apurvnerlekar@students.itu.edu"
     map.apply("userType") -> "student"
 
-    val userRegistration = new UserRegistration(map)
+    userRegistration.setMap(map)
     val expected = true
 
     //when
@@ -41,11 +41,12 @@ class UserRegistrationTest {
   }
 
   @Test
-  def itShouldTakeMapOfUserDetailsForRegistrationAndCheckIfTheUserIsAdmin {
+  def itShouldTakeMapOfUserDetailsForRegistrationAndCheckIfTheUserIsAdmin() {
     //given
     map += "emailId" -> "apurvnerlekar@itu.edu"
     map += "userType" -> "admin"
-    val userRegistration = new UserRegistration(map)
+
+    userRegistration.setMap(map)
     val expected = true
 
     //when
@@ -56,12 +57,12 @@ class UserRegistrationTest {
   }
 
   @Test
-  def itShouldTakeMapOfUserDetailsForRegistrationAndCheckIfTheUserIsNgo {
+  def itShouldTakeMapOfUserDetailsForRegistrationAndCheckIfTheUserIsNgo() {
     //given
     map += "emailId" -> "apurvnerlekar@gmail.com"
     map += "userType" -> "ngo"
 
-    val userRegistration = new UserRegistration(map)
+    userRegistration.setMap(map)
 
     val expected = true
 
@@ -74,12 +75,12 @@ class UserRegistrationTest {
   }
 
   @Test
-  def itShouldTakeMapOfUserDetailsForRegistrationAndRegisterStudent {
+  def itShouldTakeMapOfUserDetailsForRegistrationAndRegisterStudent() {
     //given
     map += "emailId" -> "apurvnerlekar@students.itu.edu"
     map += "userType" -> "student"
 
-    val userRegistration = new UserRegistration(map)
+    userRegistration.setMap(map)
 
     val expected = "Student Registered"
 
@@ -92,12 +93,12 @@ class UserRegistrationTest {
   }
 
   @Test
-  def itShouldTakeMapOfUserDetailsForRegistrationAndRegisterAdmin {
+  def itShouldTakeMapOfUserDetailsForRegistrationAndRegisterAdmin() {
     //given
     map += "emailId" -> "apurvnerlekar@itu.edu"
     map += "userType" -> "admin"
 
-    val userRegistration = new UserRegistration(map)
+    userRegistration.setMap(map)
 
     val expected = "Admin Registered"
 
@@ -107,14 +108,14 @@ class UserRegistrationTest {
     //then
     assert(actual == expected)
   }
- 
+
   @Test
-  def itShouldTakeMapOfUserDetailsForRegistrationAndRegisterNgo {
+  def itShouldTakeMapOfUserDetailsForRegistrationAndRegisterNgo() {
     //given
     map += "emailId" -> "apurvnerlekar@gmail.com"
     map += "userType" -> "ngo"
 
-    val userRegistration = new UserRegistration(map)
+    userRegistration.setMap(map)
 
     val expected = "Ngo Registered"
 
@@ -126,12 +127,12 @@ class UserRegistrationTest {
   }
 
   @Test
-  def itShouldTakeMapOfUserDetailsForRegistrationAndVerifyStudentDetails {
+  def itShouldTakeMapOfUserDetailsForRegistrationAndVerifyStudentDetails() {
     //given
     map += "emailId" -> "apurvnerlekar@students.itu.edu"
     map += "userType" -> "student"
 
-    val userRegistration = new UserRegistration(map)
+    userRegistration.setMap(map)
 
     val expected = true
 
@@ -141,4 +142,30 @@ class UserRegistrationTest {
     //then
     assert(actual == expected)
   }
+
+  @Test
+  def itShouldTakeMapOfUserDetailsForRegistrationAndCheckIfUserIsAlreadyRegistered() {
+    //given
+    map += "emailId" -> "apurvnerlekar@students.itu.edu"
+    map += "userType" -> "student"
+
+    userRegistration.setMap(map)
+
+    userRegistration.register()
+    val expected = false
+
+    //when
+    val actual = userRegistration.checkIfUserIsNotRegistered()
+
+    //then
+    assert(actual == expected)
+  }
+
+  @After
+  def clearAllRegisteredData() {
+    userRegistration.mongodbObject.dropAllDataFrom("studentUsers")
+    userRegistration.mongodbObject.dropAllDataFrom("adminUsers")
+    userRegistration.mongodbObject.dropAllDataFrom("ngoUsers")
+  }
+
 }
