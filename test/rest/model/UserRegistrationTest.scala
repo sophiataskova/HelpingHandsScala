@@ -21,6 +21,7 @@ class UserRegistrationTest {
     map += "securityQuestion" -> "what is your mothers maiden name"
     map += "answer" -> "wontTellYou"
     map += "userType" -> "student"
+    map += "lastLogin" -> ""
 
   }
 
