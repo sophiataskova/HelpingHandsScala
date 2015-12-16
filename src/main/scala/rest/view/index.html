@@ -538,7 +538,7 @@ $('#registrationForm').on('success.form.bv', function(e) {
 	 	var genderbackend = $('input[name=gender]').val();
 
 	 	var phonenumberbackend = $('input[name=phonenumber]').val();
-		var securityquestionbackend = $('input[name=securityquestion]').val();
+		var securityquestionbackend = $('input[name=question]').val();
 		var answerbackend = $('input[name=answer]').val();
 
 		var lastloginbackend = '';
@@ -560,7 +560,7 @@ $('#registrationForm').on('success.form.bv', function(e) {
 $.ajax({
 	type:'POST',
 	url:'http://localhost:8000/register',
-	contentType: "application/json",
+	//contentType: "application/json",
 	//crossDomain: true,
 
 	data:{
@@ -1018,14 +1018,14 @@ $('#resetForm').on('success.form.bv', function(e) {
 									<div class="col-md-6">
 										<div class=" input-group">
 											<input type='text' class="form-control"  name="emailstudent" id="email"
-												   type="email"><span class="input-group-addon">@students.itu.edu</span>
+												   ><span class="input-group-addon">@students.itu.edu</span>
 										</div></div>
 
 								</div>
 
 								<div class="form-group" id="emailngogroup">
 									<label class="col-md-4 control-label" >Email address<sup>*</sup></label>
-									<div class="col-md-6" id="emailngogroup">
+									<div class="col-md-6">
 										<input type="text" class="form-control" name="emailngo" />
 									</div>
 								</div>
@@ -1064,7 +1064,7 @@ $('#resetForm').on('success.form.bv', function(e) {
 								<div class="form-group">
 									<label class="col-md-4 control-label">Security Question<sup>*</sup></label>
 									<div class="col-md-6 selectContainer">
-										<select name="question" class="form-control" name="securityquestion">
+										<select name="question" class="form-control">
 											<option value=""></option>
 											<option value="q1">What is your Mother's maiden name?</option>
 										</select>
