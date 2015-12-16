@@ -1,0 +1,1440 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Helping Hands</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" media='screen'>
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" ></script>
+
+
+<!-- For Validation --> 
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
+
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js'></script>
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/additional-methods.js'></script>
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/additional-methods.min.js'></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js'></script>
+
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js'></script>
+
+
+
+
+</head>
+
+<script type="text/javascript">
+
+var icon = "";
+
+		var locations = [
+						 		{
+				                   "title": 'San Francisco',
+				                   "lat": '37.757815',
+				                   "lng": '-122.5076405',
+				                   "description": 'San Francisco'
+				               },
+								{
+				                   "title": 'Palo Alto',
+				                   "lat": '37.4257657',
+				                   "lng": '-122.2053905',
+				                   "description": 'Palo Alto'
+				               },
+								{
+				                   "title": 'Mountain View',
+				                   "lat": '37.4039351',
+				                   "lng": '-122.1513075',
+				                   "description": 'Mountain View'
+				               },
+								{
+				                   "title": 'Santa Clara',
+				                   "lat": '37.3625177',
+				                   "lng": '-121.9703761',
+				                   "description": 'Santa Clara'
+				               },
+				               {
+				                   "title": 'San Jose',
+				                   "lat": '37.3423983',
+				                   "lng": '-121.8990345',
+				                   "description": 'San Jose'
+				               },
+				               {
+				                   "title": 'Oakland',
+				                   "lat": '37.8031042',
+				                   "lng": '-122.2726887',
+				                   "description": 'Oakland'
+				               },
+				               
+				              
+				              
+				               ]
+		
+		var iconcolor=[
+		               'http://www.google.com/mapfiles/ms/micons/green-dot.png',
+		               'http://www.google.com/mapfiles/ms/micons/ltblue-dot.png',
+		               'http://www.google.com/mapfiles/ms/micons/red-dot.png',
+		               'http://www.google.com/mapfiles/ms/micons/yellow-dot.png',
+		               
+		               'http://www.google.com/mapfiles/ms/micons/orange-dot.png',
+		               'http://www.google.com/mapfiles/ms/micons/pink-dot.png',
+		               'http://www.google.com/mapfiles/ms/micons/purple-dot.png',
+		             
+		               ];
+		var marker, map;
+		var markers = [];
+		var uniqueId = 1;
+		var colorindex = 0;
+		var bounds = new google.maps.LatLngBounds();
+		var latlngbounds = new google.maps.LatLngBounds();
+		 var infoWindow = new google.maps.InfoWindow();
+var markerId;
+var myID;
+		function initialize() {
+			
+		  var mapOptions = {
+		    zoom: 9,
+		    center:new google.maps.LatLng(37.585192,-122.199926),
+		    disableDefaultUI: true,
+		    mapTypeControlOptions: google.maps.MapTypeId.ROADMAP
+		  };
+		  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+		  var marker = new google.maps.Marker({
+			   // position: new google.maps.LatLng(37.585192,-122.199926),
+			    map: map,
+			    title: "Center"
+			  });
+		
+		/*
+		  google.maps.event.addDomListener(window, 'resize', function() {
+			    map.setCenter(map.getCenter());
+			    alert('resize');
+			});
+		  */
+		}
+
+
+		function loadMarkers(markerindex, data) {
+		
+			var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+		 var marker = new google.maps.Marker({
+		    position: myLatlng,
+		    map: map,
+		    title: data.title
+		  });
+		
+		 markers[markerindex]=marker;
+		 
+		 if(colorindex<markers.length){
+		 iconFile = iconcolor[colorindex]; 
+		
+		 marker.setIcon(iconFile) ;
+		 colorindex++;
+		 }
+		 else
+			 {
+			 colorindex=0;
+			 iconFile = iconcolor[colorindex]; 
+				
+			 marker.setIcon(iconFile) ;
+			 colorindex++;
+			 }
+		
+		 
+	}
+		
+		
+
+
+		$(document).ready(function() {
+			
+			document.getElementById("usernamelogged").innerHTML = sessionStorage.getItem("loggedusername");
+			
+		  google.maps.event.addDomListener(window, 'load', initialize);
+		  
+		  $("#advsearchbutton").click(function(){
+			
+			  $("#advsearchcontainer").toggle("slow");  
+			
+			$('input:checkbox').removeAttr('checked');
+			
+			
+			  ClearAllMarkers();
+			
+			 
+		  });
+		  
+
+
+
+		  $("#sanfrancisco").click(function() {
+					 
+				        if($('#sanfrancisco').is(':checked')) {
+				        		    	
+				        	 loadMarkers(0, locations[0]);
+		
+						      
+				        } else {
+				        	
+				        	DeleteMarker(0); 
+				      
+				    		        }
+				       
+				        
+				    });
+
+			  $("#paloalto").click(function() {
+					 
+				        if($('#paloalto').is(':checked')) {
+				  
+						        	 loadMarkers(1,locations[1]);
+		
+						      
+				        } else {
+				           	DeleteMarker(1); 
+				        	
+				    		        }
+				       
+				        
+				    });
+
+			  $("#mountainview").click(function() {
+				        if($('#mountainview').is(':checked')) { 
+				
+						        	 loadMarkers(2,locations[2]);
+						      
+						      
+						       
+						      }
+				         else {
+				      
+				        	DeleteMarker(2); 
+				        	
+			
+				        }
+				        
+				    });
+
+			  $("#santaclara").click(function() {
+				        if($('#santaclara').is(':checked')) { 
+				        	
+						        	 loadMarkers(3,locations[3]);
+						        	
+						      
+						       
+						      }
+				         else {
+				        	
+				        	DeleteMarker(3); 
+				        	
+			
+				        }
+				        
+				    });
+
+				  $("#sanjose").click(function() {
+						 
+				        if($('#sanjose').is(':checked')) {
+				        
+						    	
+						        	 loadMarkers(4,locations[4]);
+						        	
+						      
+				        } else {
+				        	
+				        	DeleteMarker(4); 
+				        	
+				    		        }
+				       
+				        
+				    });
+				  
+			
+
+		  $("#oakland").click(function() {
+				        if($('#oakland').is(':checked')) { 
+				        	
+						        	 loadMarkers(5,locations[5]);
+						        	
+						    
+				        } else {
+				        	
+				        	DeleteMarker(5); 
+				        	
+				        }
+				        
+				    });
+				  
+		 
+				  
+
+		    function DeleteMarker(markerindex) {
+		        //Find and remove the marker from the Array
+		
+		        
+		         markers[markerindex].setMap(null);
+		    };
+		
+		    function ClearAllMarkers() {
+		    	
+		    	for (var markerindex = 0; markerindex < (markers.length); markerindex++) {
+		    	if(typeof markers[markerindex] !== 'undefined') {
+		    	    // does not exist
+		    		 markers[markerindex].setMap(null);
+		    	}
+		    	
+		    	}
+
+		  
+		  
+		    };
+		    
+		    $('.datepicker').datepicker({
+		         format: 'MM/DD/YYYY' ,  
+		         //    maxDate: new Date(currentMonth, currentDate, currentYear, 0, 0, 0, 0)
+		         //    autoclose: true
+		       });
+		    
+		    $('.datepicker').on('changeDate show', function(e) {
+		    	//alert('hrhr');
+	            // Validate the date when user change it
+	            $('#startdate')
+	                // Get the bootstrapValidator instance
+	                .data('bootstrapValidator')
+	                // Mark the field as not validated, so it'll be re-validated when the user change date
+	                //.updateStatus('meeting', 'NOT_VALIDATED', null)
+	                // Validate the field
+	                //.validateField('meeting');
+	                $('#createEventForm').bootstrapValidator('revalidateField', 'stardate');
+	                
+	            $('#enddate')
+                // Get the bootstrapValidator instance
+                .data('bootstrapValidator')
+                // Mark the field as not validated, so it'll be re-validated when the user change date
+                //.updateStatus('meeting', 'NOT_VALIDATED', null)
+                // Validate the field
+                //.validateField('meeting');
+                $('#createEventForm').bootstrapValidator('revalidateField', 'enddate');
+	        });
+	 
+
+		    $('#createEventForm').bootstrapValidator({
+		   		    	
+		   		        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+		   		        feedbackIcons: {
+		   		           valid: ' ',
+		   		            invalid: 'glyphicon glyphicon-remove',
+		   		            validating: 'glyphicon glyphicon-refresh',
+		   		            
+		   		        },
+		   		        
+		   		        fields: {
+		   		        	eventname: {
+		   		                validators: {
+		   		                    notEmpty: {
+		   		                        message: 'Please enter the name for the event.'
+		   		                    }	                    
+		   		                }
+		   		            },
+		   		            orgname : {
+		   		                validators: {
+		   		                    notEmpty: {
+		   		                        message: 'Please enter the organization name.'
+		   		                    }
+		   		                }
+		   		            },
+		   		            eventloc : {
+		   		                validators: {
+		   		                    notEmpty: {
+		   		                        message: 'Please enter the location.'
+		   		                    }
+		   		                }
+		   		            },
+		   		            
+		   		            eventdesc : {
+		   		                validators: {
+		   		                    notEmpty: {
+		   		                        message: 'Please enter the event description.'
+		   		                    }
+		   		                }
+		   		            },
+		   		         event_participantsreq: {
+			   	                validators: {
+			   	                    notEmpty: {
+			   	                        message: 'The number of participants required for the event is required.'
+			   	                    },
+				   	                integer: {
+				   	                          message: 'Please enter a valid integer.'
+				   	                 }
+				   	             
+			   	                }
+			   	            },
+		   		         
+		   		        
+		   	         startdate: {
+			                validators: {
+			                    notEmpty: {
+			                        message: 'The start date of the event is required'
+			                    },
+			                    date: {
+			                        format: 'YYYY/MM/DD',
+			                        message: 'The start date is not valid'
+			                    }
+			                }
+			            },
+			            enddate: {
+			                validators: {
+			                    notEmpty: {
+			                        message: 'The end date of the event is required'
+			                    },
+			                    date: {
+			                        format: 'YYYY/MM/DD',
+			                        message: 'The end date is not valid'
+			                    }
+			                }
+			            }
+		   		 
+		   		  
+		   		       
+
+		   		  	  }
+		   			  });
+		   		    
+		    
+		   
+		    $('#createEventForm').on('success.form.bv', function(e) {
+		    	//alert('rt1');
+		    	  // Prevent submit form
+		    	  e.preventDefault();
+
+		    	  var $form     = $(e.target);
+		    	    validator = $form.data('bootstrapValidator');
+		    	    // alert('rt2');
+		    	     
+		    	     $('#createEventForm').bootstrapValidator('resetForm', true);
+		    	     $('#button5').removeAttr('disabled'); 
+		    	     
+		
+		});
+		    
+	
+			
+			$('#createEventButton').click(function(){
+				alert('hi');
+				$('#createEventForm').bootstrapValidator('resetForm', true);
+				
+				});
+			
+			$('#button6').click(function(){
+				$('#createEventForm').bootstrapValidator('resetForm', true);
+				
+				});
+
+			
+			  $('#editProfileForm').bootstrapValidator({
+				  
+			  
+			        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+			        feedbackIcons: {
+			           valid: ' ',
+			            invalid: 'glyphicon glyphicon-remove',
+			            validating: 'glyphicon glyphicon-refresh',
+			            
+			        },
+			        
+			        fields: {
+			        	
+			        	firstname: {
+			               // message: 'The firstname is not valid',
+			                validators: {
+			                	
+			                    notEmpty: {
+			                        message: 'Please enter your first name.'
+			                    },
+			                  
+			                    regexp: {
+			                        regexp: /^[a-zA-Z_\.]+$/,
+			                        message: 'The firsname can only consist of alphabetical, underscore and period.'
+			                    },
+			               	           }
+			            },
+			            
+			        	lastname: {
+			             //   message: 'The lastname is not valid',
+			                validators: {
+			                    notEmpty: {
+			                        message: 'Please enter your lastname.'
+			                    },
+			                  
+			                    regexp: {
+			                        regexp: /^[a-zA-Z_\.]+$/,
+			                        message: 'The lastname can only consist of alphabetical, underscore and period.'
+			                    },
+			               	  }
+			            },
+			    
+			            username: {
+			              //  message: 'The username is not valid',
+			                validators: {
+			                    notEmpty: {
+			                        message: 'Please enter a username'
+			                    },
+			                    stringLength: {
+			                        min: 6,
+			                        max: 30,
+			                        message: 'The username must be more than 6 and less than 30 characters long'
+			                    },
+			                    regexp: {
+			                        regexp: /^[a-zA-Z0-9_\.]+$/,
+			                        message: 'The username can only consist of alphabets, number, dot and underscore'
+			                    },
+			                    different: {
+			                        field: 'password',
+			                        message: 'The username and password cannot be the same as each other'
+			                    },
+			                    
+			                }
+			            },
+			          
+			            password: {
+			                validators: {
+			                    notEmpty: {
+			                        message: 'Please enter your password'
+			                    },
+			                    different: {
+			                        field: 'username',
+			                        message: 'The password cannot be the same as username'
+			                    },
+			                stringLength: {
+			                        min: 8,
+			                        max:15,
+			                        message: 'The password must be between 8 and 15 characters.'
+			                    },
+			                   
+			                    regexp: {
+			                        regexp: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9].*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/,
+			                        
+			                        message:'Password should be a string that has at least 1 uppercase alphabet,'+
+			                        '1 lowercase alphabet, 2 digits and 1 special character.',
+			                    }
+			                   
+			                }
+			            },
+			            
+			                       
+			            gender: {
+			                validators: {
+			                    notEmpty: {
+			                        message: 'Please select your gender.'
+			                    }
+			                }
+			            },
+			            
+			            emailstudent: {
+			                validators: {
+			                    notEmpty: {
+			                        message: 'Please re-type the password'
+			                    },
+			                    regexp: {
+			                        regexp: /^[a-zA-Z0-9_\.]+$/,
+			                        
+			                        message:'The Student ID can consists of alphabets, number, dot and underscore only',
+			                    }
+			                   
+			                }
+			            },
+			            
+			            emailngo: {
+			                validators: {
+			                    notEmpty: {
+			                        message: 'Please re-type the password'
+			                    },
+			                    regexp: {
+			                        regexp: /^[-a-z0-9~!$%^&*_=+}{\?]+(\.[-a-z0-9~!$%^&*_=+}{\?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/,
+		          			
+			                        message:'Please enter a valid NGO Email ID',
+			                    }
+			                   
+			                }
+			            },
+			           
+			            
+			            
+			           phonenumber: {
+			                validators: {
+			                    notEmpty: {
+			                        message: 'Please enter your phone number'
+			                    },
+			                    stringLength: {
+			                        min: 10,
+			                        max:10,
+			                        message: 'The phone number must have at 10 digits.'
+			                    },
+			                   
+			                    regexp: {
+				                    regexp: /^[0-9]+$/,                    
+			                        message:'Phone number should not have alphabets',
+			                    } 
+			                   
+			                }
+			            },
+			            website: {
+			                validators: {
+			                	notEmpty: {
+			                        message: 'Please enter your website'
+			                    },
+			                  //  uri: {
+			                	  regexp:{
+			                		  regexp: /^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$/,
+			                	  
+			                        message: 'The website address is not valid'
+			                    }
+			                }
+			            },	
+			            organizationname:{
+			                validators: {
+			                	notEmpty: {
+			                        message: 'Please enter your organization name'
+			                    }	                
+			                }
+			            },
+			            description:{
+			                validators: {
+			                	notEmpty: {
+			                        message: 'Please enter a description of your organization'
+			                    }	                
+			                }
+			            },
+			            question: {
+			                validators: {
+			                    notEmpty: {
+			                        message: 'Please select your security question language.'
+			                    }
+			                }
+			            },
+			            answer: {
+			                validators: {
+			                    notEmpty: {
+			                        message: 'Please provide an answer for the security question.'
+			                    }
+			                }
+			            },
+			         
+			            }
+			 
+			  
+			    });
+
+			  
+			  $('#editProfileForm').on('success.form.bv', function(e) {
+				  // Prevent submit form
+				  e.preventDefault();
+
+				  alert('hi');
+				  var $form     = $(e.target);
+				     validator = $form.data('bootstrapValidator');
+				     
+				   
+				     $('#button7').removeAttr('disabled'); 
+			
+		  });
+				$('#button8').click(function(){
+					$('#editProfileForm').bootstrapValidator('resetForm', true);
+					
+					});
+				
+			  });
+
+</script>
+
+<style>
+body { padding-top: 25px; }
+
+html,
+body,
+.container.advsearch{
+ height: 83%;
+  max-width: none;
+  border-color:green;
+},
+
+#map-canvas {
+  height: 83%;
+  max-width: none;
+  position:relative;
+  overflow:hidden;
+  margin: 0px;
+  padding: 0px;
+    border-color:red;
+}
+
+.jumbotron{
+ padding:1em 1em;
+}
+
+.jbbg {
+background-color: green ;
+}
+
+
+#topnav{
+min-height:40px !important;
+background-color: darkgreen ;
+}
+
+.navbar-brand .nb{
+color: white;
+}
+
+#brand {
+  text-align: center; 
+  padding-top:60px;
+ }
+
+#brand h1{
+
+ color: white;
+    font-size: 40px;
+ 
+}
+.tooltip > .tooltip-inner {background-color: grey;}
+
+.has-success .form-control{ border-color:grey !important;}
+.has-success .form-control:focus { border-color:grey !important;}
+
+.has-success .control-label{ color:black !important;}
+
+.ui-datepicker-today {
+    background: #fcc !important;
+}
+
+#resetForm{
+ margin: 0 auto;
+    width:80% 
+}
+
+#modtit{
+padding-top:30px;
+text-align:center;
+}
+
+.close{
+ position:absolute;
+        top:10px;
+        right: 10px;
+        font-weight: bold;
+}
+
+.c2{
+background-color:#01401e;
+color:white;
+margin-left: auto ;
+  margin-right: auto ;
+  border-radius: 6px;
+
+}
+
+
+
+#createEventButton, #advsearchbutton{
+background: green !important;
+color: white !important;
+   border-radius: 24px;
+}
+
+.places{
+background: pink !important;
+}
+
+.form-group.locmap{
+background: red !important;
+}
+
+#gear{
+font-size:25px;
+}
+li .usernamelogged{
+color:pink;
+}
+
+#options
+{
+   text-align: right;
+}
+
+.nav .navbar-nav .navbar-right{
+float:right;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+
+
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+   background-image: url('http://www.servicedogstories.com/images/small_paw.gif');
+    background-repeat: no-repeat;
+}
+
+#cat1{
+ background-image: url('http://img.static.reliefweb.int/sites/reliefweb.int/files/styles/attachment-large/public/topics-icon---storms.png?itok=YlSx_48V');
+    background-repeat: no-repeat;
+   background-size: 65px 60px;
+   background-position: 1px 5px; 
+  
+    }
+    
+    #cat2{
+ background-image: url('http://www.las-cruces.org/~/media/lcpublicwebdev2/site%20images/department%20block%20images/animalshelterdeptblocksvg.ashx?h=525&la=en&w=700');
+    background-repeat: no-repeat;
+   background-size: 90px 60px;
+  
+ background-position: top 5px right 55%; 
+   background-color:white;
+    }
+    
+        
+    #cat3{
+ background-image: url('https://www.wedontwaste.org/wp-content/uploads/2014/09/wdw-logo-icon-color-whitebg.jpg');
+    background-repeat: no-repeat;
+   background-size: 70px 65px;
+  
+ background-position: top 1px right 55%;
+  background-color:white;
+  
+    }
+
+       
+    #cat4{
+ background-image: url('http://www.etsu.edu/com/cme/images/HandicapLogoDecal.JPG');
+    background-repeat: no-repeat;
+   background-size: 60px 60px;
+  
+ background-position: top 5px right 55%;
+  background-color:white;
+  
+    }
+
+    
+    #cat5{
+ background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2f/Seniors_icon.png');
+    background-repeat: no-repeat;
+   background-size: 60px 60px;
+  
+ background-position: top 5px right 55%;
+  background-color:white;
+  
+    } 
+    
+        #cat6{
+ background-image: url('http://usich.gov/resources/uploads/page_img/Logos_USICH_CTAcampaign.JPG');
+    background-repeat: no-repeat;
+   background-size: 90px 65px;
+  
+
+  background-color:white;
+  
+    }     
+    
+    
+           #cat7{
+ background-image: url('http://www.ladyfatemahtrust.org/lft/wp-content/uploads/2015/05/icon2tiff.jpg');
+    background-repeat: no-repeat;
+   background-size: 60px 60px;
+  
+
+  background-color:white;
+  
+    }  
+    
+        #cat8{
+ background-image: url('http://www.happyafricafoundation.org/themes/2/icon-education.gif');
+    background-repeat: no-repeat;
+   background-size: 70px 70px;
+  
+
+  background-color:white;
+  
+    }  
+    
+     
+        #cat9{
+ background-image: url('http://sustainability.umw.edu/dot/files/2011/06/UMW_environment_dot.jpg');
+    background-repeat: no-repeat;
+   background-size: 70px 70px;
+  
+
+  background-color:white;
+  
+    } 
+    
+      #cat10{
+ background-image: url('https://cdn0.iconfinder.com/data/icons/customicondesign-office6-shadow/256/basketball.png');
+    background-repeat: no-repeat;
+   background-size: 75px 75px;
+  
+ background-position: top 2px right 55%;
+  background-color:white;
+  
+    } 
+    
+    
+      #cat11{
+ background-image: url('http://www1.toronto.ca/AYA-ArtsCulture-ICON_150.jpg');
+    background-repeat: no-repeat;
+   background-size: 70px 70px;
+  
+ 
+  background-color:white;
+  
+    } 
+    
+     #cat12{
+ background-image: url('http://www.wisafricana.com/wp-content/uploads/2015/07/community-icon.png');
+    background-repeat: no-repeat;
+   background-size: 70px 70px;
+  
+ 
+  background-color:white;
+  
+    } 
+    
+    .helppills .active a,
+.helppills .active a:hover {
+    background-color: green !important;
+   
+}
+
+.helppills  a:hover {
+    background-color: lightgreen !important;
+    
+}
+</style>
+
+<body>
+
+<nav id ='topnav' class="navbar navbar-inverse navbar-fixed-top " >
+ 	 
+ 	 <div class="container">
+		
+		 <ul id="user_logged" class="navbar-brand nb"></ul>
+		 
+		
+	       
+       <ul id="options" class="nav navbar-nav navbar-right options">
+       
+                
+              
+                <li id="options" class="dropdown-right">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><span id="gear" class="glyphicon glyphicon-cog"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="#" data-toggle="modal"  data-target="#edit_profile_modal-1" >Edit Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+          
+       
+        </div> 
+</nav>
+
+<div class="container">
+	<div id='brand' class="jumbotron jbbg">
+     	<div class='clearfix'>
+			<div class="container">
+				<img class='pull-left' id='logo' src='https://github.com/sophiataskova/HelpingHands/blob/master/helpingHandsFE/WebContent/logo.png?raw=true' width='130' height='130'>
+			<h1>Helping Hands</h1>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+
+<div class="jumbotron c2">	
+<h1 style="text-align:center">STATIC TEXT OF ITU</h1>
+</div>	
+
+
+
+
+<div>
+                    <div class="col-md-12" >
+                        <!-- Do NOT use name="submit" or id="submit" for the Submit button -->
+                       <button id='advsearchbutton' type="button" class="btn btn-default btn-md advancedsearch">Advanced Search</button>
+                 
+<button id='createEventButton'  type="button" class="btn btn-default btn-md create_event  pull-right" data-toggle="modal"  data-target="#create_event_modal-1" >Create Event</button>
+</div>
+</div>
+<div id="advsearchcontainer" >
+<div >
+<div >
+  <form autocomplete="off" id="AdvSearchForm" method="post" class="form-horizontal col-md-4" action="" >              
+		<div ><h4 style="text-align:center;font-weight:bold;background-color:#01401e ;color:white">Location</h4></div>
+      			<div class="col-md-6" style="">
+      			 <label >
+                    <input type="checkbox" id="sanfrancisco" name="location" value="sanfrancisco" /> San Francisco
+                </label> 
+                
+                 <label >
+                    <input type="checkbox" id="sanjose" name="location" value="sanjose" /> San Jose
+                </label> 
+   
+      			
+      			 
+      	 <label >
+                    <input type="checkbox" id="santaclara" name="location" value="santaclara" /> Santa Clara
+                
+                </label>
+      			
+      			
+      	</div>
+      	<div class="col-md-6" style="">
+      			
+     
+      			 <label >
+                    <input type="checkbox" id="mountainview" name="location" value="mountainview" /> Mountain View
+                
+                </label>
+                <label >
+                    <input type="checkbox" id="paloalto" name="location" value="paloalto" /> Palo Alto
+                
+                </label>
+      			
+                
+                
+      	
+      			 <label >
+                    <input type="checkbox" id="oakland" name="location" value="oakland" /> Oakland
+                </label> 
+			</div>
+
+
+
+      
+       </form>
+      
+   		 
+             
+				     
+    
+     </div>
+<div class="container advsearch col-md-4" style="margin: auto;">  
+<div style="background-color:#01401e "><h4 style="text-align:center;font-weight:bold;color:white">Google Map</h4></div>
+			<div  id="map-canvas" style="border: 2px solid #3872ac;height: 300px; width: 300px; 
+			overflow:hidden;  margin: auto;"></div>
+</div>
+</div>
+
+<div >  
+		
+  <form autocomplete="off" id="AdvSearchForm2" method="post" class="form-horizontal col-md-4" action="" >              
+		<div ><h4 style="text-align:center;font-weight:bold;background-color:#01401e;color:white ">Category</h4></div>
+		
+      			<div >
+      			
+      			
+  <div class="col-md-4" style="padding:10px 2px 10px 22px;">
+      			 
+      			 <button type="button" id="cat1" class="btn btn-default btn-circle btn-xl" title="Disaster Relief"></button>
+      			 
+<button type="button" id="cat2" class="btn btn-primary btn-circle btn-xl" title="Animals"></button>
+ 
+      			 <button type="button" id="cat3" class="btn btn-default btn-circle btn-xl" title="Hunger"></button>
+      			 
+<button type="button" id="cat4" class="btn btn-primary btn-circle btn-xl" title="People with Disabilities"></button>
+
+  </div>
+  
+  <div class="col-md-4" style="padding:10px 2px 10px 22px;">
+      			 <button type="button" id="cat5" class="btn btn-default btn-circle btn-xl" title="Seniors"></button>
+      			 
+<button type="button" id="cat6" class="btn btn-primary btn-circle btn-xl" title="Service for Homeless"></button>
+
+      			 <button type="button" id="cat7" class="btn btn-default btn-circle btn-xl" title="Children"></button>
+      			 
+<button type="button" id="cat8" class="btn btn-primary btn-circle btn-xl" title="Education"></button>
+
+ </div>
+ 
+  <div class="col-md-4" style="padding:10px 2px 10px 22px;">
+      			 <button type="button" id="cat9" class="btn btn-default btn-circle btn-xl" title="Environment"></button>
+      			 
+<button type="button" id="cat10" class="btn btn-primary btn-circle btn-xl" title="Sports"></button>
+
+      			 <button type="button" id="cat11" class="btn btn-default btn-circle btn-xl" title="Creativity Arts"></button>
+      			 
+<button type="button" id="cat12" class="btn btn-primary btn-circle btn-xl" title="Community"></button>
+
+ </div>
+       </div>
+       </form>
+      
+   		 
+   </div>
+</div>
+  
+      
+   <div id="usernamelogged"></div>
+           
+
+
+<!-- Create Event Modal Window -->
+        
+               <div class="modal fade" id="create_event_modal-1">
+<div class="modal-dialog modal-md">
+<div class="modal-content">
+<div class="model-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 id="modtit" class="modal-title">Create Event</h4>
+</div>
+<div class="modal-body">
+
+ <form id="createEventForm" method="post" class="form-horizontal" action="">
+                     
+                      
+           <div class="form-group">  </div> 
+            
+           <div class="form-group">         
+	           	<div class=" col-md-11 alert" id="msgevent" style="display: none;">
+	             <a href="#" class="close" data-dismiss="alert">&times;</a>
+	             </div>
+	        </div>
+           
+                  
+           
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Name of Event<sup>*</sup></label>
+                    <div class="col-lg-6">
+                        <input id='eventname' type="text" class="form-control" name="eventname" />
+                    </div>
+                </div>
+                
+                            <div class="form-group">
+                    <label class="col-lg-5 control-label">Name of Organization <sup>*</sup></label>
+                    <div class="col-lg-6">
+                        <input id='orgname' type="text" class="form-control" name="orgname" />
+                    </div>
+                </div>
+         
+    
+             
+    
+          <!--      <div class="form-group">
+                    <label class="col-lg-4 control-label">From<sup>*</sup></label>
+                    <div class="col-lg-7">
+                      	<div class="input-group date" id="datetimePicker">
+                				<input type="text" class="form-control" name="fromdate" data-provide="datepicker" data-date-end-date="0d" />
+                					<span class="input-group-addon">
+                    				<span class="glyphicon glyphicon-calendar"></span>
+                					</span>
+           				 	</div>
+            					<span class="help-block">MM/DD/YYYY</span>     
+                           </div>
+                </div>
+                 
+                 <div class="form-group">
+                    <label class="col-lg-4 control-label">To<sup>*</sup></label>
+                    <div class="col-lg-7">
+                				<div class="input-group date" id="datetimePicker">
+                				<input type="text" class="form-control" name="todate" data-provide="datepicker" data-date-end-date="0d" />
+                					<span class="input-group-addon">
+                    				<span class="glyphicon glyphicon-calendar"></span>
+                					</span>
+           				 	</div>
+            					<span class="help-block">MM/DD/YYYY</span>        
+				  </div>
+                </div>-->
+                
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Start Date<sup>*</sup></label>
+                    <div class="col-lg-6">
+                         <input type="date" class="form-control" name="startdate" placeholder="date">
+                    
+                    </div>
+                </div>
+    
+         
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">End Date<sup>*</sup></label>
+                    <div class="col-lg-6">
+                         <input type="date" class="form-control" name="enddate" placeholder="date">
+                       
+                    </div>
+                </div>
+              <div class="form-group">
+                    <label class="col-lg-5 control-label">Location<sup>*</sup></label>
+                    <div class="col-lg-6">
+                        <input id='eventloc' type="text" class="form-control" name="eventloc" />
+                    </div>
+                </div>
+                
+                   <div class="form-group">
+                    <label class="col-lg-5 control-label">Descriptions<sup>*</sup></label>
+                    <div class="col-lg-6">
+                          <textarea class="form-control" rows="5" id="eventdesc" name="eventdesc"></textarea>
+                    </div>
+                </div>
+                
+                   <div class="form-group">
+                    <label class="col-lg-5 control-label">Number of Participants Required<sup>*</sup></label>
+                    <div class="col-lg-6">
+                        <input id='event_participantsreq' type="text" class="form-control" name="event_participantsreq" />
+                    </div>
+                </div>
+                
+                 <div class="form-group">
+                    <label class="col-lg-5 control-label">Additional Details</label>
+                    <div class="col-lg-6">
+                          <textarea class="form-control" rows="5" id="additionaldetails" name="additionaldetails"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-5 col-lg-offset-4">
+                        <!-- Do NOT use name="submit" or id="submit" for the Submit button -->
+                        <button id='button5' type="submit" class="btn btn-default btn-md resetpwd">Submit</button>
+                    </div>
+              <!-- </div>
+                
+                <div class="form-group">
+                    <div class="col-lg-5 col-lg-offset-8"> -->
+                        <!-- Do NOT use name="submit" or id="submit" for the Submit button -->
+                        <button id='button6' type="button" class="btn btn-default btn-mdclose resetpwd" data-dismiss="modal">Close</button>
+                    </div>
+              
+            </form>
+            
+  </div>
+            
+<div>
+
+</div>
+</div>
+</div>
+       
+        </div>
+        <br/>
+        <!-- Edit Profile Modal Window -->
+        
+       <div class="modal fade" id="edit_profile_modal-1">
+<div class="modal-dialog modal-md">
+<div class="modal-content">
+<div class="model-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 id="modtit" class="modal-title">Edit Profile</h4>
+</div>
+<div class="modal-body">
+
+ <form id="editProfileForm" method="post" class="form-horizontal" action="">
+                     
+                      
+                <div class="form-group">  </div> 
+               
+           <div class="form-group">         
+           <div class=" col-md-8 col-md-offset-2 alert" id="msgreg" style="display: none;">
+             <a href="#" class="close" data-dismiss="alert">&times;</a>
+             </div>
+           </div>
+          
+              
+            <div class="form-group">
+                    <label class="col-md-4 control-label">First Name<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id='firstname' type="text" class="form-control" name="firstname" />
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Last Name<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id='lastname' type="text" class="form-control" name="lastname" />
+                    </div>
+                </div>
+                
+                  <div class="form-group">
+                    <label class="col-md-4 control-label">Username<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id='username' type="text" class="form-control" name="username" />
+                    </div>
+                </div>
+                      
+    
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Password<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input type="password" class="form-control" name="password" />
+                    </div>
+                </div>
+                
+   
+                <div class="form-group">
+        <label class="col-md-4 control-label">Gender</label>
+        <div class="col-md-6">
+            <select class="form-control" name="gender">
+                <option value=" "></option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+    </div>
+        
+      
+   <div class="form-group" id="emailstudentgroup">
+        <label class="col-md-4 control-label" >Email address<sup>*</sup></label>
+            
+         <div class="col-md-6">
+        <div class=" input-group">
+            <input type='text' class="form-control"  name="emailstudent" id="email"
+                type="email"><span class="input-group-addon">@students.itu.edu</span>
+         </div></div>
+
+    </div>
+   
+   <!-- 
+    <div class="form-group" id="emailngogroup">
+        <label class="col-md-4 control-label" >Email address<sup>*</sup></label>
+    <div class="col-md-6" id="emailngogroup">
+                        <input type="text" class="form-control" name="emailngo" />
+       </div>
+       </div>
+    
+        -->
+                  <div class="form-group" id='phonereg'>
+                    <label class="col-md-4 control-label">Phone Number<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="phonenumber" />
+                    </div>
+                </div>
+                
+                <!-- 
+                                <div class="form-group" id='orgname'>
+                    <label class="col-md-4 control-label">Organization Name<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="organizationname" />
+                    </div>
+                </div>
+                -->
+                
+                 <div class="form-group" id='orgurl'>
+                    <label class="col-md-4 control-label">Website<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="website" />
+                    </div>
+                </div>
+                
+                   <!-- 
+                    <div class="form-group" id='desc'>
+                    <label class="col-md-4 control-label">Description<sup>*</sup></label>
+                    <div class="col-md-6">
+                         <input type="text" class="form-control" name="description" />
+                         <textarea class="form-control" rows="5" id="description" name="description"></textarea>
+                    </div>
+                </div>
+                -->
+    
+        <div class="form-group">
+            <label class="col-md-4 control-label">Security Question<sup>*</sup></label>
+            <div class="col-md-6 selectContainer">
+                <select name="question" class="form-control">
+                    <option value=""></option>
+                    <option value="q1">What is your Mother's maiden name?</option>
+                </select>
+            </div>
+        </div>
+             
+
+ 				 <div class="form-group">
+                    <label class="col-md-4 control-label">Answer<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id='answer' type="text" class="form-control" name="answer" />
+                    </div>
+                </div>
+                
+                  <div class="form-group">
+                    <div class="col-lg-5 col-lg-offset-4">
+                        <!-- Do NOT use name="submit" or id="submit" for the Submit button -->
+                        <button id='button7' type="submit" class="btn btn-default btn-md resetpwd">Submit</button>
+                    </div>
+              <!-- </div>
+                
+                <div class="form-group">
+                    <div class="col-lg-5 col-lg-offset-8"> -->
+                        <!-- Do NOT use name="submit" or id="submit" for the Submit button -->
+                        <button id='button8' type="button" class="btn btn-default btn-mdclose resetpwd" data-dismiss="modal">Close</button>
+                    </div>
+                    
+            </form>
+            
+  </div>
+            
+<div>
+
+</div>
+</div>
+</div>
+       
+        </div>
+        
+        
+         <div class="container" style="height:50px"><br/></div>
+        <div id = "tabs" class="container">
+<ul class="nav nav-pills helppills">
+<li class="active"><a href="#tab1" data-toggle="pill">Active</a></li>
+<li ><a href="#tab2" data-toggle="pill">Awaiting Acceptance</a></li>
+<li ><a href="#tab3" data-toggle="pill">Archive</a></li>
+</ul>
+
+</div>
+       
+   </div>  
+   <div class="container">
+   <div class="tab-content fors">
+<div class="tab-pane active" id="tab1">
+ 
+<div class='container' style='background-color:lightgreen;height:50px'></div>
+
+</div>
+<div class="tab-pane" id="tab2">
+<div class='container' style='background-color:yellow;heigth:50px'></div>
+</div>
+<div class="tab-pane" id="tab3">
+<div class='container' style='background-color:pink;heigth:50px'></div>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>	

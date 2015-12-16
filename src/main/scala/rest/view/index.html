@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Helping Hands</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" media='screen'>
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" ></script>
+
+
+<!-- For Validation --> 
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
+
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js'></script>
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/additional-methods.js'></script>
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/additional-methods.min.js'></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js'></script>
+
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js'></script>
+
+
+
+</head>
+
+<script type="text/javascript">
+
+
+
+$(document).ready(function(){
+	
+	var base = 'http://54.174.73.77:8080/';
+
+
+
+
+	$('#modal-1').on('hide.bs.modal', function(){
+		$('#msgpwd').removeClass('alert-danger alert-success').html('').attr('style','display:none'); 
+		$('#resetForm').bootstrapValidator('resetForm', true);
+		});
+	
+	$('a[data-toggle="pill"]').on('click', function (e) {
+	
+		$("#ngoreg").prop("checked", false);
+		
+		 $("#studentreg").prop("checked", true);
+		 
+				
+				
+				$('#emailstudentgroup').show('fast');
+				$('#emailngogroup').hide('fast');
+				$('#orgname').hide('fast');
+				   $('#orgurl').hide('fast');
+				   $('#desc').hide('fast');
+				 
+				   
+		 $("#studentlogin").prop("checked", true);
+		 
+		
+		
+		  $("#ngologin").prop("checked", false);
+		  $("#adminlogin").prop("checked", false);
+		  
+		  
+		$('#msgreg').removeClass('alert-danger alert-success').html('').attr('style','display:none');  
+		$('#msglog').removeClass('alert-danger alert-success').html('').attr('style','display:none');  
+		
+		$('#registrationForm').bootstrapValidator('resetForm', true);
+		$('#loginForm').bootstrapValidator('resetForm', true);
+		
+
+		
+		});
+
+	$('#forgotpasswordmodal').click(function(){
+		 $("#studentlogin").prop("checked", true);
+		 
+			
+			
+		  $("#ngologin").prop("checked", false);
+		  $("#adminlogin").prop("checked", false);
+	
+		$('#msglog').removeClass('alert-danger alert-success').html('').attr('style','display:none');  
+
+		$('#loginForm').bootstrapValidator('resetForm', true);
+		
+	});
+	
+	$('#button4').click(function(){
+		$('#resetForm').bootstrapValidator('resetForm', true);
+		
+		});
+
+
+	if ($("#studentreg:checked").length > 0){ 
+		
+	
+		$('#emailstudentgroup').show('fast');
+		$('#emailngogroup').hide('fast');
+		$('#orgname').hide('fast');
+		   $('#orgurl').hide('fast');
+		   $('#desc').hide('fast');
+		 
+		   
+	}
+
+	$("#studentreg").click(function() {
+		 $("#studentreg").prop("checked", true);
+		$("#ngoreg").prop("checked", false);
+			$('#emailstudentgroup').show('fast');
+			
+			$('#emailngogroup').hide('fast');
+			
+		   $('#orgname').hide('fast');
+		   $('#orgurl').hide('fast');
+		   $('#desc').hide('fast');
+		   $('#registrationForm').bootstrapValidator('resetForm', true);
+			$('#msgreg').removeClass('alert-danger alert-success').html('').attr('style','display:none'); 
+			
+	  });
+
+	  $("#ngoreg").click(function() {
+		  $("#studentreg").prop("checked", false);
+		  $("#ngoreg").prop("checked", true);
+		 
+		 $('#emailstudentgroup').hide('fast');	
+		 $('#emailngogroup').show('fast');
+	   $('#orgname').show('fast');
+	   $('#orgurl').show('fast');
+	   $('#desc').show('fast');
+	  
+	   $('#registrationForm').bootstrapValidator('resetForm', true);
+		  $('#msgreg').removeClass('alert-danger alert-success').html('').attr('style','display:none'); 
+			 
+	  });
+	  
+	  $("#studentlogin").click(function(){
+		  
+		  $("#studentlogin").prop("checked", true);
+		  $("#ngologin").prop("checked", false);
+		  $("#adminlogin").prop("checked", false);
+		  
+		 
+		  
+		  $('#loginForm').bootstrapValidator('resetForm', true);
+		  
+		  $('#msglog').removeClass('alert-danger alert-success').html('').attr('style','display:none');  
+				  
+	  });
+	  
+	  $("#ngologin").click(function(){
+		  
+		  $("#studentlogin").prop("checked", false);
+		  $("#ngologin").prop("checked", true);
+		  $("#adminlogin").prop("checked", false);
+	  
+		 
+	  
+		  $('#loginForm').bootstrapValidator('resetForm', true);
+		  
+		  $('#msglog').removeClass('alert-danger alert-success').html('').attr('style','display:none');  
+				  
+	  });
+	  
+	  $("#adminlogin").click(function(){
+		  $("#studentlogin").prop("checked", false);
+		  $("#ngologin").prop("checked", false);
+		  $("#adminlogin").prop("checked", true);
+		  
+		
+		  
+		  $('#loginForm').bootstrapValidator('resetForm', true);
+		  
+		  $('#msglog').removeClass('alert-danger alert-success').html('').attr('style','display:none');  
+				  
+	  });
+	
+	  $('#registrationForm').bootstrapValidator({
+	        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+	        feedbackIcons: {
+	           valid: ' ',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh',
+	            
+	        },
+	        
+	        fields: {
+	        	
+	        	firstname: {
+	               // message: 'The firstname is not valid',
+	                validators: {
+	                	
+	                    notEmpty: {
+	                        message: 'Please enter your first name.'
+	                    },
+	                  
+	                    regexp: {
+	                        regexp: /^[a-zA-Z_\.]+$/,
+	                        message: 'The firsname can only consist of alphabetical, underscore and period.'
+	                    },
+	               	           }
+	            },
+	            
+	        	lastname: {
+	             //   message: 'The lastname is not valid',
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please enter your lastname.'
+	                    },
+	                  
+	                    regexp: {
+	                        regexp: /^[a-zA-Z_\.]+$/,
+	                        message: 'The lastname can only consist of alphabetical, underscore and period.'
+	                    },
+	               	  }
+	            },
+	    
+	            username: {
+	              //  message: 'The username is not valid',
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please enter a username'
+	                    },
+	                    stringLength: {
+	                        min: 6,
+	                        max: 30,
+	                        message: 'The username must be more than 6 and less than 30 characters long'
+	                    },
+	                    regexp: {
+	                        regexp: /^[a-zA-Z0-9_\.]+$/,
+	                        message: 'The username can only consist of alphabets, number, dot and underscore'
+	                    },
+	                    different: {
+	                        field: 'password',
+	                        message: 'The username and password cannot be the same as each other'
+	                    },
+	                    
+	                }
+	            },
+	          
+	            password: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please enter your password'
+	                    },
+	                    different: {
+	                        field: 'username',
+	                        message: 'The password cannot be the same as username'
+	                    },
+	                stringLength: {
+	                        min: 8,
+	                        max:15,
+	                        message: 'The password must be between 8 and 15 characters.'
+	                    },
+	                   
+	                    regexp: {
+	                        regexp: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9].*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/,
+	                        
+	                        message:'Password should be a string that has at least 1 uppercase alphabet,'+
+	                        '1 lowercase alphabet, 2 digits and 1 special character.',
+	                    }
+	                   
+	                }
+	            },
+	            
+	            retypepassword: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please re-type the password'
+	                    },
+	                    identical: {
+	                        field: 'password',
+	                        message: 'The passwords dont match'
+	                    },
+	                    stringLength: {
+	                        min: 8,
+	                        max:15,
+	                        message: 'The password must be between 8 and 15 characters.'
+	                    },
+	                   
+	                    regexp: {
+	                        regexp: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9].*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/,
+	                        
+	                        message:'Password should be a string that has at least 1 uppercase alphabet,'+
+	                        '1 lowercase alphabet, 2 digits and 1 special character.',
+	                    }
+	                   
+	                }
+	            },
+	                       
+	            gender: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please select your gender.'
+	                    }
+	                }
+	            },
+	            
+	            emailstudent: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please re-type the password'
+	                    },
+	                    regexp: {
+	                        regexp: /^[a-zA-Z0-9_\.]+$/,
+	                        
+	                        message:'The Student ID can consists of alphabets, number, dot and underscore only',
+	                    }
+	                   
+	                }
+	            },
+	            
+	            emailngo: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please re-type the password'
+	                    },
+	                    regexp: {
+	                        regexp: /^[-a-z0-9~!$%^&*_=+}{\?]+(\.[-a-z0-9~!$%^&*_=+}{\?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/,
+          			
+	                        message:'Please enter a valid NGO Email ID',
+	                    }
+	                   
+	                }
+	            },
+	           
+	            
+	            
+	           phonenumber: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please enter your phone number'
+	                    },
+	                    stringLength: {
+	                        min: 10,
+	                        max:10,
+	                        message: 'The phone number must have at 10 digits.'
+	                    },
+	                   
+	                    regexp: {
+		                    regexp: /^[0-9]+$/,                    
+	                        message:'Phone number should not have alphabets',
+	                    } 
+	                   
+	                }
+	            },
+	            website: {
+	                validators: {
+	                	notEmpty: {
+	                        message: 'Please enter your website'
+	                    },
+	                  //  uri: {
+	                	  regexp:{
+	                		  regexp: /^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$/,
+	                	  
+	                        message: 'The website address is not valid'
+	                    }
+	                }
+	            },	
+	            organizationname:{
+	                validators: {
+	                	notEmpty: {
+	                        message: 'Please enter your organization name'
+	                    }	                
+	                }
+	            },
+	            description:{
+	                validators: {
+	                	notEmpty: {
+	                        message: 'Please enter a description of your organization'
+	                    }	                
+	                }
+	            },
+	            question: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please select your security question language.'
+	                    }
+	                }
+	            },
+	            answer: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please provide an answer for the security question.'
+	                    }
+	                }
+	            },
+	         
+	            }
+	 
+	  
+	    });
+
+	 $('#loginForm').bootstrapValidator({
+	        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+	        feedbackIcons: {
+	           valid: ' ',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh',
+	            
+	        },
+	        excluded: ':disabled',
+	        fields: {
+	            username2: {
+	                message: 'The username is not valid',
+	                validators: {
+	                    notEmpty: {
+	                        message: 'The username is required and cannot be empty'
+	                    }
+	                }
+	            },
+	          
+	    
+	         password2: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'The password is required and cannot be empty'
+	                    }
+	                }
+	            },
+	          
+	            }
+	 
+	  
+	    });
+	 
+	 $('#resetForm').bootstrapValidator({
+	        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+	        feedbackIcons: {
+	           valid: ' ',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh',
+	            
+	        },
+	        
+	        fields: {
+	            username3: {
+	                
+	                validators: {
+	                    notEmpty: {
+	                        message: 'The username is required and cannot be empty'
+	                    }	                    
+	                }
+	            },
+	            question2: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please select your security question language.'
+	                    }
+	                }
+	            },
+	            answer2: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please provide an answer for the security question.'
+	                    }
+	                }
+	            },
+	            
+	            newpassword: {
+	                validators: {
+	                    notEmpty: {
+	                        message: 'Please enter your password'
+	                    },
+	                    different: {
+	                        field: 'username',
+	                        message: 'The password cannot be the same as username'
+	                    },
+	                stringLength: {
+	                        min: 8,
+	                        max:15,
+	                        message: 'The password must be between 8 and 15 characters.'
+	                    },
+	                   
+	                    regexp: {
+	                        regexp: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9].*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/,
+	                        
+	                        message:'Password should be a string that has at least 1 uppercase alphabet,'+
+	                        '1 lowercase alphabet, 2 digits and 1 special character.',
+	                    }
+	                   
+	                }
+	            },
+	            retypepassword2: {
+	            	  validators: {
+		                    notEmpty: {
+		                        message: 'Please re-type the password'
+		                    },
+		                    identical: {
+		                        field: 'newpassword',
+		                        message: 'The passwords dont match'
+		                    },
+		                    stringLength: {
+		                        min: 8,
+		                        max:15,
+		                        message: 'The password must be between 8 and 15 characters.'
+		                    },
+		                   
+		                    regexp: {
+		                        regexp: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9].*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/,
+		                        
+		                        message:'Password should be a string that has at least 1 uppercase alphabet,'+
+		                        '1 lowercase alphabet, 2 digits and 1 special character.',
+		                    }
+		                   
+		                }
+	            }
+	        }
+	 
+	  
+	    });
+$('#registrationForm').on('success.form.bv', function(e) {
+  // Prevent submit form
+  e.preventDefault();
+
+  var $form     = $(e.target);
+     validator = $form.data('bootstrapValidator');
+     
+     //var adn='register/';
+     //var link=base+adn;
+     //alert(link);
+     
+     
+     
+     if ($("#studentreg:checked").length > 0){ 
+  	 
+  	     
+  	   var usernamebackend = $('input[name=username]').val();
+  	   var emailbackend = $('input[name=emailstudent]').val();
+  	   var passwordbackend = $('input[name=password]').val();	
+     }
+     else{
+  	 
+  	     
+  	   var usernamebackend = $('input[name=username]').val();
+  	   var emailbackend = $('input[name=emailngo]').val();
+  	   var passwordbackend = $('input[name=password]').val();	
+     }
+     
+$.ajax({
+	type:'POST',
+	url:'register/',
+	
+	data:{
+		'username'              : usernamebackend,
+      'email'             : emailbackend,
+      'password'    : passwordbackend
+	},
+	//dataType: "json",
+	
+	
+	success: function(){
+
+		//console.log('state '+data.status);
+		//var txt1=data.responseText;
+		//console.log(txt1);
+	
+		/*
+		$form.find('#msgreg').removeClass('alert-danger').addClass('alert-success').html('Thanks for registring! Now you can sign in as ' +validator.getFieldElements
+				('username').val()+ '. Please go to Sign In Tab and enter your credentials').show();
+		
+		$('#registrationForm').bootstrapValidator('resetForm', true);
+		 
+			 $('#firstname').focus(function() {
+			     $('#msgreg').removeClass('alert-success alert-danger').hide();
+			});
+		
+	*/
+		
+	var usernamevar = document.getElementById('username').value;
+	sessionStorage.setItem("loggedusername","Welcome " +usernamevar );
+	window.location.href="home/";
+
+		},
+	error:function(data){
+		
+		console.log('state '+data.status);
+	var txt2= data.responseJSON.message;
+	console.log(txt2);
+	
+	$form.find('#msgreg').removeClass('alert-success').addClass('alert-danger').html(txt2+'. <strong> Please choose a different username.</strong>').show();
+	
+	 $('#button1').removeAttr('disabled'); 
+	 
+		
+	/*	if(data.message == 'Username already exists'){
+			
+			$form.find('#msgreg').removeClass('alert-success').addClass('alert-danger').html('The username is already taken ' +validator.getFieldElements
+					
+					('username').val() + ',<strong> Please choose a different user name</strong>').show();
+			
+			 $('#button1').removeAttr('disabled'); 
+			 
+		}
+		
+		else {
+			
+			console.log(data.message);
+	
+			$form.find('#msgreg').removeClass('alert-success').addClass('alert-danger').html('Sorry we are unable to process your request now. ' +validator.getFieldElements
+
+			('username').val() + ',<strong> please try again later!</strong>').show();
+					
+			 $('#button1').removeAttr('disabled');
+			 
+		 
+		}
+		*/
+		
+	}
+
+ });
+
+});
+
+$('#loginForm').on('success.form.bv', function(e) {
+  // Prevent submit form
+  e.preventDefault();
+
+  var $form     = $(e.target);
+     validator = $form.data('bootstrapValidator');
+     
+     //var adn ='userLogin';
+    // var link=base+adn;
+     
+  	   
+  	   var usernamebackend = $('input[name=username2]').val();
+  	   var passwordbackend = $('input[name=password2]').val();	
+
+
+    
+     
+     
+			$.ajax({
+				type:'POST',
+				url:'userLogin/',
+				data:{
+					'username'    : usernamebackend,
+			        'password'    :passwordbackend	
+				
+				},
+				//dataType: "json",				
+				
+				success: function(data){
+				
+					
+						if(data.message == 'Successful Login'){
+						//console.log("Registration Successful, Please login!!")
+						
+							alert('You have successfully login as '+validator.getFieldElements('username2').val());
+									
+									 $('#loginForm').bootstrapValidator('resetForm', true);
+									 
+									window.location = "home.html";
+				
+						}
+				},
+				error:function(data){
+					
+			
+					
+					if(data.message == 'Unavailable Username'){
+						
+						$form.find('#msglog').removeClass('alert-success').addClass('alert-danger').html('The username and password ' +validator.getFieldElements
+								
+								('username2').val() + ',<strong>do not match</strong>').show();
+				
+						
+						 $('#button2').removeAttr('disabled'); 
+						 
+					}
+					else {
+										
+						 
+						 $form.find('#msglog').removeClass('alert-success').addClass('alert-danger').html('Sorry we are unable to process your request now. ' +validator.getFieldElements
+
+									('username2').val() + ',<strong> please try again later!</strong>').show();
+								
+						 $('#button2').removeAttr('disabled');
+						 
+					 
+					}
+					
+					
+				}
+					
+		
+		});
+
+});
+
+$('#resetForm').on('success.form.bv', function(e) {
+  // Prevent submit form
+  e.preventDefault();
+
+     var $form     = $(e.target);
+     validator = $form.data('bootstrapValidator');
+  
+    // var adn = 'changePassword';
+     //var link = base + adn;
+     
+     var usernamebackend = $('input[name=username3]').val();
+	   var passwordbackend = $('input[name=newpassword]').val();	
+
+     
+		$.ajax({
+			type:'POST',
+			url:'changePassword',
+			
+			data:{
+				'username'    : usernamebackend,
+		        'password'    : passwordbackend	
+			
+			},
+			dataType: "json",				
+			
+			success: function(data){
+				
+				
+					if(data.message == 'Successfull Reset'){
+					
+						$form.find('#msgpwd').removeClass('alert-danger').addClass('alert-success').html('You, '+validator.getFieldElements
+								('username3').val()+ ' have successfully reset your password').show();
+							
+						$('#resetForm').bootstrapValidator('resetForm', true);
+						 
+						  	$('#username3').focus(function() {
+							     $('#msgpwd').removeClass('alert-success alert-danger').hide();
+							   });
+			
+					}
+			},
+			error:function(data){
+				
+				if(data.message == 'Unavailable Username'){
+					
+					$form.find('#msgpwd').removeClass('alert-success').addClass('alert-danger').html('Username ' +validator.getFieldElements
+							
+							('username3').val() + ' is, <strong>invalid!</strong>').show();
+					
+					 $('#button3').removeAttr('disabled'); 
+					  
+					 
+				}
+				else {
+											
+					
+					 $form.find('#msgpwd').removeClass('alert-success').addClass('alert-danger').html('Sorry we are unable to process your request now. ' +validator.getFieldElements
+								
+								('username3').val() + ',<strong> please try again later!</strong>').show();
+						
+						 $('#button3').removeAttr('disabled'); 
+					 
+				 
+				}
+				
+				
+			}		
+	
+	});
+		
+});
+
+
+
+
+});
+
+</script>
+
+<style>
+
+#description{
+   resize: none;
+
+}
+
+input:-webkit-autofill{
+ -webkit-box-shadow: 0 0 0 1000px white inset;
+}
+.jumbotron{
+ padding:1em 1em;
+}
+
+.jbbg {
+background-color: green ;
+}
+
+
+#topnav{
+min-height:40px !important;
+background-color: darkgreen ;
+}
+
+.navbar-brand .nb{
+color: white;
+}
+
+#brand {
+  text-align: center; 
+  padding-top:60px;
+ }
+
+#brand h1{
+
+ color: white;
+    font-size: 40px;
+ 
+}
+
+.has-success .form-control{ border-color:grey !important;}
+.has-success .form-control:focus { border-color:grey !important;}
+
+.has-success .control-label{ color:black !important;}
+
+
+#resetForm{
+ margin: 0 auto;
+    width:80% 
+}
+
+#modtit{
+padding-top:30px;
+text-align:center;
+}
+
+.close{
+ position:absolute;
+        top:10px;
+        right: 10px;
+        font-weight: bold;
+}
+
+
+#logincontainer{
+border-style: solid;
+    border-color: #ff0000 #0000ff;
+}
+
+#account{
+text-align:center;
+}
+
+.helppills .active a,
+.helppills .active a:hover {
+    background-color: green !important;
+   
+}
+
+.helppills  a:hover {
+    background-color: lightgreen !important;
+    
+}
+
+.btn.btn-default.btn-md.signup{
+background: green !important;
+color: white !important;
+   border-radius: 24px;
+}
+
+.btn.btn-default.btn-md.login{
+background: green !important;
+color: white !important;
+   border-radius: 24px;
+}
+
+.btn.btn-default.btn-md.resetpwd{
+background: green !important;
+color: white !important;
+   border-radius: 24px;
+}
+
+
+.btn.btn-default.btn-mdclose.resetpwd{
+background: red !important;
+color: white !important;
+   border-radius: 24px;
+}
+
+#studentemailhelptext{
+
+}
+
+.input-group input {
+  border-right: 0px solid ;
+}
+
+.input-group .input-group-addon {
+.
+font-size:10px;
+  background-color: transparent;
+  border-left: 0px solid transparent;
+
+}
+
+</style>
+
+<body>
+
+<nav id ='topnav' class="navbar navbar-inverse navbar-fixed-top " >
+ 	<div class="container">
+		 <nav class="navbar-brand nb">San Jose</nav>
+	</div> 
+</nav>
+	
+	
+	
+<div class="container">
+	<div id='brand' class="jumbotron jbbg">
+     	<div class='clearfix'>
+			<div class="container">
+				<img class='pull-left' id='logo' src='https://github.com/sophiataskova/HelpingHands/blob/master/helpingHandsFE/WebContent/logo.png?raw=true' width='130' height='130'>
+			<h1>Helping Hands</h1>
+			</div>
+		</div>
+	</div>
+</div>
+<div id = "tabs" class="container">
+<div class ="row">
+<div class="col-md-6 col-md-offset-6">
+
+<ul class="nav nav-pills helppills">
+<li class="active"><a href="#tab1" data-toggle="pill">Registration</a></li>
+<li ><a href="#tab2" data-toggle="pill">Sign In</a></li>
+</ul>
+
+<div class="tab-content fors">
+<div class="tab-pane active" id="tab1">
+
+    <div class="row">
+        <div class="col-md-12">
+          
+            <!-- Change the "action" attribute to your back-end URL -->
+            <form autocomplete="off" id="registrationForm" method="post" class="form-horizontal" action="" >
+                
+               <div class="form-group">  </div> 
+               
+           <div class="form-group">         
+           <div class=" col-md-8 col-md-offset-2 alert" id="msgreg" style="display: none;">
+             <a href="#" class="close" data-dismiss="alert">&times;</a>
+             </div>
+           </div>
+          
+              
+            <div class="form-group">
+                    <label class="col-md-4 control-label">First Name<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id='firstname' type="text" class="form-control" name="firstname" />
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Last Name<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id='lastname' type="text" class="form-control" name="lastname" />
+                    </div>
+                </div>
+                
+                  <div class="form-group">
+                    <label class="col-md-4 control-label">Username<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id='username' type="text" class="form-control" name="username" />
+                    </div>
+                </div>
+                      
+    
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Password<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input type="password" class="form-control" name="password" />
+                    </div>
+                </div>
+                
+                
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Retype Password<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input type="password" class="form-control" name="retypepassword" />
+                    </div>
+                </div>
+                
+                <div class="form-group">
+        <label class="col-md-4 control-label">Gender</label>
+        <div class="col-md-6">
+            <select class="form-control" name="gender">
+                <option value=" "></option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+    </div>
+        
+          
+   <div class="form-group" id="emailstudentgroup">
+        <label class="col-md-4 control-label" >Email address<sup>*</sup></label>
+            
+         <div class="col-md-6">
+        <div class=" input-group">
+            <input type='text' class="form-control"  name="emailstudent" id="email"
+                type="email"><span class="input-group-addon">@students.itu.edu</span>
+         </div></div>
+
+    </div>
+    
+    <div class="form-group" id="emailngogroup">
+        <label class="col-md-4 control-label" >Email address<sup>*</sup></label>
+    <div class="col-md-6" id="emailngogroup">
+                        <input type="text" class="form-control" name="emailngo" />
+       </div>
+       </div>
+    
+        
+                  <div class="form-group" id='phonereg'>
+                    <label class="col-md-4 control-label">Phone Number<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="phonenumber" />
+                    </div>
+                </div>
+                
+                 <div class="form-group" id='orgname'>
+                    <label class="col-md-4 control-label">Organization Name<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="organizationname" />
+                    </div>
+                </div>
+                
+                 <div class="form-group" id='orgurl'>
+                    <label class="col-md-4 control-label">Website<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="website" />
+                    </div>
+                </div>
+                
+                    <div class="form-group" id='desc'>
+                    <label class="col-md-4 control-label">Description<sup>*</sup></label>
+                    <div class="col-md-6">
+                        
+                         <textarea class="form-control" rows="5" id="description" name="description"></textarea>
+                    </div>
+                </div>
+                
+    
+        <div class="form-group">
+            <label class="col-md-4 control-label">Security Question<sup>*</sup></label>
+            <div class="col-md-6 selectContainer">
+                <select name="question" class="form-control">
+                    <option value=""></option>
+                    <option value="q1">What is your Mother's maiden name?</option>
+                </select>
+            </div>
+        </div>
+             
+
+ 				 <div class="form-group">
+                    <label class="col-md-4 control-label">Answer<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id='answer' type="text" class="form-control" name="answer" />
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-md-6 col-md-offset-4">
+                        <!-- Do NOT use name="submit" or id="submit" for the Submit button -->
+                        <button id='button1' type="submit" class="btn btn-default btn-md signup">Sign up</button>
+                    </div>
+                </div>
+            </form>
+             </div>
+              </div>
+        <div class="row">
+        <div class="col-md-6 col-md-offset-4"><h4>Account Type</h4></div>
+        <br/>
+        <div class="col-md-6 col-md-offset-4">
+             <div  >
+                <label >
+                    <input  checked type="radio" id="studentreg" name="profile1"  value="Student"  /> Student
+                </label> 
+                <label >
+                    <input type="radio" id="ngoreg" name="profile2" value="NGO"  /> NGO
+                </label> 
+             
+            </div>
+       
+    </div>
+        </div>
+
+   
+
+
+</div>
+<div class="tab-pane" id="tab2">
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+          
+            <!-- Change the "action" attribute to your back-end URL -->
+            <form id="loginForm" method="post" class="form-horizontal" action="" >
+            
+
+            <div class="form-group">  </div> 
+            
+              <div class="form-group">         
+           <div class=" col-md-8 col-md-offset-2 alert" id="msglog" style="display: none;">
+             <a href="#" class="close" data-dismiss="alert">&times;</a>
+             </div>
+           </div>
+           
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Username<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id='username2' type="text" class="form-control" name="username2" />
+                    </div>
+                </div>
+            
+            
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Password<sup>*</sup></label>
+                    <div class="col-md-6">
+                        <input id="password2" type="password" class="form-control" name="password2" />
+                    </div>
+                </div>
+                
+                 <div class="form-group">
+                    <div class="col-md-6 col-lg-offset-4">
+                        <!-- Do NOT use name="submit" or id="submit" for the Submit button -->
+                       <button id='button2' type="submit" class="btn btn-default btn-md login">Login</button>
+                    </div>
+                </div>
+                
+            </form>
+             </div>
+             </div>
+                    <div class="row">
+        <div class="col-md-6 col-md-offset-4"><h4 class="profilelogin">Account Type</h4></div>
+        <br/>
+        <div class="col-md-6 col-md-offset-4">
+            <div  >
+                <label >
+                    <input checked  type="radio" id="studentlogin" name="profile3"  value=" Student2"  /> Student
+                </label> 
+                <label >
+                    <input type="radio" id="ngologin" name="profile4"  value="NGO2" /> NGO
+                </label> 
+                <label >
+                    <input type="radio" id="adminlogin" name="profile5"  value="Admin"/> Admin
+                </label> 
+            </div>
+     
+    </div>
+        </div>
+
+ <div class="row">
+        <div class="col-md-6 col-md-offset-4">
+        <button type="button" id="forgotpasswordmodal" class="btn btn-link" data-toggle="modal" data-target="#modal-1">Forgot Password?</button>
+        </div>
+        <br/>
+        
+       <div class="modal fade" id="modal-1">
+<div class="modal-dialog modal-md">
+<div class="modal-content">
+<div class="model-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+<h4 id="modtit" class="modal-title">Reset Password</h4>
+</div>
+<div class="modal-body">
+
+ <form id="resetForm" method="post" class="form-horizontal" action="">
+                     
+                      
+           <div class="form-group">  </div> 
+            
+           <div class="form-group">         
+	           	<div class=" col-md-11 alert" id="msgpwd" style="display: none;">
+	             <a href="#" class="close" data-dismiss="alert">&times;</a>
+	             </div>
+	        </div>
+           
+                  
+           
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Username<sup>*</sup></label>
+                    <div class="col-lg-7">
+                        <input id='username3' type="text" class="form-control" name="username3" />
+                    </div>
+                </div>
+                
+                 <div class="form-group">
+            <label class="col-lg-4 control-label">Security Question<sup>*</sup></label>
+            <div class="col-lg-7 selectContainer">
+                <select name="question2" class="form-control">
+                    <option value=""></option>
+                    <option value="q1.2">What is your Mother's maiden name?</option>
+                </select>
+            </div>
+        </div>
+            
+            <div class="form-group">
+                    <label class="col-lg-4 control-label">Answer<sup>*</sup></label>
+                    <div class="col-lg-7">
+                        <input id='answer2' type="text" class="form-control" name="answer2" />
+                    </div>
+                </div>
+         
+    
+             
+    
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">New Password<sup>*</sup></label>
+                    <div class="col-lg-7">
+                        <input id="newpassword" type="password" class="form-control" name="newpassword" />
+                    </div>
+                </div>
+                 
+                 <div class="form-group">
+                    <label class="col-lg-4 control-label">Retype Password<sup>*</sup></label>
+                    <div class="col-lg-7">
+                        <input id="retypepassword2" type="password" class="form-control" name="retypepassword2" />
+                    </div>
+                </div>
+    
+             
+
+                <div class="form-group">
+                    <div class="col-lg-5 col-lg-offset-4">
+                        <!-- Do NOT use name="submit" or id="submit" for the Submit button -->
+                        <button id='button3' type="submit" class="btn btn-default btn-md resetpwd">Submit</button>
+                    </div>
+              <!-- </div>
+                
+                <div class="form-group">
+                    <div class="col-lg-5 col-lg-offset-8"> -->
+                        <!-- Do NOT use name="submit" or id="submit" for the Submit button -->
+                        <button id='button4' type="button" class="btn btn-default btn-mdclose resetpwd" data-dismiss="modal">Close</button>
+                    </div>
+              
+            </form>
+            
+  </div>
+            
+<div>
+</div>
+</div>
+</div>
+       
+        </div>
+   
+</div>
+
+
+</div>
+
+
+
+
+</div>
+</div></div>
+
+
+</div>
+
+</body>
+</html>

@@ -1,5 +1,4 @@
-
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,18 +11,58 @@
     based on the recommendations of the Application Developer's Guide.
 </description>
 
+    <!--<servlet>-->
+        <!--<servlet-name>WebService</servlet-name>-->
+        <!--<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>-->
+        <!---->
+        <!--<init-param>-->
+            <!--<param-name>jersey.config.server.provider.packages</param-name>-->
+            <!--<param-value>rest</param-value>-->
+        <!--</init-param>-->
+        <!---->
+        <!--<init-param>-->
+            <!--<param-name>unit:WidgetPU</param-name>-->
+            <!--<param-value>persistence/widget</param-value>-->
+        <!--</init-param>-->
+        <!---->
+        <!--<load-on-startup>1</load-on-startup>-->
+    <!--</servlet>-->
+    <!---->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>WebService</servlet-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</servlet-mapping>-->
+
     <servlet>
-        <servlet-name>HelpingHands</servlet-name>
+        <servlet-name>Jersey REST Service</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>rest.controller</param-value>
+            <param-value>main.scala.rest.controller</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>HelpingHands</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>Jersey REST Service</servlet-name>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
+
+    <!--<servlet>-->
+        <!--<servlet-name>HelpingHands</servlet-name>-->
+        <!--<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>-->
+        <!--<init-param>-->
+            <!--<param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>-->
+
+            <!--<param-value>com.sun.jersey.api.core.PackagesResourceConfig</param-value>-->
+
+            <!--<param-name>com.sun.jersey.config.property.packages</param-name>-->
+            <!--<param-value>rest.controller</param-value>-->
+        <!--</init-param>-->
+        <!--<load-on-startup>1</load-on-startup>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>HelpingHands</servlet-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</servlet-mapping>-->
 
 </web-app>
