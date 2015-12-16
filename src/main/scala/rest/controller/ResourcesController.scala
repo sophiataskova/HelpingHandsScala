@@ -1,5 +1,6 @@
 package src.main.scala.rest.controller
 
+import java.io.{InputStream, FileInputStream}
 import javax.ws.rs._
 import javax.ws.rs.core.{MediaType, Response}
 
@@ -21,15 +22,15 @@ class ResourcesController {
   @GET
   @Path("/")
   @Produces(Array("text/html"))
-  def indexPage(request: String): String = {
-     Source.fromFile("src/main/scala/rest/view/index.html").getLines.mkString
+  def indexPage(request: String): InputStream = {
+    new FileInputStream("src/main/scala/rest/view/index.html")
   }
 
   @GET
   @Path("/home")
   @Produces(Array("text/html"))
-  def homePage(request: String): String = {
-    Source.fromFile("src/main/scala/rest/view/home.html").getLines.mkString
+  def homePage(request: String): InputStream = {
+    new FileInputStream("src/main/scala/rest/view/home.html")
   }
 
 
