@@ -535,10 +535,13 @@ $('#registrationForm').on('success.form.bv', function(e) {
 	   	var lastnamebackend = $('input[name=lastname]').val();
 	   	var usernamebackend = $('input[name=username]').val();
 	 	var passwordbackend = $('input[name=password]').val();
-	 	var genderbackend = $('input[name=gender]').val();
+
+	 	var genderbackend = $( "#gender" ).find(":selected").text();
+
+
 
 	 	var phonenumberbackend = $('input[name=phonenumber]').val();
-		var securityquestionbackend = $('input[name=question]').val();
+		var securityquestionbackend = $( "#question" ).find(":selected").text();
 		var answerbackend = $('input[name=answer]').val();
 
 		var lastloginbackend = '';
@@ -559,34 +562,32 @@ $('#registrationForm').on('success.form.bv', function(e) {
 
 $.ajax({
 	type:'POST',
-	url:'http://localhost:8000/register',
-	//contentType: "application/json",
-	//crossDomain: true,
+	url:'/register',
+	contentType: "application/json",
 
 	data:{
 
-	'firstName': firstnamebackend,
-		'lastName': lastnamebackend,
-			'username':usernamebackend,
-				'password': passwordbackend,
-					'gender': genderbackend,
-						'emailId':emailbackend,
-							'phoneNumber': phonenumberbackend,
-								'securityQuestion': securityquestionbackend,
-									'answer': answerbackend,
-										'userType': profilebackend,
-											'lastLogin': lastloginbackend,
+	'firstName': firstnamebackend.toString(),
+	'lastName': lastnamebackend.toString(),
+	'username': usernamebackend.toString(),
+	'password': passwordbackend.toString(),
+	'gender': genderbackend.toString(),
+	'emailId': emailbackend.toString(),
+	'phoneNumber': phonenumberbackend.toString(),
+	'securityQuestion': securityquestionbackend.toString(),
+	'answer': answerbackend.toString(),
+	'userType': profilebackend.toString(),
+	'lastLogin': lastloginbackend.toString()
 
 
 	},
-	dataType: "json",
+
 
 
 	success: function(data){
+	console.log(data);
 
-		console.log('state '+data.status+ 'data '+data);
-		var txt1=data.responseJSON.message;
-	console.log(txt1);
+
 		alert('hi');
 		/*
 		$form.find('#msgreg').removeClass('alert-danger').addClass('alert-success').html('Thanks for registring! Now you can sign in as ' +validator.getFieldElements
@@ -607,11 +608,10 @@ $.ajax({
 		},
 	error:function(data){
 
-		console.log('state '+data.status);
-	var txt2= data.responseJSON.message;
-	console.log(txt2);
-
-	$form.find('#msgreg').removeClass('alert-success').addClass('alert-danger').html(txt2+'. <strong> Please choose a different username.</strong>').show();
+	console.log(data);
+	console.log(data.responseText);
+	var txt2 = data.responseText;
+	$form.find('#msgreg').removeClass('alert-success').addClass('alert-danger').html(txt2 + ' <strong> error</strong>').show();
 
 	 $('#button1').removeAttr('disabled');
 
@@ -1003,8 +1003,9 @@ $('#resetForm').on('success.form.bv', function(e) {
 								<div class="form-group">
 									<label class="col-md-4 control-label">Gender</label>
 									<div class="col-md-6">
-										<select class="form-control" name="gender">
+										<select class="form-control" name="gender" id="gender">
 											<option value=" "></option>
+
 											<option value="male">Male</option>
 											<option value="female">Female</option>
 										</select>
@@ -1064,8 +1065,8 @@ $('#resetForm').on('success.form.bv', function(e) {
 								<div class="form-group">
 									<label class="col-md-4 control-label">Security Question<sup>*</sup></label>
 									<div class="col-md-6 selectContainer">
-										<select name="question" class="form-control">
-											<option value=""></option>
+										<select name="question" class="form-control" id="question">
+											<option value=" "></option>
 											<option value="q1">What is your Mother's maiden name?</option>
 										</select>
 									</div>
