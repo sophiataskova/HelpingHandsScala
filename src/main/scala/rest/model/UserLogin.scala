@@ -35,18 +35,18 @@ class UserLogin {
 
     if (map.get("userType").get == "student") {
 
-      mongodbConnection.update(map,"studentUsers")
+      mongodbConnection.updateLastLogin(map,"studentUsers")
       return "Student Logout Successful"
     }
 
     if (map.get("userType").get == "admin") {
 
-      mongodbConnection.update(map,"adminUsers")
+      mongodbConnection.updateLastLogin(map,"adminUsers")
       return "Admin Logout Successful"
     }
 
     if (map.get("userType").get == "ngo" ) {
-      mongodbConnection.update(map,"ngoUsers")
+      mongodbConnection.updateLastLogin(map,"ngoUsers")
       return "Ngo Logout Successful"
     }
 
