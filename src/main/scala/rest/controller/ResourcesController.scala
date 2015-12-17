@@ -102,7 +102,7 @@ class ResourcesController {
    if(userRegistration.mongodbObject.update(searchMap, convertedMap, collection))
      return Response.status(Response.Status.OK).entity("{\"message\" :\"" + "Password Successfully Changed"  + "\" }").build()
 
-    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "No such user found" + "\" }").build()
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "No such user found with your combination of data, please check your fields again" + "\" }").build()
   }
 
   @POST
@@ -205,6 +205,23 @@ class ResourcesController {
     Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "There was no matching registered user, please check your credentials" + "\" }").build()
   }
 
+  @POST
+  @Path("/attendEvent")
+  @Consumes(Array("application/json"))
+  @Produces(Array("application/json"))
+  def attendEvent(request: String): Response = {
+
+    val convertedMap = convertToMap(request)
+
+    val userTypeInRequest = userType.get(convertedMap.get("userType").get).get
+
+    val userData = userRegistration.mongodbObject.get(convertedMap, userTypeInRequest)
+
+    if (userData.nonEmpty)
+      return Response.status(Response.Status.OK).entity(" { \"message\" : " + userData.head + "}").build()
+
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "There was no matching registered user, please check your credentials" + "\" }").build()
+  }
 
   private def convertToMap(request: String): Map[String, String] = {
 
