@@ -50,9 +50,16 @@ class UserRegistration() {
 
   def checkIfUserIsNotRegistered(): Boolean = {
 
-    val resultFromDb = mongodbObject.get(map, userType.get(map.get("userType").get).get)
+    var searchUser = Map[String, String]()
 
-    resultFromDb.isEmpty
+    searchUser += "username" -> map.get("username").get
+    searchUser += "emailId" -> map.get("emailId").get
+
+    val checkForUsername = mongodbObject.get(searchUser - "emailId", userType.get(map.get("userType").get).get)
+
+    val checkForEmail = mongodbObject.get(searchUser - "username", userType.get(map.get("userType").get).get)
+
+    checkForUsername.isEmpty  && checkForEmail.isEmpty
   }
 
 
