@@ -165,6 +165,8 @@ var icon = "";
 
 		  var profilelogout = sessionStorage.getItem("loggedprofile");
 
+		  var emaillogout = sessionStorage.getItem("loggedemail");
+
 
 
 		  if(sessionStorage.getItem("loggedprofile") == 'Student'){
@@ -173,12 +175,21 @@ var icon = "";
 
 
 		   $("#createEventButton").hide('fast');
+		      $('#orgname').hide('fast');
+
+	   		$('#orgurl').hide('fast');
+	   		$('#desc').hide('fast');
+
 
 
 		  }
 		  else{
 
 		   $("#createEventButton").show('fast');
+		      $('#orgname').show('fast');
+
+	   			$('#orgurl').show('fast');
+	  			 $('#desc').show('fast');
 
 		  }
 
@@ -430,7 +441,7 @@ var icon = "";
 				            eventlocnearby:{
 				            	 validators: {
 					                    notEmpty: {
-					                        message: 'Please select your gender.'
+					                        message: 'Please select the nearby location.'
 					                    }
 					                }
 					            },
@@ -719,14 +730,154 @@ var icon = "";
 				  alert('hi');
 				  var $form     = $(e.target);
 				     validator = $form.data('bootstrapValidator');
+
+
+		var firstnamebackend = $('input[name=firstname]').val();
+  		var lastnamebackend = $('input[name=lastname]').val();
+  	 	var genderbackend = $( "#gender" ).find(":selected").val();
+	   	var phonenumberbackend = $('input[name=phonenumber]').val();
+	   	var securityquestionbackend =  $( "#question" ).find(":selected").val();
+	 	var answerbackend = $('input[name=answer]').val();
+	 	var orgnamebackend = $('input[name=organizationname]').val();
+  	   	var orgdescbackend = $('textarea#description').val();
+  	   	var orgurlbackend = $('input[name=website]').val();
+
+
+	  			$.ajax({
+				type:'POST',
+				url:'/updateProfile',
+				contentType: "application/json",
+
+				data:JSON.stringify({
+
+
+				'username': usernamelogout.toString(),
+				'emailId': emaillogout.toString(),
+				'userType': profilelogout.toString().toLowerCase(),
+				 'firstName': firstnamebackend.toString(),
+				'lastName': lastnamebackend.toString(),
+				'gender': genderbackend.toString(),
+				'phoneNumber': phonenumberbackend.toString(),
+				'securityQuestion': securityquestionbackend.toString(),
+				'answer': answerbackend.toString(),
+				'organizationName':orgnamebackend.toString(),
+	    		'description': orgdescbackend.toString(),
+	    		'website':orgurlbackend.toString()
+
+
+				}),
+
+
+
+				success: function(data){
+				console.log(data);
+
+				console.log(data.message);
+
+				var txt2 = data.message;
+
+				$form.find('#msgprofile').removeClass('alert-danger').addClass('alert-success').html(txt2).show();
+
+					},
+				error:function(data){
+
+				console.log(data);
+				console.log(data.responseJSON.message);
+
+				var txt2 = data.responseJSON.message;
+
+				$form.find('#msgprofile').removeClass('alert-success').addClass('alert-danger').html(txt2).show();
+
+
+				 $('#button7').removeAttr('disabled');
+
+
+				}
+
+			 });
 				     
 				   
-				     $('#button7').removeAttr('disabled'); 
+
 			
 		  		});
 				
 			  $('#button8').click(function(){
-					$('#editProfileForm').bootstrapValidator('resetForm', true);
+
+			  $('#msgprofile').removeClass('alert-danger alert-success').html('').attr('style','display:none');
+
+			<!--	$('#editProfileForm').bootstrapValidator('resetForm', true); -->
+
+			  });
+
+			  $('#editprofile').click(function(){
+
+			  $('#msgprofile').removeClass('alert-danger alert-success').html('').attr('style','display:none');
+
+
+
+			$.ajax({
+				type:'POST',
+				url:'/populateEditProfile',
+				contentType: "application/json",
+
+				data:JSON.stringify({
+
+
+				'username': usernamelogout.toString(),
+				'userType': profilelogout.toString().toLowerCase(),
+				'emailId': emaillogout.toString()
+
+
+
+				}),
+
+
+
+				success: function(data){
+
+
+				console.log(data.message);
+
+				console.log(data.message.securityQuestion);
+
+				$('#firstname').val(data.message.firstName);
+
+				$('#lastname').val(data.message.lastName);
+
+				$( "#gender" ).find(":selected").text(data.message.gender);
+
+				$('#phonenumber').val(data.message.phoneNumber);
+
+
+				$( "#question" ).find(":selected").text(data.message.securityQuestion);
+
+				$('#answer').val(data.message.answer);
+
+				$('#organizationname').val(data.message.organizationName);
+
+				$('#website').val(data.message.website);
+
+				$('textarea#description').val(data.message.description);
+
+					},
+				error:function(data){
+
+
+				console.log(data.responseJSON.message);
+
+
+				}
+
+			 });
+
+
+
+
+
+
+
+
+
 					
 				});
 				
@@ -800,7 +951,7 @@ var icon = "";
 	width:80%
 	}
 
-	#modtit{
+	#modtitle_event, modtitle_profile{
 	padding-top:30px;
 	text-align:center;
 	}
@@ -1034,7 +1185,7 @@ var icon = "";
 			<li  class="dropdown-right">
 				<a data-toggle="dropdown" class="dropdown-toggle" href="#"><span id="gear" class="glyphicon glyphicon-cog"></span></a>
 				<ul role="menu" class="dropdown-menu">
-					<li><a href="#" data-toggle="modal"  data-target="#edit_profile_modal-1" >Edit Profile</a></li>
+					<li><a href="#" id="editprofile" data-toggle="modal"  data-target="#edit_profile_modal-1" >Edit Profile</a></li>
 					<li class="divider"></li>
 					<li><a href="#" id="logout">Log Out</a></li>
 				</ul>
@@ -1198,7 +1349,7 @@ var icon = "";
 						<div class="form-group">
 							<label class="col-lg-5 control-label">Name of Organization <sup>*</sup></label>
 							<div class="col-lg-6">
-								<input id='orgname_event' type="text" class="form-control" name="orgname" />
+								<input id='orgname_event' type="text" class="form-control" name="orgname_event" />
 							</div>
 						</div>
 
@@ -1308,12 +1459,7 @@ var icon = "";
 							</div>
 						</div>
 
-						<div class="form-group">
-							<label class="col-lg-5 control-label">Additional Details</label>
-							<div class="col-lg-6">
-								<textarea class="form-control" rows="5" id="additionaldetails" name="additionaldetails"></textarea>
-							</div>
-						</div>
+
 
 						<div class="form-group">
 							<div class="col-lg-5 col-lg-offset-4">
@@ -1353,7 +1499,7 @@ var icon = "";
 						<div class="form-group">  </div>
 
 						<div class="form-group">
-							<div class=" col-md-8 col-md-offset-2 alert" id="msgreg" style="display: none;">
+							<div class=" col-md-8 col-md-offset-2 alert" id="msgprofile" style="display: none;">
 								<a href="#" class="close" data-dismiss="alert">&times;</a>
 							</div>
 						</div>
@@ -1379,10 +1525,9 @@ var icon = "";
 						<div class="form-group">
 							<label class="col-md-4 control-label">Gender</label>
 							<div class="col-md-6">
-								<select class="form-control" name="gender">
-									<option value=" "></option>
-									<option value="male">Male</option>
-									<option value="female">Female</option>
+								<select class="form-control" name="gender" id="gender">
+									<option value="Male">Male</option>
+									<option value="Female">Female</option>
 								</select>
 							</div>
 						</div>
@@ -1392,16 +1537,14 @@ var icon = "";
 						<div class="form-group" id='phonereg'>
 							<label class="col-md-4 control-label">Phone Number<sup>*</sup></label>
 							<div class="col-md-6">
-								<input type="text" class="form-control" name="phonenumber" />
+								<input type="text" class="form-control" name="phonenumber" id="phonenumber"/>
 							</div>
 						</div>
 
-						<!--
-						<div class="form-group" id='orgname_profile'>
+						<div class="form-group" id='orgname'>
 							<label class="col-md-4 control-label">Organization Name<sup>*</sup></label>
 							<div class="col-md-6">
 								<input type="text" class="form-control" name="organizationname" />
-
 							</div>
 						</div>
 
@@ -1412,23 +1555,22 @@ var icon = "";
 							</div>
 						</div>
 
+						<div class="form-group" id='desc'>
+							<label class="col-md-4 control-label">Description<sup>*</sup></label>
+							<div class="col-md-6">
 
-                         <div class="form-group" id='desc'>
-                         <label class="col-md-4 control-label">Description<sup>*</sup></label>
-                         <div class="col-md-6">
-                              <input type="text" class="form-control" name="description" />
-                              <textarea class="form-control" rows="5" id="description" name="description"></textarea>
-                         </div>
-                     </div>
-                     -->
+								<textarea class="form-control" rows="5" id="description" name="description"></textarea>
+							</div>
+						</div>
+
 
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">Security Question<sup>*</sup></label>
 							<div class="col-md-6 selectContainer">
-								<select name="question" class="form-control">
-									<option value=""></option>
-									<option value="q1">What is your Mother's maiden name?</option>
+								<select name="question" class="form-control" id="question">
+
+									<option value="What is your Mother's maiden name?">What is your Mother's maiden name?</option>
 								</select>
 							</div>
 						</div>

@@ -313,7 +313,7 @@ $(document).ready(function(){
 	            emailstudent: {
 	                validators: {
 	                    notEmpty: {
-	                        message: 'Please re-type the password'
+	                        message: 'Email Student ID is required'
 	                    },
 	                    regexp: {
 	                        regexp: /^[a-zA-Z0-9_\.]+$/,
@@ -327,7 +327,7 @@ $(document).ready(function(){
 	            emailngo: {
 	                validators: {
 	                    notEmpty: {
-	                        message: 'Please re-type the password'
+	                        message: 'NGO Email ID is required'
 	                    },
 	                    regexp: {
 	                        regexp: /^[-a-z0-9~!$%^&*_=+}{\?]+(\.[-a-z0-9~!$%^&*_=+}{\?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/,
@@ -385,6 +385,7 @@ $(document).ready(function(){
 	                    }
 	                }
 	            },
+
 	            question: {
 	                validators: {
 	                    notEmpty: {
@@ -392,6 +393,7 @@ $(document).ready(function(){
 	                    }
 	                }
 	            },
+
 	            answer: {
 	                validators: {
 	                    notEmpty: {
@@ -537,21 +539,30 @@ $('#registrationForm').on('success.form.bv', function(e) {
 	   	var usernamebackend = $('input[name=username]').val();
 	 	var passwordbackend = $('input[name=password]').val();
 
-	 	var genderbackend = $( "#gender" ).find(":selected").text();
+	 	var genderbackend = $( "#gender" ).find(":selected").val();
 
 
 
 
 	 	var phonenumberbackend = $('input[name=phonenumber]').val();
-		var securityquestionbackend = $( "#question" ).find(":selected").text();
+		var securityquestionbackend = $( "#question" ).find(":selected").val();
 		var answerbackend = $('input[name=answer]').val();
-    alert(securityquestionbackend + ' ' +genderbackend);
+    alert(securityquestionbackend + ' ttttt' +genderbackend);
+
+     	var orgnamebackend = $('input[name=organizationname]').val();
+  	   	var orgdescbackend = $('textarea#description').val();
+  	   	var orgurlbackend = $('input[name=website]').val();
+
+  	   	alert(orgdescbackend);
+
+
 
 		var lastloginbackend = '';
 
      if ($("#studentreg:checked").length > 0){
 
     	var emailbackend = $('input[name=emailstudent]').val()+"@students.itu.edu";
+    	var emailvar = emailbackend;
     	var profilebackend = $('input[name=profile1]').val();
     	var profilevar = profilebackend;
 
@@ -559,9 +570,14 @@ $('#registrationForm').on('success.form.bv', function(e) {
      else
      {
 
+
+
     	var profilebackend = $('input[name=profile2]').val();
     	var profilevar = profilebackend;
   	   	var emailbackend = $('input[name=emailngo]').val();
+  	   	var emailvar = emailbackend;
+
+
 
      }
 
@@ -582,7 +598,10 @@ $.ajax({
 	'securityQuestion': securityquestionbackend.toString(),
 	'answer': answerbackend.toString(),
 	'userType': profilebackend.toString().toLowerCase(),
-	'lastLogin': lastloginbackend.toString()
+	'lastLogin': lastloginbackend.toString(),
+	    'organizationName':orgnamebackend.toString(),
+	    'description': orgdescbackend.toString(),
+	    'website':orgurlbackend.toString()
 
 
 	}),
@@ -607,10 +626,12 @@ $.ajax({
 	*/
 
 	var usernamevar = document.getElementById('username').value;
+
 	alert(usernamevar);
 	alert(profilevar);
 	sessionStorage.setItem("loggedusername",usernamevar );
 	sessionStorage.setItem("loggedprofile",profilevar );
+	sessionStorage.setItem("loggedemail",emailvar );
 	window.location.href="home/";
 
 		},
@@ -670,21 +691,25 @@ $('#loginForm').on('success.form.bv', function(e) {
 
 		var profilebackend = $('input[name=profile3]').val();
 		var profilevar = profilebackend;
-			alert(profilebackend);
+			alert(profilevar);
+			alert($('input[name=profile3]').val());
 		}
-     	else if ($("#ngologin:checked").length > 0)
-     	{
+		else if ($("#ngologin:checked").length > 0){
 
 		var profilebackend = $('input[name=profile4]').val();
 		var profilevar = profilebackend;
-			alert(profilebackend);
+			alert(profilevar);
+			alert($('input[name=profile3]').val());
 		}
-     	else
-     	{
+		else {
 
-     	var profilebackend = $('input[name=profile5]').val();
-		alert(profilebackend);
-     	}
+		var profilebackend = $('input[name=profile5]').val();
+		var profilevar = profilebackend;
+			alert(profilevar);
+			alert($('input[name=profile3]').val());
+
+		}
+
 
 
 				$.ajax({
@@ -713,7 +738,7 @@ $('#loginForm').on('success.form.bv', function(e) {
 					alert('hi');
 
 				var usernamevar = document.getElementById('username2').value;
-				var profilevar = document.getElementById('adminlogin').value;
+
 				sessionStorage.setItem("loggedusername",usernamevar );
 				sessionStorage.setItem("loggedprofile",profilevar );
 				alert(usernamevar);
@@ -750,7 +775,7 @@ $('#resetForm').on('success.form.bv', function(e) {
 
    		var usernamebackend = $('input[name=username3]').val();
   	 	var passwordbackend = $('input[name=newpassword]').val();
-		var securityquestionbackend = $( "#question2" ).find(":selected").text();
+		var securityquestionbackend = $( "#question2" ).find(":selected").val();
 
 		var answerbackend = $('input[name=answer2]').val();
 
@@ -1072,10 +1097,10 @@ $('#resetForm').on('success.form.bv', function(e) {
 									<label class="col-md-4 control-label">Gender</label>
 									<div class="col-md-6">
 										<select class="form-control" name="gender" id="gender">
-											<option value=" "></option>
 
-											<option value="male">Male</option>
-											<option value="female">Female</option>
+                                            <option value=" "></option>
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
 										</select>
 									</div>
 								</div>
@@ -1134,11 +1159,13 @@ $('#resetForm').on('success.form.bv', function(e) {
 									<label class="col-md-4 control-label">Security Question<sup>*</sup></label>
 									<div class="col-md-6 selectContainer">
 										<select name="question" class="form-control" id="question">
-											<option value=" "></option>
-											<option value="q1">What is your Mother's maiden name?</option>
+                                            <option value=" "></option>
+											<option value="What is your Mother's maiden name?">What is your Mother's maiden name?</option>
 										</select>
 									</div>
 								</div>
+
+
 
 
 								<div class="form-group">
@@ -1279,8 +1306,8 @@ $('#resetForm').on('success.form.bv', function(e) {
 												<label class="col-lg-4 control-label">Security Question<sup>*</sup></label>
 												<div class="col-lg-7 selectContainer">
 													<select name="question2" class="form-control" id="question2">
-														<option value=""></option>
-														<option value="q2">What is your Mother's maiden name?</option>
+                                                        <option value=" "></option>
+														<option value="What is your Mother's maiden name?">What is your Mother's maiden name?</option>
 													</select>
 												</div>
 											</div>
