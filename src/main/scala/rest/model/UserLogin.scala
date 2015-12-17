@@ -1,9 +1,5 @@
 package main.scala.rest.model
 
-import java.util.Date
-
-import com.mongodb.DBObject
-
 class UserLogin {
 
   val mongodbConnection = new MongodbConnection()

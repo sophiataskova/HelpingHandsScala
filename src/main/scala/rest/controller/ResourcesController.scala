@@ -59,7 +59,7 @@ class ResourcesController {
 
     val responseMessage = userLogin.login()
 
-    if (responseMessage.matches("Student Login Successful")) {
+    if (responseMessage.matches("[a-zA-z]* Successful")) {
       return Response.status(Response.Status.OK).entity("{\"message\" :\"" + responseMessage + "\" }").build()
     }
 
@@ -76,7 +76,7 @@ class ResourcesController {
 
     val responseMessage = userLogin.logout()
 
-    if (responseMessage.matches("Student Logout Successful")) {
+    if (responseMessage.matches("[a-zA-z]* Successful")) {
       return Response.status(Response.Status.OK).entity("{\"message\" :\"" + responseMessage + "\" }").build()
     }
 
