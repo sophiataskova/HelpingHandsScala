@@ -33,17 +33,29 @@ class MongodbConnection() {
 
   }
 
-  def update(map: Map[String, String], collection: String) {
-//     var updateFields:Map[String,String]= Map[String,String]()
+  def updateLastLogin(map: Map[String, String], collection: String) {
 
     val update = MongoDBObject(
       "$set" -> MongoDBObject("lastLogin" -> new Date().toString)
     )
-//    updateFields += "lastLogin" -> new Date().toString
 
     mongoCollection(collection).findAndModify(map.asDBObject,update)
 
   }
+
+  def update(entry: Map[String, String],updateFields: Map[String,String], collection: String):Boolean= {
+
+    val update = MongoDBObject(
+      "$set" -> MongoDBObject(updateFields.toList)
+    )
+
+    val returnedCollection = mongoCollection(collection) findAndModify(entry asDBObject,update)
+
+    if (returnedCollection.nonEmpty) return true
+
+    false
+  }
+
 
   def dropAllDataFrom(collection: String) {
     mongoCollection(collection).drop()

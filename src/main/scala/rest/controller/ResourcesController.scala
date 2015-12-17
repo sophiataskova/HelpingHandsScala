@@ -2,15 +2,11 @@ package src.main.scala.rest.controller
 
 import java.io.{InputStream, FileInputStream}
 import javax.ws.rs._
-import javax.ws.rs.core.{MediaType, Response}
+import javax.ws.rs.core.Response
 
 import main.scala.rest.model.{Events, UserLogin, UserRegistration}
 
-
-import scala.io.Source
-
-//import main.scala.rest.UserRegistration
-
+import scala.collection.immutable.HashMap
 
 @Path("/")
 class ResourcesController {
@@ -18,6 +14,8 @@ class ResourcesController {
   val userRegistration = new UserRegistration()
   val userLogin = new UserLogin()
   val events = new Events()
+  private val userType = HashMap[String, String]("student" -> "studentUsers", "admin" -> "adminUsers", "ngo" -> "ngoUsers")
+
 
   @GET
   @Path("/")
@@ -48,7 +46,7 @@ class ResourcesController {
       return Response.status(Response.Status.OK).entity("{\"message\" :\"" + responseMessage + "\" }").build()
     }
 
-    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" : \"Registration Unsuccessful\" }").build()
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" : \"This username/email has already been registered, please choose another username/email, or try to log in\" }").build()
   }
 
   @POST
@@ -86,6 +84,28 @@ class ResourcesController {
   }
 
   @POST
+  @Path("/resetPassword")
+  @Consumes(Array("application/json"))
+  @Produces(Array("application/json"))
+  def resetPassword(request: String): Response = {
+
+    val convertedMap = convertToMap(request)
+
+    var searchMap = Map[String, String]()
+
+    searchMap += "username" -> convertedMap.get("username").get
+    searchMap += "securityQuestion" -> convertedMap.get("securityQuestion").get
+    searchMap += "answer" -> convertedMap.get("answer").get
+
+    val collection = userType.get(convertedMap.get("userType").get).get
+
+   if(userRegistration.mongodbObject.update(searchMap, convertedMap, collection))
+     return Response.status(Response.Status.OK).entity("{\"message\" :\"" + "Password Successfully Changed"  + "\" }").build()
+
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "No such user found" + "\" }").build()
+  }
+
+  @POST
   @Path("/createEvent")
   @Consumes(Array("application/json"))
   @Produces(Array("application/json"))
@@ -93,7 +113,7 @@ class ResourcesController {
     val convertedMap = convertToMap(request)
     val responseMessage = events.createEvent(convertedMap)
 
-    if(events.mongodbConnection.get(convertedMap,"createEvents").nonEmpty){
+    if (events.mongodbConnection.get(convertedMap, "createEvents").nonEmpty) {
       return Response.status(Response.Status.OK).entity("{\"message\" :\"" + responseMessage + "\" }").build()
     }
 
@@ -110,7 +130,7 @@ class ResourcesController {
 
     val responseMessage = events.deleteEvent(convertedMap)
 
-    if(events.mongodbConnection.get(convertedMap,"createEvents").isEmpty){
+    if (events.mongodbConnection.get(convertedMap, "createEvents").isEmpty) {
       return Response.status(Response.Status.OK).entity("{\"message\" :\"" + responseMessage + "\" }").build()
     }
 
@@ -127,19 +147,63 @@ class ResourcesController {
 
     val responseData = events.mongodbConnection.get(convertedMap, "createEvents")
 
-    if(responseData.nonEmpty){
+    if (responseData.nonEmpty) {
 
       val prettyResponseBuilder = new StringBuilder()
 
-      responseData.foreach( data => prettyResponseBuilder.append(data.toString()).append(","))
+      responseData.foreach(data => prettyResponseBuilder.append(data.toString).append(","))
 
       val prettyResponseString = prettyResponseBuilder.toString()
-      return Response.status(Response.Status.OK).entity(" { \"message\" : [" +  prettyResponseString.substring(0,prettyResponseString.length -1) + "]}").build()
+      return Response.status(Response.Status.OK).entity(" { \"message\" : [" + prettyResponseString.substring(0, prettyResponseString.length - 1) + "]}").build()
     }
 
     Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "There are no matching events" + "\" }").build()
   }
 
+  @POST
+  @Path("/updateProfile")
+  @Consumes(Array("application/json"))
+  @Produces(Array("application/json"))
+  def updateProfile(request: String): Response = {
+
+    val convertedMap = convertToMap(request)
+
+    var searchMap = Map[String, String]()
+
+    searchMap += "username" -> convertedMap.get("username").get
+
+    searchMap += "emailId" -> convertedMap.get("emailId").get
+
+    val userTypeInRequest = userType.get(convertedMap.get("userType").get).get
+
+
+    if (userRegistration.mongodbObject.update(searchMap, convertedMap, userTypeInRequest)) {
+
+      return Response.status(Response.Status.OK).entity("{\"message\" :\"" + "Profile updated" + "\" }").build()
+    }
+
+
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "There was no matching registered user, please check your credentials" + "\" }").build()
+  }
+
+
+  @POST
+  @Path("/populateEditProfile")
+  @Consumes(Array("application/json"))
+  @Produces(Array("application/json"))
+  def populateEditProfile(request: String): Response = {
+
+    val convertedMap = convertToMap(request)
+
+    val userTypeInRequest = userType.get(convertedMap.get("userType").get).get
+
+    val userData = userRegistration.mongodbObject.get(convertedMap, userTypeInRequest)
+
+    if (userData.nonEmpty)
+      return Response.status(Response.Status.OK).entity(" { \"message\" : " + userData.head + "}").build()
+
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "There was no matching registered user, please check your credentials" + "\" }").build()
+  }
 
 
   private def convertToMap(request: String): Map[String, String] = {
