@@ -17,3 +17,6 @@ export PATH=$M2_HOME/bin:$JAVA_HOME/bin:$SCALA_HOME/bin:$TOMCAT_HOME:$PATH
 
 mvn clean install
 
+- Import this postman collection for easy reference of endpoints
+POSTMAN COLLECTION:
+https://www.getpostman.com/collections/8d61942083d5c253217a
