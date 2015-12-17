@@ -541,10 +541,11 @@ $('#registrationForm').on('success.form.bv', function(e) {
 
 
 
+
 	 	var phonenumberbackend = $('input[name=phonenumber]').val();
 		var securityquestionbackend = $( "#question" ).find(":selected").text();
 		var answerbackend = $('input[name=answer]').val();
-
+    alert(securityquestionbackend + ' ' +genderbackend);
 
 		var lastloginbackend = '';
 
@@ -575,7 +576,7 @@ $.ajax({
 	'lastName': lastnamebackend.toString(),
 	'username': usernamebackend.toString(),
 	'password': passwordbackend.toString(),
-	'gender': $( "#gender" ).find(":selected").text().toString(),
+	'gender': genderbackend.toString(),
 	'emailId': emailbackend.toString(),
 	'phoneNumber': phonenumberbackend.toString(),
 	'securityQuestion': securityquestionbackend.toString(),
@@ -589,7 +590,7 @@ $.ajax({
 
 
 	success: function(data){
-	console.log(data);
+	console.log(data.message);
 
 
 		alert('hi');
@@ -705,8 +706,8 @@ $('#loginForm').on('success.form.bv', function(e) {
 				success: function(data){
 				console.log(data);
 
-				console.log(data.responseJSON);
-				var txt2 = data.responseJSON;
+				console.log(data.message);
+				var txt2 = data.message;
 
 
 					alert('hi');
@@ -716,14 +717,14 @@ $('#loginForm').on('success.form.bv', function(e) {
 				sessionStorage.setItem("loggedusername",usernamevar );
 				sessionStorage.setItem("loggedprofile",profilevar );
 				alert(usernamevar);
-				window.location.href="home/";
+			window.location.href="home/";
 
 
 					},
 				error:function(data){
 
 				console.log(data);
-				console.log(data.responseJSON);
+				console.log(data.responseJSON.message);
 				var txt2 = data.responseJSON.message;
 				$form.find('#msglog').removeClass('alert-success').addClass('alert-danger').html(txt2).show();
 
@@ -744,68 +745,95 @@ $('#resetForm').on('success.form.bv', function(e) {
      var $form     = $(e.target);
      validator = $form.data('bootstrapValidator');
 
-    // var adn = 'changePassword';
-     //var link = base + adn;
-
-     var usernamebackend = $('input[name=username3]').val();
-	   var passwordbackend = $('input[name=newpassword]').val();
 
 
-		$.ajax({
-			type:'POST',
-			url:'changePassword',
 
-			data:{
-				'username'    : usernamebackend,
-		        'password'    : passwordbackend
+   		var usernamebackend = $('input[name=username3]').val();
+  	 	var passwordbackend = $('input[name=newpassword]').val();
+		var securityquestionbackend = $( "#question2" ).find(":selected").text();
 
-			},
-			dataType: "json",
+		var answerbackend = $('input[name=answer2]').val();
 
-			success: function(data){
+		alert(usernamebackend + ' ' + passwordbackend + ' ' + securityquestionbackend + ' ' +answerbackend);
 
 
-					if(data.message == 'Successfull Reset'){
 
-						$form.find('#msgpwd').removeClass('alert-danger').addClass('alert-success').html('You, '+validator.getFieldElements
-								('username3').val()+ ' have successfully reset your password').show();
 
-						$('#resetForm').bootstrapValidator('resetForm', true);
+ 	   if ($("#studentlogin:checked").length > 0){
 
-						  	$('#username3').focus(function() {
+		var profilebackend = $('input[name=profile3]').val();
+		var profilevar = profilebackend;
+			alert(profilebackend);
+		}
+     	else if ($("#ngologin:checked").length > 0)
+     		{
+
+		var profilebackend = $('input[name=profile4]').val();
+		var profilevar = profilebackend;
+			alert(profilebackend);
+		}
+     	else
+     		{
+
+     		var profilebackend = $('input[name=profile5]').val();
+		alert(profilebackend);
+     		}
+
+
+				$.ajax({
+				type:'POST',
+				url:'/resetPassword',
+				contentType: "application/json",
+
+				data:JSON.stringify({
+
+
+				'username': usernamebackend.toString(),
+				'userType': profilebackend.toString().toLowerCase(),
+				'securityQuestion': securityquestionbackend.toString(),
+				'answer': answerbackend.toString(),
+				'password': passwordbackend.toString()
+
+
+
+				}),
+
+
+
+				success: function(data){
+				console.log(data);
+
+				console.log(data.message);
+				var txt2 = data.message;
+
+
+					alert('hi');
+
+					$form.find('#msgpwd').removeClass('alert-danger').addClass('alert-success').html(txt2).show();
+
+					$('#resetForm').bootstrapValidator('resetForm', true);
+
+					$('#username3').focus(function() {
 							     $('#msgpwd').removeClass('alert-success alert-danger').hide();
-							   });
-
-					}
-			},
-			error:function(data){
-
-				if(data.message == 'Unavailable Username'){
-
-					$form.find('#msgpwd').removeClass('alert-success').addClass('alert-danger').html('Username ' +validator.getFieldElements
-
-							('username3').val() + ' is, <strong>invalid!</strong>').show();
-
-					 $('#button3').removeAttr('disabled');
+					});
 
 
-				}
-				else {
+					},
+				error:function(data){
 
+				console.log(data);
+				console.log(data.responseJSON.message);
+				var txt2 = data.responseJSON.message;
 
-					 $form.find('#msgpwd').removeClass('alert-success').addClass('alert-danger').html('Sorry we are unable to process your request now. ' +validator.getFieldElements
+				$form.find('#msgpwd').removeClass('alert-success').addClass('alert-danger').html(txt2).show();
 
-								('username3').val() + ',<strong> please try again later!</strong>').show();
-
-						 $('#button3').removeAttr('disabled');
+				$('#button3').removeAttr('disabled');
 
 
 				}
 
+			 });
 
-			}
-
-	});
 
 });
 
@@ -1250,9 +1278,9 @@ $('#resetForm').on('success.form.bv', function(e) {
 											<div class="form-group">
 												<label class="col-lg-4 control-label">Security Question<sup>*</sup></label>
 												<div class="col-lg-7 selectContainer">
-													<select name="question2" class="form-control">
+													<select name="question2" class="form-control" id="question2">
 														<option value=""></option>
-														<option value="q1.2">What is your Mother's maiden name?</option>
+														<option value="q2">What is your Mother's maiden name?</option>
 													</select>
 												</div>
 											</div>
