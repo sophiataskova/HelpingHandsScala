@@ -8,19 +8,19 @@ class EnrollEventsTest {
 
   @Before
   def init() {
-    {
-      "eventName": "myFirstEvent",
-      "organization": "amazinglyAwesomeOrganization",
-      "from": "",
-      "to": "",
-      "location": "someLocation",
-      "volunteersRequired": "5",
-      "usersParticipating": "10",
-      "commentsPosted": "",
-      "comments": "",
-      "expired": "false"
-
-    }
+//    {
+//      "eventName": "myFirstEvent",
+//      "organization": "amazinglyAwesomeOrganization",
+//      "from": "",
+//      "to": "",
+//      "location": "someLocation",
+//      "volunteersRequired": "5",
+//      "usersParticipating": "10",
+//      "commentsPosted": "",
+//      "comments": "",
+//      "expired": "false"
+//
+//    }
     map += "eventName" -> "myFirstEvent"
     map += "organization" -> "amazinglyAwesomeOrganization"
     map += "from" -> "startDate"
@@ -31,6 +31,9 @@ class EnrollEventsTest {
     map += "commentsPosted" -> ""
     map += "comments" -> ""
 
+    map += "locationNearby" -> "San Francisco"
+    map += "category" -> "environment"
+    map += "description" -> "some description goes here"
     map += "expired" -> "false"
     map += "isActive" -> "true"
     map += "isApproved" -> "true"
@@ -41,6 +44,12 @@ class EnrollEventsTest {
 
   @Test
   def itShouldIncreaseTheCountOfAttendingPersonsForAnEvent() {
+
+    //given
+
+    //when
+
+    //then
     assert(true)
   }
 
