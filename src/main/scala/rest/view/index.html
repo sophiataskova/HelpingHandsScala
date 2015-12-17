@@ -301,13 +301,14 @@ $(document).ready(function(){
 	                }
 	            },
 
+	           /*
 	            gender: {
 	                validators: {
 	                    notEmpty: {
 	                        message: 'Please select your gender.'
 	                    }
 	                }
-	            },
+	            },	            */
 
 	            emailstudent: {
 	                validators: {
@@ -362,7 +363,7 @@ $(document).ready(function(){
 	                	notEmpty: {
 	                        message: 'Please enter your website'
 	                    },
-	                  //  uri: {
+	                   //uri: {
 	                	  regexp:{
 	                		  regexp: /^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$/,
 
@@ -458,7 +459,7 @@ $(document).ready(function(){
 	            question2: {
 	                validators: {
 	                    notEmpty: {
-	                        message: 'Please select your security question language.'
+	                        message: 'Please select your security question.'
 	                    }
 	                }
 	            },
@@ -544,18 +545,21 @@ $('#registrationForm').on('success.form.bv', function(e) {
 		var securityquestionbackend = $( "#question" ).find(":selected").text();
 		var answerbackend = $('input[name=answer]').val();
 
+
 		var lastloginbackend = '';
 
      if ($("#studentreg:checked").length > 0){
 
     	var emailbackend = $('input[name=emailstudent]').val()+"@students.itu.edu";
     	var profilebackend = $('input[name=profile1]').val();
+    	var profilevar = profilebackend;
 
      }
      else
      {
 
     	var profilebackend = $('input[name=profile2]').val();
+    	var profilevar = profilebackend;
   	   	var emailbackend = $('input[name=emailngo]').val();
 
      }
@@ -602,16 +606,19 @@ $.ajax({
 	*/
 
 	var usernamevar = document.getElementById('username').value;
-	sessionStorage.setItem("loggedusername","Welcome " +usernamevar );
+	alert(usernamevar);
+	alert(profilevar);
+	sessionStorage.setItem("loggedusername",usernamevar );
+	sessionStorage.setItem("loggedprofile",profilevar );
 	window.location.href="home/";
 
 		},
 	error:function(data){
 
 	console.log(data);
-	console.log(data.responseText);
-	var txt2 = data.responseText;
-	$form.find('#msgreg').removeClass('alert-success').addClass('alert-danger').html(txt2 + ' <strong> error</strong>').show();
+	console.log(data.responseJSON);
+	var txt2 = data.responseJSON.message;
+	$form.find('#msgreg').removeClass('alert-success').addClass('alert-danger').html(txt2).show();
 
 	 $('#button1').removeAttr('disabled');
 
@@ -653,72 +660,80 @@ $('#loginForm').on('success.form.bv', function(e) {
   var $form     = $(e.target);
      validator = $form.data('bootstrapValidator');
 
-     //var adn ='userLogin';
-    // var link=base+adn;
-
-
-  	   var usernamebackend = $('input[name=username2]').val();
+     var usernamebackend = $('input[name=username2]').val();
   	   var passwordbackend = $('input[name=password2]').val();
+			alert(usernamebackend);
+			alert(passwordbackend);
+
+  	   if ($("#studentlogin:checked").length > 0){
+
+		var profilebackend = $('input[name=profile3]').val();
+		var profilevar = profilebackend;
+			alert(profilebackend);
+		}
+     	else if ($("#ngologin:checked").length > 0)
+     	{
+
+		var profilebackend = $('input[name=profile4]').val();
+		var profilevar = profilebackend;
+			alert(profilebackend);
+		}
+     	else
+     	{
+
+     	var profilebackend = $('input[name=profile5]').val();
+		alert(profilebackend);
+     	}
 
 
-
-
-
-			$.ajax({
+				$.ajax({
 				type:'POST',
-				url:'userLogin/',
-				data:{
-					'username'    : usernamebackend,
-			        'password'    :passwordbackend
+				url:'/login',
+				contentType: "application/json",
 
-				},
-				//dataType: "json",
+				data:JSON.stringify({
+
+
+				'username': usernamebackend.toString(),
+				'password': passwordbackend.toString(),
+				'userType': profilebackend.toString().toLowerCase()
+
+				}),
+
+
 
 				success: function(data){
+				console.log(data);
+
+				console.log(data.responseJSON);
+				var txt2 = data.responseJSON;
 
 
-						if(data.message == 'Successful Login'){
-						//console.log("Registration Successful, Please login!!")
+					alert('hi');
 
-							alert('You have successfully login as '+validator.getFieldElements('username2').val());
+				var usernamevar = document.getElementById('username2').value;
+				var profilevar = document.getElementById('adminlogin').value;
+				sessionStorage.setItem("loggedusername",usernamevar );
+				sessionStorage.setItem("loggedprofile",profilevar );
+				alert(usernamevar);
+				window.location.href="home/";
 
-									 $('#loginForm').bootstrapValidator('resetForm', true);
 
-									window.location = "home.html";
-
-						}
-				},
+					},
 				error:function(data){
 
+				console.log(data);
+				console.log(data.responseJSON);
+				var txt2 = data.responseJSON.message;
+				$form.find('#msglog').removeClass('alert-success').addClass('alert-danger').html(txt2).show();
 
 
-					if(data.message == 'Unavailable Username'){
-
-						$form.find('#msglog').removeClass('alert-success').addClass('alert-danger').html('The username and password ' +validator.getFieldElements
-
-								('username2').val() + ',<strong>do not match</strong>').show();
-
-
-						 $('#button2').removeAttr('disabled');
-
-					}
-					else {
-
-
-						 $form.find('#msglog').removeClass('alert-success').addClass('alert-danger').html('Sorry we are unable to process your request now. ' +validator.getFieldElements
-
-									('username2').val() + ',<strong> please try again later!</strong>').show();
-
-						 $('#button2').removeAttr('disabled');
-
-
-					}
+				 $('#button2').removeAttr('disabled');
 
 
 				}
 
-
-		});
+			 });
 
 });
 
@@ -951,10 +966,35 @@ $('#resetForm').on('success.form.bv', function(e) {
 					<div class="row">
 						<div class="col-md-12">
 
+
+
 							<!-- Change the "action" attribute to your back-end URL -->
 							<form autocomplete="off" id="registrationForm" method="post" class="form-horizontal" action="" >
 
 								<div class="form-group">  </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-md-offset-4"><h4>Account Type</h4></div>
+                                    <br/>
+                                    <div class="col-md-6 col-md-offset-4">
+                                        <div  >
+                                            <label >
+                                                <input  checked type="radio" id="studentreg" name="profile1"  value="Student"  />Student
+                                            </label>
+                                            <label >
+                                                <input type="radio" id="ngoreg" name="profile2" value="Ngo"  />NGO
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">  </div>
+
+
+
+
 
 								<div class="form-group">
 									<div class=" col-md-8 col-md-offset-2 alert" id="msgreg" style="display: none;">
@@ -1014,7 +1054,7 @@ $('#resetForm').on('success.form.bv', function(e) {
 
 
 								<div class="form-group" id="emailstudentgroup">
-									<label class="col-md-4 control-label" >Email address<sup>*</sup></label>
+									<label class="col-md-4 control-label" >Email Address<sup>*</sup></label>
 
 									<div class="col-md-6">
 										<div class=" input-group">
@@ -1025,7 +1065,7 @@ $('#resetForm').on('success.form.bv', function(e) {
 								</div>
 
 								<div class="form-group" id="emailngogroup">
-									<label class="col-md-4 control-label" >Email address<sup>*</sup></label>
+									<label class="col-md-4 control-label" >Email Address<sup>*</sup></label>
 									<div class="col-md-6">
 										<input type="text" class="form-control" name="emailngo" />
 									</div>
@@ -1087,23 +1127,13 @@ $('#resetForm').on('success.form.bv', function(e) {
 									</div>
 								</div>
 
-								<div class="row">
-									<div class="col-md-6 col-md-offset-4"><h4>Account Type</h4></div>
-									<br/>
-									<div class="col-md-6 col-md-offset-4">
-										<div  >
-											<label >
-												<input  checked type="radio" id="studentreg" name="profile1"  value="Student"  /> Student
-											</label>
-											<label >
-												<input type="radio" id="ngoreg" name="profile2" value="NGO"  /> NGO
-											</label>
 
-										</div>
 
-									</div>
-								</div>
 							</form>
+
+
+
+
 						</div>
 					</div>
 
@@ -1121,6 +1151,30 @@ $('#resetForm').on('success.form.bv', function(e) {
 							<!-- Change the "action" attribute to your back-end URL -->
 							<form id="loginForm" method="post" class="form-horizontal" action="" >
 
+
+								<div class="form-group">  </div>
+
+
+
+
+                                <div class="row">
+                                    <div class="col-md-6 col-md-offset-4"><h4 class="profilelogin">Account Type</h4></div>
+                                    <br/>
+                                    <div class="col-md-6 col-md-offset-4">
+                                        <div  >
+                                            <label >
+                                                <input checked  type="radio" id="studentlogin" name="profile3"  value="Student"  />Student
+                                            </label>
+                                            <label >
+                                                <input type="radio" id="ngologin" name="profile4"  value="Ngo" />NGO
+                                            </label>
+                                            <label >
+                                                <input type="radio" id="adminlogin" name="profile5"  value="admin"/>Admin
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
 
 								<div class="form-group">  </div>
 
@@ -1152,25 +1206,9 @@ $('#resetForm').on('success.form.bv', function(e) {
 									</div>
 								</div>
 
-							</form>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6 col-md-offset-4"><h4 class="profilelogin">Account Type</h4></div>
-						<br/>
-						<div class="col-md-6 col-md-offset-4">
-							<div  >
-								<label >
-									<input checked  type="radio" id="studentlogin" name="profile3"  value=" Student2"  /> Student
-								</label>
-								<label >
-									<input type="radio" id="ngologin" name="profile4"  value="NGO2" /> NGO
-								</label>
-								<label >
-									<input type="radio" id="adminlogin" name="profile5"  value="Admin"/> Admin
-								</label>
-							</div>
 
+
+							</form>
 						</div>
 					</div>
 
