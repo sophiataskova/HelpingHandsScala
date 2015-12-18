@@ -12,8 +12,10 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
 	<!-- Latest compiled and minified JavaScript -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.5.9/slick.css"/>
 
-
+	<!-- For Validation -->
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
@@ -22,8 +24,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" ></script>
 
 
-	<!-- For Validation -->
-	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
 
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
 
@@ -36,6 +36,14 @@
 
 
 	<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js'></script>
+
+
+
+
+
+
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.5.9/slick.min.js"></script>
 
 
 
@@ -165,14 +173,11 @@ var icon = "";
 
 		  var profilelogout = sessionStorage.getItem("loggedprofile");
 
-		  var emaillogout = sessionStorage.getItem("loggedemail");
+		  var emaillogout;
 
 
 
 		  if(sessionStorage.getItem("loggedprofile") == 'Student'){
-
-
-
 
 		   $("#createEventButton").hide('fast');
 		      $('#orgname').hide('fast');
@@ -183,13 +188,23 @@ var icon = "";
 
 
 		  }
-		  else{
 
-		   $("#createEventButton").show('fast');
+		  else if (sessionStorage.getItem("loggedprofile") == 'Ngo'){
+
+		  $("#createEventButton").show('fast');
 		      $('#orgname').show('fast');
 
 	   			$('#orgurl').show('fast');
 	  			 $('#desc').show('fast');
+
+		  }
+		  else{
+
+		  $("#createEventButton").show('fast');
+
+		  $('#editprofile').hide('fast');
+
+		  $('#divider').hide('fast');
 
 		  }
 
@@ -413,7 +428,7 @@ var icon = "";
 		   		                    }	                    
 		   		                }
 		   		            },
-		   		            orgname : {
+		   		            orgname_event : {
 		   		                validators: {
 		   		                    notEmpty: {
 		   		                        message: 'Please enter the organization name.'
@@ -503,18 +518,151 @@ var icon = "";
 		    	    validator = $form.data('bootstrapValidator');
 		    	    // alert('rt2');
 		    	     
-		    	     $('#createEventForm').bootstrapValidator('resetForm', true);
-		    	     $('#button5').removeAttr('disabled'); 
+		    	   //  $('#createEventForm').bootstrapValidator('resetForm', true);
+		    	   //
+
+
+
+
+		var eventnamebackend = $('input[name=eventname]').val();
+
+		var orgnamebackend = $('input[name=orgname_event]').val();
+
+		var startdatebackend = $('input[name=startdate]').val();
+
+		var enddatebackend = $('input[name=enddate]').val();
+
+		var eventlocbackend = $('input[name=eventloc]').val();
+
+		var eventlocationnearbybackend = $( "#eventlocnearby" ).find(":selected").val();
+
+  	 	var eventdescbackend = $('textarea#eventdesc').val();
+
+		var categorybackend = $( "#category" ).find(":selected").val();
+
+		var participantsrequiredrbackend = $('input[name=event_participantsreq]').val();
+
+		var expiredbackend = '';
+
+
+			$.ajax({
+				type:'POST',
+				url:'/createEvent',
+				contentType: "application/json",
+
+				data:JSON.stringify({
+
+
+
+				    "eventName" : eventnamebackend.toString(),
+					"description": eventdescbackend.toString(),
+				 "organization" : orgnamebackend.toString(),
+
+					"from" : startdatebackend.toString(),
+
+					"to" : enddatebackend.toString(),
+					"location" : eventlocbackend.toString(),
+					"locationNearby": eventlocationnearbybackend.toString(),
+					"category":  categorybackend.toString(),
+
+					"volunteersParticipating" : participantsrequiredrbackend.toString(),
+
+					"expired" : expiredbackend.toString(),
+					"userType": usernamelogout.toString()
+
+
+
+				}),
+
+
+
+				success: function(data){
+				console.log(data);
+
+				console.log(data.message);
+
+				var txt2 = data.message;
+
+				$form.find('#msgevent').removeClass('alert-danger').addClass('alert-success').html(txt2).show();
+
+				<!-- $('#createEventForm').bootstrapValidator('resetForm', true);-->
+
+					},
+				error:function(data){
+
+				console.log(data);
+				console.log(data.responseJSON.message);
+
+				var txt2 = data.responseJSON.message;
+
+				$form.find('#msgevent').removeClass('alert-success').addClass('alert-danger').html(txt2).show();
+
+				 $('#button5').removeAttr('disabled');
+
+
+				}
+
+			 });
+
+
+
 		    	     
 		
 			});
 		    
 	
-			
+				$('#create_event_modal-1').on('hide.bs.modal', function(){
+						$('#msgevent').removeClass('alert-danger alert-success').html('').attr('style','display:none');
+						$('#createEventForm').bootstrapValidator('resetForm', true);
+				});
+
+
 			$('#createEventButton').click(function(){
 		
-				$('#createEventForm').bootstrapValidator('resetForm', true);
-				
+								$('#createEventForm').bootstrapValidator('resetForm', true);
+
+								  $('#msgevent').removeClass('alert-danger alert-success').html('').attr('style','display:none');
+
+
+
+							$.ajax({
+								type:'POST',
+								url:'/populateEditProfile',
+								contentType: "application/json",
+
+								data:JSON.stringify({
+
+
+								'username': usernamelogout.toString(),
+								'userType': profilelogout.toString().toLowerCase(),
+								//'emailId': emaillogout.toString()
+
+
+
+								}),
+
+
+
+								success: function(data){
+
+
+								console.log(data.message);
+
+
+								$('#orgname_event').val(data.message.organizationName);
+
+									},
+								error:function(data){
+
+
+								console.log(data.responseJSON.message);
+
+
+								}
+
+							 });
+
+
 				});
 			
 			$('#button6').click(function(){
@@ -809,79 +957,98 @@ var icon = "";
 
 			  });
 
-			  $('#editprofile').click(function(){
+
+							 $('#editprofile').click(function(){
 
 			  $('#msgprofile').removeClass('alert-danger alert-success').html('').attr('style','display:none');
 
 
+												$.ajax({
+													type:'POST',
+													url:'/populateEditProfile',
+													contentType: "application/json",
 
-			$.ajax({
-				type:'POST',
-				url:'/populateEditProfile',
-				contentType: "application/json",
-
-				data:JSON.stringify({
-
-
-				'username': usernamelogout.toString(),
-				'userType': profilelogout.toString().toLowerCase(),
-				'emailId': emaillogout.toString()
+													data:JSON.stringify({
 
 
-
-				}),
+													'username': usernamelogout.toString(),
+													'userType': profilelogout.toString().toLowerCase(),
+													//'emailId': emaillogout.toString()
 
 
 
-				success: function(data){
-
-
-				console.log(data.message);
-
-				console.log(data.message.securityQuestion);
-
-				$('#firstname').val(data.message.firstName);
-
-				$('#lastname').val(data.message.lastName);
-
-				$( "#gender" ).find(":selected").text(data.message.gender);
-
-				$('#phonenumber').val(data.message.phoneNumber);
-
-
-				$( "#question" ).find(":selected").text(data.message.securityQuestion);
-
-				$('#answer').val(data.message.answer);
-
-				$('#organizationname').val(data.message.organizationName);
-
-				$('#website').val(data.message.website);
-
-				$('textarea#description').val(data.message.description);
-
-					},
-				error:function(data){
-
-
-				console.log(data.responseJSON.message);
-
-
-				}
-
-			 });
+													}),
 
 
 
+													success: function(data){
+
+
+														getEmailFunction(data);
 
 
 
+														},
+													error:function(data){
+
+
+													console.log(data.responseJSON.message);
+
+
+													}
+
+												 });
+
+						});
+
+
+						function getEmailFunction(data) {
+
+									emaillogout = data.message.emailId;
+
+									console.log(data.message);
+
+													console.log(data.message.securityQuestion);
+
+													console.log(data.message.organizationName+ 'uu' + data.message.website);
+
+													$('#firstname').val(data.message.firstName);
+
+													$('#lastname').val(data.message.lastName);
+
+													$( "#gender" ).find(":selected").text(data.message.gender);
+
+													$('#phonenumber').val(data.message.phoneNumber);
+
+
+													$( "#question" ).find(":selected").text(data.message.securityQuestion);
+
+													$('#answer').val(data.message.answer);
+
+													$('#organizationname').val(data.message.organizationName);
+
+													$('#website').val(data.message.website);
+
+													$('textarea#description').val(data.message.description);
 
 
 
-					
-				});
-				
-		});
+						}
+
+
+
+	});
+
+</script>
+<script>
+				$('.multiple-items').slick({
+					  infinite: true,
+					  slidesToShow: 3,
+					  slidesToScroll: 3
+					});
+
+
+
 
 </script>
 
@@ -1186,7 +1353,7 @@ var icon = "";
 				<a data-toggle="dropdown" class="dropdown-toggle" href="#"><span id="gear" class="glyphicon glyphicon-cog"></span></a>
 				<ul role="menu" class="dropdown-menu">
 					<li><a href="#" id="editprofile" data-toggle="modal"  data-target="#edit_profile_modal-1" >Edit Profile</a></li>
-					<li class="divider"></li>
+					<li class="divider" id="divider"></li>
 					<li><a href="#" id="logout">Log Out</a></li>
 				</ul>
 			</li>
@@ -1332,7 +1499,7 @@ var icon = "";
 						<div class="form-group">  </div>
 
 						<div class="form-group">
-							<div class=" col-md-11 alert" id="msgevent" style="display: none;">
+							<div class=" col-md-9 col-md-offset-2 alert alert" id="msgevent" style="display: none;">
 								<a href="#" class="close" data-dismiss="alert">&times;</a>
 							</div>
 						</div>
@@ -1353,36 +1520,10 @@ var icon = "";
 							</div>
 						</div>
 
-						<!--      <div class="form-group">
-                                   <label class="col-lg-4 control-label">From<sup>*</sup></label>
-                                   <div class="col-lg-7">
-                                         <div class="input-group date" id="datetimePicker">
-                                               <input type="text" class="form-control" name="fromdate" data-provide="datepicker" data-date-end-date="0d" />
-                                                   <span class="input-group-addon">
-                                                   <span class="glyphicon glyphicon-calendar"></span>
-                                                   </span>
-                                               </div>
-                                               <span class="help-block">MM/DD/YYYY</span>
-                                          </div>
-                               </div>
-
-                                <div class="form-group">
-                                   <label class="col-lg-4 control-label">To<sup>*</sup></label>
-                                   <div class="col-lg-7">
-                                               <div class="input-group date" id="datetimePicker">
-                                               <input type="text" class="form-control" name="todate" data-provide="datepicker" data-date-end-date="0d" />
-                                                   <span class="input-group-addon">
-                                                   <span class="glyphicon glyphicon-calendar"></span>
-                                                   </span>
-                                               </div>
-                                               <span class="help-block">MM/DD/YYYY</span>
-                                 </div>
-                               </div>-->
-
 						<div class="form-group">
 							<label class="col-lg-5 control-label">Start Date<sup>*</sup></label>
 							<div class="col-lg-6">
-								<input type="date" class="form-control" name="startdate" placeholder="date">
+								<input type="date" id="startdate" class="form-control" name="startdate" placeholder="date">
 
 							</div>
 						</div>
@@ -1391,7 +1532,7 @@ var icon = "";
 						<div class="form-group">
 							<label class="col-lg-5 control-label">End Date<sup>*</sup></label>
 							<div class="col-lg-6">
-								<input type="date" class="form-control" name="enddate" placeholder="date">
+								<input type="date" id="enddate" class="form-control" name="enddate" placeholder="date">
 
 							</div>
 						</div>
@@ -1407,13 +1548,15 @@ var icon = "";
 							<label class="col-lg-5 control-label">Location Near By<sup>*</sup></label>
 							<div class="col-lg-6">
 								<select class="form-control" id='eventlocnearby'  name="eventlocnearby">
+
 									<option value=" "></option>
-									<option value="sf">San Francisco</option>
-									<option value="sj">San Jose</option>
-									<option value="sc">Santa Clara</option>
-									<option value="mv">Mountain View</option>
-									<option value="pa">Palo Alto</option>
-									<option value="o">Oakland</option>
+
+									<option value="San Francisco">San Francisco</option>
+									<option value="San Jose">San Jose</option>
+									<option value="Santa Clara">Santa Clara</option>
+									<option value="Mountain View">Mountain View</option>
+									<option value="Palo Alto">Palo Alto</option>
+									<option value="Oakland">Oakland</option>
 
 								</select>
 
@@ -1432,19 +1575,21 @@ var icon = "";
 							<label class="col-lg-5 control-label">Category <sup>*</sup></label>
 							<div class="col-lg-6">
 								<select class="form-control" id='category'  name="category">
+
 									<option value=" "></option>
-									<option value="disaster_relief">Disaster Relief</option>
-									<option value="seniors">Seniors</option>
-									<option value="environment">Environment</option>
-									<option value="animals">Animals</option>
-									<option value="service_homeless">Service for Homeless</option>
-									<option value="sports">Sports</option>
-									<option value="hunger">Hunger</option>
-									<option value="childer">Children</option>
-									<option value="creativity_arts">Creativity Arts</option>
-									<option value="people_disabilities">People with Disabilities</option>
-									<option value="education">Education</option>
-									<option value="community">Community</option>
+
+									<option value="Disaster Relief">Disaster Relief</option>
+									<option value="Seniors">Seniors</option>
+									<option value="Environment">Environment</option>
+									<option value="Animals">Animals</option>
+									<option value="Service Homeless">Service for Homeless</option>
+									<option value="Sports">Sports</option>
+									<option value="Hunger">Hunger</option>
+									<option value="Childer">Children</option>
+									<option value="Creativity Arts">Creativity Arts</option>
+									<option value="People with Disabilities">People with Disabilities</option>
+									<option value="Education">Education</option>
+									<option value="Community">Community</option>
 
 
 								</select>
@@ -1544,14 +1689,14 @@ var icon = "";
 						<div class="form-group" id='orgname'>
 							<label class="col-md-4 control-label">Organization Name<sup>*</sup></label>
 							<div class="col-md-6">
-								<input type="text" class="form-control" name="organizationname" />
+								<input type="text" class="form-control" name="organizationname" id="organizationname"/>
 							</div>
 						</div>
 
 						<div class="form-group" id='orgurl'>
 							<label class="col-md-4 control-label">Website<sup>*</sup></label>
 							<div class="col-md-6">
-								<input type="text" class="form-control" name="website" />
+								<input type="text" class="form-control" name="website" id="website" />
 							</div>
 						</div>
 
@@ -1615,17 +1760,37 @@ var icon = "";
 
 	<div  >
 		<div class="tab-content fors" >
-			<div class="tab-pane active" id="tab1" style="background-color:green">
-				<div  >k</div>
 
+
+
+
+				<div id="carousel2" >
+
+					<div class=".multiple-items">
+						<div>your content</div>
+						<div>your content</div>
+						<div>your content</div>
+
+					</div>
+
+				</div>
+
+
+
+			<div class="tab-pane" id="tab2" >
+				<div  id="carousel3">k</div>
+
+				<div ></div>
+
+				<div id="carousel4" >k</div>
 			</div>
 
-			<div class="tab-pane" id="tab2" style="background-color:green">
-				<div  >k</div>
-			</div>
+			<div class="tab-pane" id="tab3" >
+				<div id="carousel5" >k</div>
 
-			<div class="tab-pane" id="tab3" style="background-color:green">
-				<div >k</div>
+				<div ></div>
+
+				<div id="carousel6">k</div>
 			</div>
 		</div>
 	</div>
