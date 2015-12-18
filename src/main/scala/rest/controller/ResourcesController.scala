@@ -2,7 +2,7 @@ package src.main.scala.rest.controller
 
 import java.io.{InputStream, FileInputStream}
 import javax.ws.rs._
-import javax.ws.rs.core.Response
+import javax.ws.rs.core.{MediaType, Response}
 
 import main.scala.rest.model.{EnrollEvents, Events, UserLogin, UserRegistration}
 
@@ -261,7 +261,7 @@ class ResourcesController {
 
     if (convertedMap.get("userType").get == "admin") {
 
-      if(enrollEvents.approveEvent(convertedMap - "userType" )) {
+      if (enrollEvents.approveEvent(convertedMap - "userType")) {
 
         return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"Event approved\"" + "}").build()
 
@@ -281,7 +281,7 @@ class ResourcesController {
 
     if (convertedMap.get("userType").get == "admin") {
 
-      if(enrollEvents.denyEvent(convertedMap - "userType")) {
+      if (enrollEvents.denyEvent(convertedMap - "userType")) {
 
         return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"Event Denied\"" + "}").build()
 
@@ -291,9 +291,30 @@ class ResourcesController {
     Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "\"You are not authorized for this action\"" + "\" }").build()
   }
 
+  @POST
+  @Path("/searchEvent")
+  @Consumes(Array("text/plain"))
+  @Produces(Array("application/json"))
+  def searchEvent(request: String): Response = {
+
+    val responseData = events.searchKeywords(request)
+
+    if (responseData.nonEmpty) {
+      val prettyResponseBuilder = new StringBuilder()
+
+      responseData.foreach(data => prettyResponseBuilder.append(data.toString).append(","))
+
+      val prettyResponseString = prettyResponseBuilder.toString()
+
+      return Response.status(Response.Status.OK).entity(" { \"message\" : [" + prettyResponseString.substring(0, prettyResponseString.length - 1) + "]}").build()
+    }
+
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" : " + "\"No Data Found, Please Narrow Down Your Search\"" + " }").build()
+  }
+
   private def convertToMap(request: String): Map[String, String] = {
 
-    var convertedMap: Map[String, String] = Map[String, String]()
+    var tidyMap: Map[String, String] = Map[String, String]()
 
     val req = request.filter(_ >= ' ').replaceAll(" ", "")
 
@@ -304,10 +325,10 @@ class ResourcesController {
       .toMap
 
     for (x <- untidyMap) {
-      convertedMap += x._1 -> x._2
+      tidyMap += x._1 -> x._2
     }
 
-    convertedMap
+    tidyMap
   }
 
 }

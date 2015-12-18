@@ -23,9 +23,16 @@ class Events {
     "Event Deleted"
   }
 
-  def enrollForEvent(){
+  def searchKeywords(searchString: String) = {
+
+    var searchTokens:String = ""
+
+    searchString.split(" ").foreach(x => searchTokens = searchTokens.concat("[a-zA-Z0-9 ]*" + x))
+
+    searchTokens=searchTokens.concat("[a-zA-Z0-9 ]*")
+
+    mongodbConnection.searchEvents(searchTokens,"createEvents")
 
   }
-
 
 }

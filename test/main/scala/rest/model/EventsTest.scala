@@ -1,7 +1,7 @@
 package main.scala.rest.model
 
 
-import org.junit.{Before, Test}
+import org.junit.{After, Before, Test}
 
 
 class EventsTest {
@@ -21,14 +21,11 @@ class EventsTest {
     map += "usersParticipating" -> "10"
     map += "commentsPosted" -> ""
     map += "comments" -> ""
-    map += "expired" -> "false"
 
     map += "locationNearby" -> "San Francisco"
     map += "category" -> "environment"
     map += "description" -> "some description goes here"
-    map += "isActive" -> "true"
-    map += "isApproved" -> "true"
-    map += "isAwaitingAcceptance" -> "false"
+
 
   }
 
@@ -53,9 +50,28 @@ class EventsTest {
      events.deleteEvent(map)
 
     val actual=events.mongodbConnection.get(map, "createEvents")
+
     //then
     assert(actual.size == expected)
+    clearDb()
   }
 
+  @Test
+  def itShouldSearchEventForKeyWords(){
+    //given
+    val searchString = "some goes"
+
+    //when
+    events.createEvent(map)
+     val actualData = events.searchKeywords(searchString)
+
+    //then
+    assert(actualData.nonEmpty)
+  }
+
+  @After
+  def clearDb(){
+    events.mongodbConnection.dropAllDataFrom("createEvents")
+  }
 
 }

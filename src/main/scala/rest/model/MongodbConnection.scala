@@ -7,7 +7,6 @@ import com.mongodb.casbah.Imports._
 
 class MongodbConnection() {
 
-
   val mongoCollection = MongoConnection("localhost", 27017)("helpingHandsDb")
 
   def insert(obj: Map[String, Any], collection: String) {
@@ -79,6 +78,23 @@ class MongodbConnection() {
         return x(searchValue))
 
     "Value not found"
+  }
+
+
+  def searchEvents(searchString: String, collection: String): List[String] = {
+
+    val search = MongoDBObject("description" -> searchString.r)
+
+    var results = List[String]()
+
+    mongoCollection(collection).find(search).foreach( result =>
+
+      results = result.toString :: results
+
+    )
+
+    results
+
   }
 
   def dropAllDataFrom(collection: String) {
