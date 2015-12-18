@@ -1,56 +1,91 @@
 package main.scala.rest.model
 
-import org.junit.{Before, Test}
+import org.junit.{After, Test, Before}
+
 
 class EnrollEventsTest {
 
-  var map = Map[String, String]()
+  val events = new Events()
+
+  var event:Map[String,String] = Map[String,String]()
+
+  var enrollEvents= new EnrollEvents()
+
+  var createEvent= new Events()
 
   @Before
-  def init() {
-//    {
-//      "eventName": "myFirstEvent",
-//      "organization": "amazinglyAwesomeOrganization",
-//      "from": "",
-//      "to": "",
-//      "location": "someLocation",
-//      "volunteersRequired": "5",
-//      "usersParticipating": "10",
-//      "commentsPosted": "",
-//      "comments": "",
-//      "expired": "false"
-//
-//    }
-    map += "eventName" -> "myFirstEvent"
-    map += "organization" -> "amazinglyAwesomeOrganization"
-    map += "from" -> "startDate"
-    map += "to" -> "endDate"
-    map += "location" -> "address"
-    map += "volunteersRequired" -> "5"
-    map += "usersParticipating" -> "10"
-    map += "commentsPosted" -> ""
-    map += "comments" -> ""
+  def init(){
 
-    map += "locationNearby" -> "San Francisco"
-    map += "category" -> "environment"
-    map += "description" -> "some description goes here"
-    map += "expired" -> "false"
-    map += "isActive" -> "true"
-    map += "isApproved" -> "true"
-    map += "isAwaitingAcceptance" -> "false"
+    event += "eventName" -> "myFirstEvent"
+    event += "organization" -> "amazinglyAwesomeOrganization"
+    event += "from" -> "startDate"
+    event += "to" -> "endDate"
+    event += "location" -> "address"
+    event += "volunteersRequired" -> "5"
+    event += "usersParticipating" -> "0"
+    event += "commentsPosted" -> ""
+    event += "comments" -> ""
+    event += "expired" -> "false"
 
+//    event += "volunteersContact" -> ""
+    event += "volunteersInterested" -> "0"
+    event += "locationNearby" -> "San Francisco"
+    event += "category" -> "environment"
+    event += "description" -> "some description goes here"
+    event += "isActive" -> "true"
+    event += "isApproved" -> "true"
+    event += "isAwaitingAcceptance" -> "false"
+
+    createEvent.createEvent(event)
 
   }
 
   @Test
-  def itShouldIncreaseTheCountOfAttendingPersonsForAnEvent() {
+  def itShouldIncreaseTheCountOfUsersParticipating(){
 
     //given
 
+    var user:Map[String,String] = Map[String,String]()
+
+    user += "username" -> "apurv"
+    user += "emailId" -> "emailId"
+
+    val expected = true
+    val basicEvent= event - "usersParticipating" - "volunteersInterested" -"volunteersRequired" -"volunteersContact"
+
     //when
+    val actual = enrollEvents.enrollAsParticipant(basicEvent)
 
     //then
-    assert(true)
+    assert(actual == expected)
+  }
+
+
+  @Test
+  def itShouldAddVolunteersToVolunteersContact(){
+
+    //given
+
+    var user:Map[String,String] = Map[String,String]()
+
+    user += "username" -> "apurv"
+    user += "emailId" -> "emailId"
+
+    val expected = true
+    val basicEvent= event - "usersParticipating" - "volunteersInterested" -"volunteersRequired"
+
+
+    //when
+
+    val actual = enrollEvents.enrollAsVolunteer(basicEvent,user)
+
+    //then
+    assert(actual == expected)
+  }
+
+  @After
+  def clearDb(){
+    createEvent.mongodbConnection.dropAllDataFrom("createEvents")
   }
 
 }

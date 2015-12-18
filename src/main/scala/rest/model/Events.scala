@@ -17,4 +17,9 @@ class Events {
     "Event Deleted"
   }
 
+  def enrollForEvent(){
+
+  }
+
+
 }

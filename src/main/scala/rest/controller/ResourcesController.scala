@@ -4,7 +4,7 @@ import java.io.{InputStream, FileInputStream}
 import javax.ws.rs._
 import javax.ws.rs.core.Response
 
-import main.scala.rest.model.{Events, UserLogin, UserRegistration}
+import main.scala.rest.model.{EnrollEvents, Events, UserLogin, UserRegistration}
 
 import scala.collection.immutable.HashMap
 
@@ -14,20 +14,21 @@ class ResourcesController {
   val userRegistration = new UserRegistration()
   val userLogin = new UserLogin()
   val events = new Events()
+  val enrollEvents= new EnrollEvents()
   private val userType = HashMap[String, String]("student" -> "studentUsers", "admin" -> "adminUsers", "ngo" -> "ngoUsers")
 
 
   @GET
   @Path("/")
   @Produces(Array("text/html"))
-  def indexPage(request: String): InputStream = {
+  def indexPage(): InputStream = {
     new FileInputStream("src/main/scala/rest/view/index.html")
   }
 
   @GET
   @Path("/home")
   @Produces(Array("text/html"))
-  def homePage(request: String): InputStream = {
+  def homePage(): InputStream = {
     new FileInputStream("src/main/scala/rest/view/home.html")
   }
 
@@ -200,7 +201,7 @@ class ResourcesController {
     val userData = userRegistration.mongodbObject.get(convertedMap, userTypeInRequest)
 
     if (userData.nonEmpty)
-      return Response.status(Response.Status.OK).entity(" { \"message\" : " + userData.head + "}").build()
+      return Response.status(Response.Status.OK).entity(" { \"message\" :" + userData.head + "}").build()
 
     Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "There was no matching registered user, please check your credentials" + "\" }").build()
   }
@@ -213,14 +214,40 @@ class ResourcesController {
 
     val convertedMap = convertToMap(request)
 
-    val userTypeInRequest = userType.get(convertedMap.get("userType").get).get
+    var event:Map[String,String] = Map[String,String]()
+    event += "organization" -> convertedMap.get("organization").get
+    event += "eventName" -> convertedMap.get("eventName").get
 
-    val userData = userRegistration.mongodbObject.get(convertedMap, userTypeInRequest)
 
-    if (userData.nonEmpty)
-      return Response.status(Response.Status.OK).entity(" { \"message\" : " + userData.head + "}").build()
+     if(enrollEvents.enrollAsParticipant(event)){
+       return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"You have successfully enrolled for this event\"" + "}").build()
+     }
 
-    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "There was no matching registered user, please check your credentials" + "\" }").build()
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" : " + "\"There was a problem during enrollment, Please try again later\"" + " }").build()
+  }
+
+  @POST
+  @Path("/volunteerForEvent")
+  @Consumes(Array("application/json"))
+  @Produces(Array("application/json"))
+  def volunteerForEvent(request: String): Response = {
+
+    val convertedMap = convertToMap(request)
+
+    var event:Map[String,String] = Map[String,String]()
+    event += "organization" -> convertedMap.get("organization").get
+    event += "eventName" -> convertedMap.get("eventName").get
+
+    var user:Map[String,String] = Map[String,String]()
+
+    user += "username" -> convertedMap.get("username").get
+    user += "emailId" -> convertedMap.get("emailId").get
+
+    if(enrollEvents.enrollAsVolunteer(event,user)){
+      return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"We have conveyed your request to volunteer, to the organizer\"" + "}").build()
+    }
+
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "\"There was problem joining as a volunteer, please try again later\"" + "\" }").build()
   }
 
   private def convertToMap(request: String): Map[String, String] = {

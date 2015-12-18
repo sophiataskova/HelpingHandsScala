@@ -1,6 +1,5 @@
 package main.scala.rest.model
 
-import java.util.Date
 
 import org.junit.{Before, Test}
 
@@ -15,15 +14,21 @@ class EventsTest {
 
     map += "eventName" -> "myFirstEvent"
     map += "organization" -> "amazinglyAwesomeOrganization"
-    map += "from" -> new Date(2015, 12, 10).toString
-    map += "to"  -> new Date(2015,12,11).toString
-    map += "location" -> "someLocation"
+    map += "from" -> "startDate"
+    map += "to" -> "endDate"
+    map += "location" -> "address"
     map += "volunteersRequired" -> "5"
-    map += "volunteersParticipating" -> "10"
-    map += "description" -> "hereGoesSomeDiscriptionAboutTheEvent"
+    map += "usersParticipating" -> "10"
     map += "commentsPosted" -> ""
     map += "comments" -> ""
     map += "expired" -> "false"
+
+    map += "locationNearby" -> "San Francisco"
+    map += "category" -> "environment"
+    map += "description" -> "some description goes here"
+    map += "isActive" -> "true"
+    map += "isApproved" -> "true"
+    map += "isAwaitingAcceptance" -> "false"
 
   }
 
@@ -51,5 +56,6 @@ class EventsTest {
     //then
     assert(actual.size == expected)
   }
+
 
 }
