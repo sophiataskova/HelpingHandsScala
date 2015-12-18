@@ -23,18 +23,11 @@ class EnrollEventsTest {
     event += "location" -> "address"
     event += "volunteersRequired" -> "5"
     event += "usersParticipating" -> "0"
-    event += "commentsPosted" -> ""
-    event += "comments" -> ""
-    event += "expired" -> "false"
 
-//    event += "volunteersContact" -> ""
     event += "volunteersInterested" -> "0"
     event += "locationNearby" -> "San Francisco"
     event += "category" -> "environment"
     event += "description" -> "some description goes here"
-    event += "isActive" -> "true"
-    event += "isApproved" -> "true"
-    event += "isAwaitingAcceptance" -> "false"
 
     createEvent.createEvent(event)
 
@@ -78,6 +71,49 @@ class EnrollEventsTest {
     //when
 
     val actual = enrollEvents.enrollAsVolunteer(basicEvent,user)
+
+    //then
+    assert(actual == expected)
+  }
+
+  @Test
+  def itShouldApproveTheEvent() {
+
+    //given
+
+    val expected = true
+
+    //when
+    val actual = enrollEvents.approveEvent(event)
+
+    //then
+    assert(actual == expected)
+  }
+
+
+  @Test
+  def itShouldDenyTheEvent() {
+
+    //given
+
+    val expected = true
+
+    //when
+    val actual = enrollEvents.denyEvent(event)
+
+    //then
+    assert(actual == expected)
+  }
+
+  @Test
+  def itShouldExpireTheEvent() {
+
+    //given
+
+    val expected = true
+
+    //when
+    val actual = enrollEvents.expireEvent(event)
 
     //then
     assert(actual == expected)

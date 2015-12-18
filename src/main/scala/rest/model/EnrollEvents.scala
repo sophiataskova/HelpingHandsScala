@@ -1,6 +1,7 @@
 package main.scala.rest.model
 
 class EnrollEvents {
+
   val mongoConnection = new MongodbConnection()
 
   def enrollAsParticipant(event: Map[String, String]): Boolean = {
@@ -38,6 +39,40 @@ class EnrollEvents {
 
     mongoConnection.update(event, updateFields, "createEvents")
 
+  }
+
+  def approveEvent(event: Map[String, String]): Boolean = {
+
+    var updateFields = Map[String, String]()
+
+    updateFields += "expired" -> "false"
+    updateFields += "isActive" -> "true"
+    updateFields += "isAwaitingApproval" -> "false"
+    updateFields += "isDenied" -> "false"
+
+    mongoConnection.update(event, updateFields, "createEvents")
+  }
+
+  def denyEvent(event: Map[String, String]): Boolean = {
+    var updateFields = Map[String, String]()
+
+    updateFields += "expired" -> "true"
+    updateFields += "isActive" -> "false"
+    updateFields += "isAwaitingApproval" -> "false"
+    updateFields += "isDenied" -> "true"
+
+    mongoConnection.update(event, updateFields, "createEvents")
+  }
+
+  def expireEvent(event: Map[String, String]): Boolean = {
+    var updateFields = Map[String, String]()
+
+    updateFields += "expired" -> "true"
+    updateFields += "isActive" -> "false"
+    updateFields += "isAwaitingApproval" -> "false"
+    updateFields += "isDenied" -> "false"
+
+    mongoConnection.update(event, updateFields, "createEvents")
   }
 
 }

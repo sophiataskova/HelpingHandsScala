@@ -5,8 +5,14 @@ class Events {
   val mongodbConnection = new MongodbConnection()
 
   def createEvent(map: Map[String, String]): String = {
+    var updateMap = map
 
-    mongodbConnection.insert(map, "createEvents")
+    updateMap += "expired" -> "false"
+    updateMap += "isActive" -> "false"
+    updateMap += "isAwaitingApproval" -> "true"
+    updateMap += "isDenied" -> "false"
+
+    mongodbConnection.insert(updateMap, "createEvents")
 
     "New Event Created"
   }

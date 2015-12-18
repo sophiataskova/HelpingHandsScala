@@ -14,7 +14,7 @@ class ResourcesController {
   val userRegistration = new UserRegistration()
   val userLogin = new UserLogin()
   val events = new Events()
-  val enrollEvents= new EnrollEvents()
+  val enrollEvents = new EnrollEvents()
   private val userType = HashMap[String, String]("student" -> "studentUsers", "admin" -> "adminUsers", "ngo" -> "ngoUsers")
 
 
@@ -47,7 +47,7 @@ class ResourcesController {
       return Response.status(Response.Status.OK).entity("{\"message\" :\"" + responseMessage + "\" }").build()
     }
 
-    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" : \"This username/email has already been registered, please choose another username/email, or try to log in\" }").build()
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" : \"This username/email has already been registered or is invalid, please choose correct credentials, or try to log in\" }").build()
   }
 
   @POST
@@ -100,8 +100,8 @@ class ResourcesController {
 
     val collection = userType.get(convertedMap.get("userType").get).get
 
-   if(userRegistration.mongodbObject.update(searchMap, convertedMap, collection))
-     return Response.status(Response.Status.OK).entity("{\"message\" :\"" + "Password Successfully Changed"  + "\" }").build()
+    if (userRegistration.mongodbObject.update(searchMap, convertedMap, collection))
+      return Response.status(Response.Status.OK).entity("{\"message\" :\"" + "Password Successfully Changed" + "\" }").build()
 
     Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "No such user found with your combination of data, please check your fields again" + "\" }").build()
   }
@@ -112,6 +112,7 @@ class ResourcesController {
   @Produces(Array("application/json"))
   def createEvent(request: String): Response = {
     val convertedMap = convertToMap(request)
+
     val responseMessage = events.createEvent(convertedMap)
 
     if (events.mongodbConnection.get(convertedMap, "createEvents").nonEmpty) {
@@ -214,14 +215,14 @@ class ResourcesController {
 
     val convertedMap = convertToMap(request)
 
-    var event:Map[String,String] = Map[String,String]()
+    var event: Map[String, String] = Map[String, String]()
     event += "organization" -> convertedMap.get("organization").get
     event += "eventName" -> convertedMap.get("eventName").get
 
 
-     if(enrollEvents.enrollAsParticipant(event)){
-       return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"You have successfully enrolled for this event\"" + "}").build()
-     }
+    if (enrollEvents.enrollAsParticipant(event)) {
+      return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"You have successfully enrolled for this event\"" + "}").build()
+    }
 
     Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" : " + "\"There was a problem during enrollment, Please try again later\"" + " }").build()
   }
@@ -234,20 +235,60 @@ class ResourcesController {
 
     val convertedMap = convertToMap(request)
 
-    var event:Map[String,String] = Map[String,String]()
+    var event: Map[String, String] = Map[String, String]()
     event += "organization" -> convertedMap.get("organization").get
     event += "eventName" -> convertedMap.get("eventName").get
 
-    var user:Map[String,String] = Map[String,String]()
+    var user: Map[String, String] = Map[String, String]()
 
     user += "username" -> convertedMap.get("username").get
     user += "emailId" -> convertedMap.get("emailId").get
 
-    if(enrollEvents.enrollAsVolunteer(event,user)){
+    if (enrollEvents.enrollAsVolunteer(event, user)) {
       return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"We have conveyed your request to volunteer, to the organizer\"" + "}").build()
     }
 
     Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "\"There was problem joining as a volunteer, please try again later\"" + "\" }").build()
+  }
+
+  @POST
+  @Path("/approveEvent")
+  @Consumes(Array("application/json"))
+  @Produces(Array("application/json"))
+  def approveEvent(request: String): Response = {
+
+    val convertedMap = convertToMap(request)
+
+    if (convertedMap.get("userType").get == "admin") {
+
+      if(enrollEvents.approveEvent(convertedMap - "userType" )) {
+
+        return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"Event approved\"" + "}").build()
+
+      }
+      return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"There was a problem approving the request, Please try again later\"" + "}").build()
+    }
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "\"You are not authorized for this action\"" + "\" }").build()
+  }
+
+  @POST
+  @Path("/denyEvent")
+  @Consumes(Array("application/json"))
+  @Produces(Array("application/json"))
+  def denyEvent(request: String): Response = {
+
+    val convertedMap = convertToMap(request)
+
+    if (convertedMap.get("userType").get == "admin") {
+
+      if(enrollEvents.denyEvent(convertedMap - "userType")) {
+
+        return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"Event Denied\"" + "}").build()
+
+      }
+      return Response.status(Response.Status.OK).entity(" { \"message\" : " + "\"There was a problem approving the request, Please try again later\"" + "}").build()
+    }
+    Response.status(Response.Status.BAD_REQUEST).entity("{\"message\" :\"" + "\"You are not authorized for this action\"" + "\" }").build()
   }
 
   private def convertToMap(request: String): Map[String, String] = {
