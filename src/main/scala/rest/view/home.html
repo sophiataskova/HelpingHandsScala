@@ -12,10 +12,13 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
 	<!-- Latest compiled and minified JavaScript -->
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.5.9/slick.css"/>
 
 	<!-- For Validation -->
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"/>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick.css"/>
+
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
@@ -39,11 +42,10 @@
 
 
 
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick.min.js"></script>
 
 
 
-
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.5.9/slick.min.js"></script>
 
 
 
@@ -91,21 +93,21 @@ var icon = "";
 				                   "lng": '-122.2726887',
 				                   "description": 'Oakland'
 				               },
-				               
-				              
-				              
+
+
+
 				               ]
-		
+
 		var iconcolor=[
 		               'http://www.google.com/mapfiles/ms/micons/green-dot.png',
 		               'http://www.google.com/mapfiles/ms/micons/ltblue-dot.png',
 		               'http://www.google.com/mapfiles/ms/micons/red-dot.png',
 		               'http://www.google.com/mapfiles/ms/micons/yellow-dot.png',
-		               
+
 		               'http://www.google.com/mapfiles/ms/micons/orange-dot.png',
 		               'http://www.google.com/mapfiles/ms/micons/pink-dot.png',
 		               'http://www.google.com/mapfiles/ms/micons/purple-dot.png',
-		             
+
 		               ];
 		var marker, map;
 		var markers = [];
@@ -116,9 +118,9 @@ var icon = "";
 		var infoWindow = new google.maps.InfoWindow();
 		var markerId;
 		var myID;
-		
+
 		function initialize() {
-			
+
 		  var mapOptions = {
 		    zoom: 9,
 		    center:new google.maps.LatLng(37.585192,-122.199926),
@@ -131,49 +133,67 @@ var icon = "";
 			    map: map,
 			    title: "Center"
 			  });
-		
+
 		}
 
 
 		function loadMarkers(markerindex, data) {
-		
+
 		var myLatlng = new google.maps.LatLng(data.lat, data.lng);
 		var marker = new google.maps.Marker({
 		    position: myLatlng,
 		    map: map,
 		    title: data.title
 		  });
-		
+
 		 markers[markerindex]=marker;
-		 
+
 		 if(colorindex<markers.length){
-		 iconFile = iconcolor[colorindex]; 
-		
+		 iconFile = iconcolor[colorindex];
+
 		 marker.setIcon(iconFile) ;
 		 colorindex++;
 		 }
 		 else
 			 {
 			 colorindex=0;
-			 iconFile = iconcolor[colorindex]; 
-				
+			 iconFile = iconcolor[colorindex];
+
 			 marker.setIcon(iconFile) ;
 			 colorindex++;
 			 }
-		
-		 
+
+
 		}
-		
-		
+
+
 
 
 		$(document).ready(function() {
-			
+
+
+		    $('.multiple-items').slick({
+	  		infinite: true,
+	  		slidesToShow: 3,
+	  		slidesToScroll: 3,
+	  		autoplaySpeed : true
+			});
+
 		  var usernamelogout = sessionStorage.getItem("loggedusername");
 
 		  var profilelogout = sessionStorage.getItem("loggedprofile");
 
 		  var emaillogout;
+
+		  var emailorgname;
+
+		  var FlagActiveValue;
+			var FlagExpiredValue;
+			var FlagAwaitingValue;
+
+		  var LocationValue;
+
+		  var CategoryValue;
 
 
 
@@ -214,7 +234,7 @@ var icon = "";
 		  alert(typeof(profilelogout));
 
 		  document.getElementById("user_logged").innerHTML = usernamelogout ;
-			
+
 		  google.maps.event.addDomListener(window, 'load', initialize);
 
 		  $('#logout').click(function(){
@@ -265,167 +285,172 @@ var icon = "";
 
 
 		  $("#advsearchbutton").click(function(){
-			
-			  $("#advsearchcontainer").toggle("slow");  
-			
+
+			  $("#advsearchcontainer").toggle("slow");
+
 			$('input:checkbox').removeAttr('checked');
-			
-			
+
+
 			  ClearAllMarkers();
-			
-			 
+
+
 		  });
-		  
+
 
 
 
 		  	$("#sanfrancisco").click(function() {
-					 
+
 				        if($('#sanfrancisco').is(':checked')) {
-				        		    	
+
 				        	 loadMarkers(0, locations[0]);
-		
-						      
+
+
 				        } else {
-				        	
-				        	DeleteMarker(0); 
-				      
+
+				        	DeleteMarker(0);
+
 				    		        }
-				       
-				        
+
+
 				    });
 
 			$("#paloalto").click(function() {
-					 
+
 				        if($('#paloalto').is(':checked')) {
-				  
+
 						        	 loadMarkers(1,locations[1]);
-		
-						      
+
+
 				        } else {
-				           	DeleteMarker(1); 
-				        	
+				           	DeleteMarker(1);
+
 				    		        }
-				       
-				        
+
+
 				    });
 
 			$("#mountainview").click(function() {
-				        if($('#mountainview').is(':checked')) { 
-				
+				        if($('#mountainview').is(':checked')) {
+
 						        	 loadMarkers(2,locations[2]);
-						      
-						      
-						       
+
+
+
 						      }
 				         else {
-				      
-				        	DeleteMarker(2); 
-				        	
-			
+
+				        	DeleteMarker(2);
+
+
 				        }
-				        
+
 				    });
 
 			$("#santaclara").click(function() {
-				        if($('#santaclara').is(':checked')) { 
-				        	
+				        if($('#santaclara').is(':checked')) {
+
 						        	 loadMarkers(3,locations[3]);
-						        	
-						      
-						       
+
+
+
 						      }
 				         else {
-				        	
-				        	DeleteMarker(3); 
-				        	
-			
+
+				        	DeleteMarker(3);
+
+
 				        }
-				        
+
 				    });
 
 			$("#sanjose").click(function() {
-						 
+
 				        if($('#sanjose').is(':checked')) {
-				        
-						    	
+
+
 						        	 loadMarkers(4,locations[4]);
-						        	
-						      
+
+
 				        } else {
-				        	
-				        	DeleteMarker(4); 
-				        	
+
+				        	DeleteMarker(4);
+
 				    		        }
-				       
-				        
+
+
 				    });
-				  
-			
+
+
 
 		  $("#oakland").click(function() {
-				        if($('#oakland').is(':checked')) { 
-				        	
+				        if($('#oakland').is(':checked')) {
+
 						        	 loadMarkers(5,locations[5]);
-						        	
-						    
+
+
 				        } else {
-				        	
-				        	DeleteMarker(5); 
-				        	
+
+				        	DeleteMarker(5);
+
 				        }
-				        
+
 				    });
-				  
-		 
-				  
+
+
+
 
 		    function DeleteMarker(markerindex) {
 		        //Find and remove the marker from the Array
-		
-		        
+
+
 		         markers[markerindex].setMap(null);
 		    };
-		
+
 		    function ClearAllMarkers() {
-		    	
+
 		    	for (var markerindex = 0; markerindex < (markers.length); markerindex++) {
 		    	if(typeof markers[markerindex] !== 'undefined') {
 		    	    // does not exist
 		    		 markers[markerindex].setMap(null);
 		    	}
-		    	
+
 		    	}
 
-		  
-		  
+
+
 		    };
-		    
-		    $('.datepicker').datepicker({
-		         format: 'MM/DD/YYYY' ,  
+		    /*
+		    $('.datepicker').datetpicker({
+		         format: 'MM/DD/YYYY' ,
 		         //    maxDate: new Date(currentMonth, currentDate, currentYear, 0, 0, 0, 0)
 		         //    autoclose: true
-		       });
-		    
 
-	 
+
+
+		       });
+				*/
+
+
+
+
 
 		    $('#createEventForm').bootstrapValidator({
-		   		    	
+
 		   		        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
 		   		        feedbackIcons: {
 		   		           valid: ' ',
 		   		            invalid: 'glyphicon glyphicon-remove',
 		   		            validating: 'glyphicon glyphicon-refresh',
-		   		            
+
 		   		        },
-		   		        
+
 		   		        fields: {
 		   		        	eventname: {
 		   		                validators: {
 		   		                    notEmpty: {
 		   		                        message: 'Please enter the name for the event.'
-		   		                    }	                    
+		   		                    }
 		   		                }
 		   		            },
 		   		            orgname_event : {
@@ -442,8 +467,8 @@ var icon = "";
 		   		                    }
 		   		                }
 		   		            },
-		   		            
-		   		            
+
+
 		   		         category: {
 				                validators: {
 				                    notEmpty: {
@@ -451,8 +476,8 @@ var icon = "";
 				                    }
 				                }
 				            },
-				            
-				      
+
+
 				            eventlocnearby:{
 				            	 validators: {
 					                    notEmpty: {
@@ -460,7 +485,7 @@ var icon = "";
 					                    }
 					                }
 					            },
-				            	
+
 		   		            eventdesc : {
 		   		                validators: {
 		   		                    notEmpty: {
@@ -468,7 +493,7 @@ var icon = "";
 		   		                    }
 		   		                }
 		   		            },
-		   		         event_participantsreq: {
+		   		         event_volunteersreq: {
 			   	                validators: {
 			   	                    notEmpty: {
 			   	                        message: 'The number of participants required for the event is required.'
@@ -476,21 +501,45 @@ var icon = "";
 				   	                integer: {
 				   	                          message: 'Please enter a valid integer.'
 				   	                 }
-				   	             
+
 			   	                }
 			   	            },
-		   		         
-		   		        
+
+		   		            event_volunteersreq: {
+			   	                validators: {
+			   	                    notEmpty: {
+			   	                        message: 'The number of participants required for the event is required.'
+			   	                    },
+				   	                integer: {
+				   	                          message: 'Please enter a valid integer.'
+				   	                 }
+
+			   	                }
+			   	            },
+
+			   	               event_volunteersreq: {
+			   	                validators: {
+			   	                    notEmpty: {
+			   	                        message: 'The number of participants required for the event is required.'
+			   	                    },
+				   	                integer: {
+				   	                          message: 'Please enter a valid integer.'
+				   	                 }
+
+			   	                }
+			   	            },
+
 		   	         startdate: {
-			                validators: {
-			                    notEmpty: {
-			                        message: 'The start date of the event is required'
-			                    },
-			                    date: {
-			                        format: 'YYYY/MM/DD',
-			                        message: 'The start date is not valid'
-			                    }
-			                }
+			            validators: {
+	                    date: {
+	                        format: 'MM/DD/YYYY',
+	                        message: 'The start date is not a valid date'
+	                    },
+	                    notEmpty: {
+	                        message: 'The start date can not be empty'
+	                    },
+
+	                }
 			            },
 			            enddate: {
 			                validators: {
@@ -506,9 +555,9 @@ var icon = "";
 
 		   		  	  }
 		   			  });
-		   		    
-		    
-		   
+
+
+
 		    $('#createEventForm').on('success.form.bv', function(e) {
 		    	//alert('rt1');
 		    	  // Prevent submit form
@@ -517,100 +566,79 @@ var icon = "";
 		    	  var $form     = $(e.target);
 		    	    validator = $form.data('bootstrapValidator');
 		    	    // alert('rt2');
-		    	     
 		    	   //  $('#createEventForm').bootstrapValidator('resetForm', true);
 		    	   //
 
 
 
 
-		var eventnamebackend = $('input[name=eventname]').val();
 
-		var orgnamebackend = $('input[name=orgname_event]').val();
+			 if($('input[name=startdate]').val() ==  $('input[name=enddate]').val()){
+			  console.log($('input[name=startdate]').val());
+			 console.log( $('input[name=enddate]').val());
+			 alert('equal');
+			 console.log('eqal');
+			 }
 
-		var startdatebackend = $('input[name=startdate]').val();
+			 else if ($('input[name=startdate]').val() >=  $('input[name=enddate]').val()){
 
-		var enddatebackend = $('input[name=enddate]').val();
+			 console.log($('input[name=startdate]').val());
+			 console.log( $('input[name=enddate]').val());
+			 alert('greater');
+			 console.log('greater');
+			 }
 
-		var eventlocbackend = $('input[name=eventloc]').val();
+			 else{
 
-		var eventlocationnearbybackend = $( "#eventlocnearby" ).find(":selected").val();
+			  console.log($('input[name=startdate]').val());
+			 console.log( $('input[name=enddate]').val());
+			 alert('less');
+			 console.log('less');
 
-  	 	var eventdescbackend = $('textarea#eventdesc').val();
+			 }
 
-		var categorybackend = $( "#category" ).find(":selected").val();
+		if($('input[name=startdate]').val() >  $('input[name=enddate]').val()){
 
-		var participantsrequiredrbackend = $('input[name=event_participantsreq]').val();
+				alert('hh');
 
-		var expiredbackend = '';
+				$('#msgevent').removeClass('alert-success').addClass('alert-danger').html("Start Date is Greater than End Date").show();
 
-
-			$.ajax({
-				type:'POST',
-				url:'/createEvent',
-				contentType: "application/json",
-
-				data:JSON.stringify({
+				//$('#createEventForm').data('bootstrapValidator').updateStatus('startdate','INVALID',' ')
 
 
+				$('#createEventForm').data('bootstrapValidator').updateStatus('enddate','INVALID',' ')
 
-				    "eventName" : eventnamebackend.toString(),
-					"description": eventdescbackend.toString(),
-				 "organization" : orgnamebackend.toString(),
+				 e.preventDefault();
 
-					"from" : startdatebackend.toString(),
-
-					"to" : enddatebackend.toString(),
-					"location" : eventlocbackend.toString(),
-					"locationNearby": eventlocationnearbybackend.toString(),
-					"category":  categorybackend.toString(),
-
-					"volunteersParticipating" : participantsrequiredrbackend.toString(),
-
-					"expired" : expiredbackend.toString(),
-					"userType": usernamelogout.toString()
+				$('#button5').removeAttr('enabled');
 
 
 
-				}),
+
+		}
+
+		else{
+
+				if($('input[name=startdate]').val() <  $('input[name=enddate]').val()){
+
+						 getDateComparisonFunction();
 
 
+				}
+				else
+				{
 
-				success: function(data){
-				console.log(data);
-
-				console.log(data.message);
-
-				var txt2 = data.message;
-
-				$form.find('#msgevent').removeClass('alert-danger').addClass('alert-success').html(txt2).show();
-
-				<!-- $('#createEventForm').bootstrapValidator('resetForm', true);-->
-
-					},
-				error:function(data){
-
-				console.log(data);
-				console.log(data.responseJSON.message);
-
-				var txt2 = data.responseJSON.message;
-
-				$form.find('#msgevent').removeClass('alert-success').addClass('alert-danger').html(txt2).show();
-
-				 $('#button5').removeAttr('disabled');
+					 getDateComparisonFunction();
 
 
 				}
 
-			 });
 
 
+		}
+});
 
-		    	     
-		
-			});
-		    
-	
+
 				$('#create_event_modal-1').on('hide.bs.modal', function(){
 						$('#msgevent').removeClass('alert-danger alert-success').html('').attr('style','display:none');
 						$('#createEventForm').bootstrapValidator('resetForm', true);
@@ -618,7 +646,7 @@ var icon = "";
 
 
 			$('#createEventButton').click(function(){
-		
+
 								$('#createEventForm').bootstrapValidator('resetForm', true);
 
 								  $('#msgevent').removeClass('alert-danger alert-success').html('').attr('style','display:none');
@@ -664,55 +692,55 @@ var icon = "";
 
 
 				});
-			
+
 			$('#button6').click(function(){
 				$('#createEventForm').bootstrapValidator('resetForm', true);
-				
+
 				});
 
-			
+
 			$('#editProfileForm').bootstrapValidator({
-				  
-			  
+
+
 			        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
 			        feedbackIcons: {
 			           valid: ' ',
 			            invalid: 'glyphicon glyphicon-remove',
 			            validating: 'glyphicon glyphicon-refresh',
-			            
+
 			        },
-			        
+
 			        fields: {
-			        	
+
 			        	firstname: {
 			               // message: 'The firstname is not valid',
 			                validators: {
-			                	
+
 			                    notEmpty: {
 			                        message: 'Please enter your first name.'
 			                    },
-			                  
+
 			                    regexp: {
 			                        regexp: /^[a-zA-Z_\.]+$/,
 			                        message: 'The firsname can only consist of alphabetical, underscore and period.'
 			                    },
 			               	           }
 			            },
-			            
+
 			        	lastname: {
 			             //   message: 'The lastname is not valid',
 			                validators: {
 			                    notEmpty: {
 			                        message: 'Please enter your lastname.'
 			                    },
-			                  
+
 			                    regexp: {
 			                        regexp: /^[a-zA-Z_\.]+$/,
 			                        message: 'The lastname can only consist of alphabetical, underscore and period.'
 			                    },
 			               	  }
 			            },
-			    
+
 			            username: {
 			              //  message: 'The username is not valid',
 			                validators: {
@@ -732,10 +760,10 @@ var icon = "";
 			                        field: 'password',
 			                        message: 'The username and password cannot be the same as each other'
 			                    },
-			                    
+
 			                }
 			            },
-			          
+
 			            password: {
 			                validators: {
 			                    notEmpty: {
@@ -750,31 +778,31 @@ var icon = "";
 			                        max:15,
 			                        message: 'The password must be between 8 and 15 characters.'
 			                    },
-			                   
+
 			                    regexp: {
 			                        regexp: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9].*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/,
-			                        
+
 			                        message:'Password should be a string that has at least 1 uppercase alphabet,'+
 			                        '1 lowercase alphabet, 2 digits and 1 special character.',
 			                    }
-			                   
+
 			                }
 			            },
-			            
+
 			            gender: {
-				           
+
 				                validators: {
 				                    notEmpty: {
 				                        message: 'Please select your gender.'
 				                    },
-				                  
-				                  
+
+
 				               	  }
 				            },
-				    
-			            
-			                       
-			          
+
+
+
+
 			            emailstudent: {
 			                validators: {
 			                    notEmpty: {
@@ -782,13 +810,13 @@ var icon = "";
 			                    },
 			                    regexp: {
 			                        regexp: /^[a-zA-Z0-9_\.]+$/,
-			                        
+
 			                        message:'The Student ID can consists of alphabets, number, dot and underscore only',
 			                    }
-			                   
+
 			                }
 			            },
-			            
+
 			            emailngo: {
 			                validators: {
 			                    notEmpty: {
@@ -796,15 +824,15 @@ var icon = "";
 			                    },
 			                    regexp: {
 			                        regexp: /^[-a-z0-9~!$%^&*_=+}{\?]+(\.[-a-z0-9~!$%^&*_=+}{\?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/,
-		          			
+
 			                        message:'Please enter a valid NGO Email ID',
 			                    }
-			                   
+
 			                }
 			            },
-			           
-			            
-			            
+
+
+
 			           phonenumber: {
 			                validators: {
 			                    notEmpty: {
@@ -815,12 +843,12 @@ var icon = "";
 			                        max:10,
 			                        message: 'The phone number must have at 10 digits.'
 			                    },
-			                   
+
 			                    regexp: {
-				                    regexp: /^[0-9]+$/,                    
+				                    regexp: /^[0-9]+$/,
 			                        message:'Phone number should not have alphabets',
-			                    } 
-			                   
+			                    }
+
 			                }
 			            },
 			            website: {
@@ -828,26 +856,26 @@ var icon = "";
 			                	notEmpty: {
 			                        message: 'Please enter your website'
 			                    },
-			                 
+
 			                	  regexp:{
 			                		  regexp: /^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$/,
-			                	  
+
 			                        message: 'The website address is not valid'
 			                    }
 			                }
-			            },	
+			            },
 			            organizationname:{
 			                validators: {
 			                	notEmpty: {
 			                        message: 'Please enter your organization name'
-			                    }	                
+			                    }
 			                }
 			            },
 			            description:{
 			                validators: {
 			                	notEmpty: {
 			                        message: 'Please enter a description of your organization'
-			                    }	                
+			                    }
 			                }
 			            },
 			            question: {
@@ -864,13 +892,13 @@ var icon = "";
 			                    }
 			                }
 			            },
-			         
+
 			          }
-			 
-			  
+
+
 			    });
 
-			  
+
 			  $('#editProfileForm').on('success.form.bv', function(e) {
 				  // Prevent submit form
 				  e.preventDefault();
@@ -943,12 +971,12 @@ var icon = "";
 				}
 
 			 });
-				     
-				   
 
-			
+
+
+
 		  		});
-				
+
 			  $('#button8').click(function(){
 
 			  $('#msgprofile').removeClass('alert-danger alert-success').html('').attr('style','display:none');
@@ -970,16 +998,11 @@ var icon = "";
 
 													data:JSON.stringify({
 
-
 													'username': usernamelogout.toString(),
 													'userType': profilelogout.toString().toLowerCase(),
 													//'emailId': emaillogout.toString()
 
-
-
 													}),
-
-
 
 													success: function(data){
 
@@ -1002,9 +1025,157 @@ var icon = "";
 						});
 
 
+						function getDateComparisonFunction(){
+
+											var eventnamebackend = $('input[name=eventname]').val();
+
+											var orgnamebackend = $('input[name=orgname_event]').val();
+
+											var startdatebackend = $('input[name=startdate]').val();
+
+
+											var enddatebackend = $('input[name=enddate]').val();
+
+											console.log(startdatebackend);
+
+											console.log(enddatebackend);
+
+
+											var eventlocbackend = $('input[name=eventloc]').val();
+
+											var eventlocationnearbybackend = $( "#eventlocnearby" ).find(":selected").val();
+
+											var eventdescbackend = $('textarea#eventdesc').val();
+
+											var categorybackend = $( "#category" ).find(":selected").val();
+
+											var volunteersrequiredbackend = $('input[name=event_volunteersreq]').val();
+
+											var expiredbackend = '';
+
+											console.log(profilelogout.toString().toLowerCase());
+
+
+
+										//$('#createEventForm').data('bootstrapValidator').updateStatus('startdate','VALID','null')
+
+
+												$('#createEventForm').data('bootstrapValidator').updateStatus('enddate','VALID','null')
+
+													$('#msgevent').removeClass('alert-danger alert-success').html('').attr('style','display:none')
+
+
+												$.ajax({
+												type:'POST',
+												url:'/createEvent',
+												contentType: "application/json",
+
+												data:JSON.stringify({
+
+
+
+													"eventName" : eventnamebackend.toString(),
+													"description": eventdescbackend.toString(),
+												 "organization" : orgnamebackend.toString(),
+
+													"from" : startdatebackend.toString(),
+
+													"to" : enddatebackend.toString(),
+													"location" : eventlocbackend.toString(),
+													"locationNearby": eventlocationnearbybackend.toString(),
+													"category":  categorybackend.toString(),
+
+													"volunteersParticipating" : volunteersrequiredbackend.toString(),
+													"usersParticipating": '0',
+													"volunteersInterested":'0' ,
+
+
+													"userType": profilelogout.toString().toLowerCase(),
+
+
+
+												}),
+
+
+
+												success: function(data){
+												console.log(data);
+
+												console.log(data.message);
+
+												var txt2 = data.message;
+
+												$('#msgevent').removeClass('alert-danger').addClass('alert-success').html(txt2).show();
+
+
+
+																	var newCarouselItem = document.createElement("div");
+																	newCarouselItem.className = "item";
+																	var insideCarousel = document.createElement("div");
+																	insideCarousel.className = "col-xs-3";
+																	var anchorCar = document.createElement("a");
+																	var pCar = document.createElement("p");
+																	pCar.innerHTML = "WORKING WOLA";
+
+																	anchorCar.appendChild(pCar);
+																	insideCarousel.appendChild(anchorCar);
+																	newCarouselItem.appendChild(insideCarousel);
+
+																	var categorybackend = $( "#category" ).find(":selected").val();
+
+																	var catCarousel = categorybackend+' Awaiting Approval';
+
+																	var carouselInner = document.getElementById(catCarousel);
+
+																	carouselInner.appendChild(newCarouselItem);
+
+
+																	var carouselInnerH = $(carouselInner);//convert to jQuery Element
+																	var carouselInnerJ = carouselInnerH[0];//convert to HTML Element
+
+
+
+																	console.log(catCarousel.length);
+																	/*
+																	document.getElementById(catCarousel).each(function(){
+																		consolelog(level1);
+																		var n = $(this).find('.item').length;
+																		console.log($('.item').length);
+																		//$(this).closest('.iso-post').find(".image-count").text("There are " + n + " images in this gallery.");
+																	   });*/
+
+
+
+
+
+
+												<!-- $('#createEventForm').bootstrapValidator('resetForm', true);-->
+
+													},
+												error:function(data){
+
+												console.log(data);
+												console.log(data.responseJSON.message);
+
+												var txt2 = data.responseJSON.message;
+
+												$('#msgevent').removeClass('alert-success').addClass('alert-danger').html(txt2).show();
+
+												 $('#button5').removeAttr('disabled');
+
+
+												}
+
+											 });
+
+
+						}
+
 						function getEmailFunction(data) {
 
 									emaillogout = data.message.emailId;
+
+									emailorgname = data.message.organizationName;
 
 									console.log(data.message);
 
@@ -1037,20 +1208,791 @@ var icon = "";
 
 
 
+
+
+
+
+
+
+
+/*
+								$('#myCarouselAnimalActive').carousel({
+								  interval: 4000,
+								  interval: false
+								})
+
+								$('#myCarouselChildrenActive').carousel({
+								  interval: 4000,
+								  interval: false
+								})
+
+
+
+								$('#myCarouselAnimalAwaitingApproval').carousel({
+								  interval: 4000,
+								  interval: false
+								})
+
+								$('#myCarouselChildrenAwaitingApproval').carousel({
+								  interval: 4000,
+								  interval: false
+								})
+
+
+								$('#myCarouselAnimalArchived').carousel({
+								  interval: 4000,
+								  interval: false
+								})
+
+								$('#myCarouselChildrenArchived').carousel({
+								  interval: 4000,
+								  interval: false
+								})
+
+								*/
+
+									$('.carousel .item').each(function(){
+									  var next = $(this).next();
+									  if (!next.length) {
+										next = $(this).siblings(':first');
+									  }
+									  next.children(':first-child').clone().appendTo($(this));
+
+									  for (var i=0;i<2;i++) {
+										next=next.next();
+										if (!next.length) {
+											next = $(this).siblings(':first');
+										}
+
+										next.children(':first-child').clone().appendTo($(this));
+									  }
+									});
+
+
+
+///////////////////////Active Events
+
+															   $('#Active').click(function(){
+															  console.log('gello');
+
+																$.ajax({
+																type:'POST',
+																url:'/populateEditProfile',
+																contentType: "application/json",
+
+																data:JSON.stringify({
+
+
+																'username': usernamelogout.toString(),
+																'userType': profilelogout.toString().toLowerCase(),
+
+
+
+																}),
+
+
+
+																success: function(data){
+
+
+																console.log(data.message);
+
+
+																console.log(data.message.organizationName);
+
+
+
+																 FlagActiveValue = "true";
+																 FlagExpiredValue = "false";
+																 FlagAwaitingValue = "false";
+
+
+																   getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
+
+
+																	},
+																error:function(data){
+
+
+																console.log(data.responseJSON.message);
+
+																 FlagActiveValue = "true";
+																 FlagExpiredValue = "false";
+																 FlagAwaitingValue = "false";
+
+
+
+																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
+
+
+																}
+
+															 });
+
+
+
+															  });
+
+
+
+				//// Awatiing for Aproval
+
+
+
+						   $('#AwaitingAcceptance').click(function(){
+															  console.log('gello');
+
+																$.ajax({
+																type:'POST',
+																url:'/populateEditProfile',
+																contentType: "application/json",
+
+																data:JSON.stringify({
+
+
+																'username': usernamelogout.toString(),
+																'userType': profilelogout.toString().toLowerCase(),
+
+
+
+																}),
+
+
+
+																success: function(data){
+
+
+																console.log(data.message);
+
+
+																console.log(data.message.organizationName);
+
+																 FlagActiveValue = "false";
+																 FlagExpiredValue = "false";
+																 FlagAwaitingValue = "true";
+
+
+
+																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
+
+
+																	},
+																error:function(data){
+
+
+																console.log(data.responseJSON.message);
+
+
+
+																 FlagActiveValue = "false";
+																 FlagExpiredValue = "false";
+																 FlagAwaitingValue = "true";
+
+
+
+																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
+
+																}
+
+															 });
+
+
+
+															  });
+
+
+
+
+				//////Archive
+
+
+
+						   $('#Archive').click(function(){
+															  console.log('gello');
+
+																$.ajax({
+																type:'POST',
+																url:'/populateEditProfile',
+																contentType: "application/json",
+
+																data:JSON.stringify({
+
+
+																'username': usernamelogout.toString(),
+																'userType': profilelogout.toString().toLowerCase(),
+
+
+
+																}),
+
+
+
+																success: function(data){
+
+
+																console.log(data.message);
+
+
+																console.log(data.message.organizationName);
+
+																 FlagActiveValue = "false";
+																 FlagExpiredValue = "true";
+																 FlagAwaitingValue = "false";
+
+
+
+																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
+
+
+																	},
+																error:function(data){
+
+
+																console.log(data.responseJSON.message);
+
+																  FlagActiveValue = "false";
+																 FlagExpiredValue = "true";
+																 FlagAwaitingValue = "false";
+
+
+
+																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
+
+																}
+
+															 });
+
+
+
+								});
+
+								  function getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue, data) {
+
+															  console.log(data);
+
+
+
+
+															orgnamelogout = data.message.organizationName;
+
+
+																			$.ajax({
+																	type:'POST',
+																	url:'/viewEvents',
+																	contentType: "application/json",
+
+																	data:JSON.stringify({
+
+																	'organization': orgnamelogout.toString(),
+																	"isActive": FlagActiveValue,
+																	 "expired": FlagExpiredValue,
+																	 "isAwaitingApproval": FlagAwaitingValue,
+
+
+
+																	}),
+
+																	success: function(data){
+
+
+																		console.log(data.message);
+
+
+
+																		},
+																	error:function(data){
+
+
+																	console.log(data.responseJSON.message);
+
+
+																	}
+
+																 });
+														}
+
+///Volunteer Event
+														$('#button9').click(function(){
+
+
+															$.ajax({
+																type:'POST',
+																url:'/populateEditProfile',
+																contentType: "application/json",
+
+																data:JSON.stringify({
+
+
+																'username': usernamelogout.toString(),
+																'userType': profilelogout.toString().toLowerCase(),
+
+
+
+																}),
+
+
+
+																success: function(data){
+
+
+																console.log(data.message);
+
+
+																console.log(data.message.organizationName);
+
+
+																EventVolunteerAction(data);
+
+
+																$('#msgevent').removeClass('alert-danger').addClass('alert-success').html("You are Volunteering for this Event").show();
+
+
+
+
+																	},
+																error:function(data){
+
+
+																console.log(data.responseJSON.message);
+
+																EventVolunteerAction(data);
+
+
+
+
+																}
+
+															 });
+
+
+
+														});
+
+
+														 function EventVolunteerAction(data) {
+
+															  console.log(data);
+
+
+
+															emaillogout = data.message.emailId;
+
+															orgnamelogout = data.message.organizationName;
+
+															var eventnamebackend = $('input[name=eventname]').val();
+
+															$('#event_volunteersinterested').removeAttr('readonly');
+
+															var volunteercount = parseInt($('input[name=event_volunteersinterested]').val());
+
+
+
+															console.log(typeof((volunteercount)))
+
+															console.log(((volunteercount)))
+
+															console.log(emaillogout + orgnamelogout + eventnamebackend +usernamelogout+profilelogout.toLowerCase()+volunteercount );
+
+
+																	$.ajax({
+																	type:'POST',
+																	url:'/volunteerForEvent',
+																	contentType: "application/json",
+
+																	data:JSON.stringify({
+
+																	"organization": orgnamelogout.toString(),
+																	"eventName" : eventnamebackend.toString(),
+
+    																"emailId" : emaillogout.toString(),
+
+    																"username": usernamelogout.toString(),
+																	"userType": profilelogout.toString().toLowerCase()
+
+																	}),
+
+																	success: function(){
+
+
+
+
+
+
+
+																		volunteercount+=1;
+
+
+																		$('#event_volunteersinterested').val(volunteercount);
+
+
+
+																		console.log(volunteercount);
+
+
+
+																		},
+																	error:function(data){
+
+
+																	console.log(data);
+
+
+																	}
+
+																 });
+														}
+
+
+
+/////Attend Event
+
+
+										$('#button10').click(function(){
+
+
+										orgnamelogout = $('input[name=orgname_event]').val();
+
+															var eventnamebackend = $('input[name=eventname]').val();
+
+
+
+															console.log(eventnamebackend);
+
+															$('#event_userparticipating').removeAttr('readonly');
+
+
+
+															var usercount = parseInt($('input[name=event_userparticipating]').val());
+
+															console.log(typeof(usercount));
+
+															console.log(orgnamelogout + eventnamebackend +'HHHHHH'+profilelogout.toLowerCase()+usercount +'attendevent');
+
+
+																	$.ajax({
+																	type:'POST',
+																	url:'/attendEvent',
+																	contentType: "application/json",
+
+																	data:JSON.stringify({
+
+																	"organization": orgnamelogout.toString(),
+																	"eventName" : eventnamebackend.toString(),
+
+
+																	"userType": profilelogout.toString().toLowerCase()
+
+																	}),
+
+																	success: function(){
+
+
+
+
+
+
+
+																		usercount+=1;
+
+
+																		$('#event_userparticipating').val(usercount);
+
+
+
+																		console.log(usercount);
+
+																		$('#msgevent').removeClass('alert-danger').addClass('alert-success').html("You are Participating in this Event").show();
+
+
+
+
+																		},
+																	error:function(data){
+
+
+																	console.log(data);
+
+
+																	}
+
+																 });
+
+
+
+
+
+											});
+
+
+														 function EventAttendAction(data) {
+
+															  console.log(data);
+
+
+
+
+
+														}
+
+
+
+
+///APPROVE EVENT
+
+
+
+
+										$('#button12').click(function(){
+
+
+											orgnamelogout = $('input[name=orgname_event]').val();
+
+											var eventnamebackend = $('input[name=eventname]').val();
+
+
+
+
+
+
+															$.ajax({
+																type:'POST',
+																url:'/approveEvent',
+																contentType: "application/json",
+
+																data:JSON.stringify({
+
+
+																"eventName" : eventnamebackend.toString(),
+																//'userType': profilelogout.toString().toLowerCase(),
+																'userType': 'admin',
+																'organization': orgnamelogout.toString()
+
+
+
+																}),
+
+
+
+																success: function(data){
+
+
+																console.log(data.message);
+
+
+																		$('#msgevent').removeClass('alert-danger').addClass('alert-success').html(data.message).show();
+
+
+
+																	},
+																error:function(data){
+
+
+																console.log(data.responseJSON.message);
+
+
+
+
+																}
+
+															 });
+
+
+
+														});
+
+
+
+///////DENY EVENT
+
+
+
+
+
+
+
+										$('#button13').click(function(){
+
+
+											orgnamelogout = $('input[name=orgname_event]').val();
+
+											var eventnamebackend = $('input[name=eventname]').val();
+
+
+
+
+
+
+															$.ajax({
+																type:'POST',
+																url:'/denyEvent',
+																contentType: "application/json",
+
+																data:JSON.stringify({
+
+
+																"eventName" : eventnamebackend.toString(),
+																//'userType': profilelogout.toString().toLowerCase(),
+																'userType': 'admin',
+																'organization': orgnamelogout.toString()
+
+
+
+																}),
+
+
+
+																success: function(data){
+
+
+																console.log(data.message);
+
+
+																		$('#msgevent').removeClass('alert-success').addClass('alert-danger').html(data.message).show();
+
+
+
+																	},
+																error:function(data){
+
+
+																console.log(data.responseJSON.message);
+
+
+
+
+																}
+
+															 });
+
+
+
+														});
+
+
+///////////Delete Event
+
+											$('#button15').click(function(){
+
+
+											orgnamelogout = $('input[name=orgname_event]').val();
+
+											var eventnamebackend = $('input[name=eventname]').val();
+
+											var startdatebackend = $('input[name=startdate]').val();
+
+
+											var enddatebackend = $('input[name=enddate]').val();
+
+
+
+
+
+
+
+
+
+
+
+															$.ajax({
+																type:'POST',
+																url:'/deleteEvent',
+																contentType: "application/json",
+
+																data:JSON.stringify({
+
+
+																"eventName" : eventnamebackend.toString(),
+
+																'userType': 'admin',
+																'organization': orgnamelogout.toString(),
+																"from" : startdatebackend.toString(),
+
+																"to" : enddatebackend.toString(),
+
+
+
+																}),
+
+
+
+																success: function(data){
+
+
+																console.log(data.message);
+
+
+																		$('#msgevent').removeClass('alert-success').addClass('alert-danger').html(data.message).show();
+
+
+
+																	},
+																error:function(data){
+
+
+																console.log(data.responseJSON.message);
+
+
+
+
+																}
+
+															 });
+
+
+
+														});
+
+
+
+		/////// Search
+
+
+						$('#search').click(function(){
+
+			var searchText = $('input[name=search]').val();
+
+			console.log(searchText);
+
+															$.ajax({
+																type:'POST',
+																url:'/searchEvent',
+
+																dataType : "text",
+																contentType: "text",
+																data : searchText,
+
+
+																success: function(data){
+
+
+																console.log(data);
+
+																alert('data'+sarch);
+
+
+
+
+																	},
+																error:function(data){
+
+
+																console.log(data);
+
+
+
+
+																}
+
+															 });
+
+
+
+														});
+
 	});
 
 </script>
-<script>
-				$('.multiple-items').slick({
-					  infinite: true,
-					  slidesToShow: 3,
-					  slidesToScroll: 3
-					});
 
-
-
-
-</script>
 
 <style>
 	body { padding-top: 25px; }
@@ -1118,7 +2060,7 @@ var icon = "";
 	width:80%
 	}
 
-	#modtitle_event, modtitle_profile{
+	#modtitle_event, #modtitle_profile{
 	padding-top:30px;
 	text-align:center;
 	}
@@ -1325,14 +2267,15 @@ var icon = "";
 
 	}
 
-	.btn.btn-default.btn-md.createEventS, .btn.btn-default.btn-md.editProfileS{
+	.btn.btn-default.btn-md.createEventS,.btn.btn-default.btn-md.VolunteerEvent, .btn.btn-default.btn-md.AttendEvent,.btn.btn-default.btn-md.Search,
+	.btn.btn-default.btn-md.ApproveEvent, .btn.btn-default.btn-md.editProfileS{
 	background: green !important;
 	color: white !important;
 	border-radius: 24px;
 	}
 
 
-	.btn.btn-default.btn-mdclose.createEventClose, .btn.btn-default.btn-mdclose.editProfileClose{
+	.btn.btn-default.btn-mdclose.createEventClose, .btn.btn-default.btn-md.DenyEvent,.btn.btn-default.btn-md.DeleteEvent,.btn.btn-default.btn-mdclose.editProfileClose{
 	background: red !important;
 	color: white !important;
 	border-radius: 24px;
@@ -1377,13 +2320,36 @@ var icon = "";
 		<h1 style="text-align:center">STATIC TEXT OF ITU</h1>
 	</div>
 
-	<div style="background-color:brown">
+
+	<div>
+		<div class="form-group">
+			<div class="col-md-3 col-md-offset-4">
+			<input type="text" id="searchtext" class="form-control" placeholder="Search" name="search">
+			</div>
+
+			<div class="col-md-1">
+
+				<button id='search' type="button" class="btn btn-default btn-md Search">Search</button>
+			</div>
+
+			</div>
+
+
+
+
+
+
+	<div >
 		<div class="col-md-12" >
 			<!-- Do NOT use name="submit" or id="submit" for the Submit button -->
 			<button id='advsearchbutton' type="button" class="btn btn-default btn-md advancedsearch">Advanced Search</button>
+
+
+
+
 			<button id='createEventButton'  type="button" class="btn btn-default btn-md create_event  pull-right" data-toggle="modal"  data-target="#create_event_modal-1" >Create Event</button>
 		</div>
-	</div>
+
 
 	<div id="advsearchcontainer"  >
 		<div >
@@ -1516,14 +2482,34 @@ var icon = "";
 						<div class="form-group">
 							<label class="col-lg-5 control-label">Name of Organization <sup>*</sup></label>
 							<div class="col-lg-6">
-								<input id='orgname_event' type="text" class="form-control" name="orgname_event" />
+								<input id='orgname_event' type="text" class="form-control" name="orgname_event" readonly="readonly"/>
 							</div>
 						</div>
 
 						<div class="form-group">
 							<label class="col-lg-5 control-label">Start Date<sup>*</sup></label>
 							<div class="col-lg-6">
+
 								<input type="date" id="startdate" class="form-control" name="startdate" placeholder="date">
+
+								<!--
+
+                                                                <div class='input-group date' id='startdate'>
+                                                                    <input type='text' class="form-control" />
+                                                                        <span class="input-group-addon">
+                                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                                        </span>
+                                                                </div>
+
+
+
+                                                                                                <div class='input-group date' id='startdate' name="startdate">
+                                                                                                    <input type='text' class="form-control" name="startdatetext"/>
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                                </span>
+                                                                                                </div>
+                                                                -->
 
 							</div>
 						</div>
@@ -1532,7 +2518,25 @@ var icon = "";
 						<div class="form-group">
 							<label class="col-lg-5 control-label">End Date<sup>*</sup></label>
 							<div class="col-lg-6">
+
 								<input type="date" id="enddate" class="form-control" name="enddate" placeholder="date">
+
+
+											<!--<div class='input-group date' id='endate'>
+												<input type='text' class="form-control" />
+													<span class="input-group-addon">
+														<span class="glyphicon glyphicon-calendar"></span>
+													</span>
+											</div>
+
+							<!--
+								<div class='input-group date' id='enddate' name="enddate">
+									<input type='text' class="form-control" name="enddatetext"/>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+								</div>
+								-->
 
 							</div>
 						</div>
@@ -1572,6 +2576,30 @@ var icon = "";
 
 
 						<div class="form-group">
+							<label class="col-lg-5 control-label">Number of Volunteers Required<sup>*</sup></label>
+							<div class="col-lg-6">
+								<input id='event_volunteersreq' type="number" min = '0' class="form-control" name="event_volunteersreq" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-lg-5 control-label">Number of Users Participating<sup>*</sup></label>
+							<div class="col-lg-6">
+								<input id='event_userparticipating' type="number" min='0' class="form-control" name="event_userparticipating" placeholder="0" readonly="readonly" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-lg-5 control-label">Number of Volunteers Interested<sup>*</sup></label>
+							<div class="col-lg-6">
+								<input id='event_volunteersinterested' type="number" min='0' class="form-control" name="event_volunteersinterested" placeholder="0" readonly="readonly" />
+							</div>
+						</div>
+
+
+
+
+						<div class="form-group">
 							<label class="col-lg-5 control-label">Category <sup>*</sup></label>
 							<div class="col-lg-6">
 								<select class="form-control" id='category'  name="category">
@@ -1581,11 +2609,11 @@ var icon = "";
 									<option value="Disaster Relief">Disaster Relief</option>
 									<option value="Seniors">Seniors</option>
 									<option value="Environment">Environment</option>
-									<option value="Animals">Animals</option>
+									<option value="Animal">Animal</option>
 									<option value="Service Homeless">Service for Homeless</option>
 									<option value="Sports">Sports</option>
 									<option value="Hunger">Hunger</option>
-									<option value="Childer">Children</option>
+									<option value="Children">Children</option>
 									<option value="Creativity Arts">Creativity Arts</option>
 									<option value="People with Disabilities">People with Disabilities</option>
 									<option value="Education">Education</option>
@@ -1597,12 +2625,7 @@ var icon = "";
 						</div>
 
 
-						<div class="form-group">
-							<label class="col-lg-5 control-label">Number of Participants Required<sup>*</sup></label>
-							<div class="col-lg-6">
-								<input id='event_participantsreq' type="text" class="form-control" name="event_participantsreq" />
-							</div>
-						</div>
+
 
 
 
@@ -1614,6 +2637,60 @@ var icon = "";
 
 							<button id='button6' type="button" class="btn btn-default btn-mdclose createEventClose" data-dismiss="modal">Close</button>
 						</div>
+
+
+
+						<div class="form-group" id="ApprovedEvents">
+							<div class="col-lg-5 col-lg-offset-4">
+
+								<button id='button9' type="button" class="btn btn-default btn-md VolunteerEvent">Volunteer Event</button>
+							</div>
+
+
+
+							<button id='button10' type="button" class="btn btn-default btn-md AttendEvent">Attend Event</button>
+
+
+
+						</div>
+
+						<div class="form-group" id="ApprovalWaitingEvents">
+							<div class="col-lg-5 col-lg-offset-4">
+
+								<button id='button12' type="button" class="btn btn-default btn-md ApproveEvent">Approve</button>
+							</div>
+
+
+
+								<button id='button13' type="button" class="btn btn-default btn-md DenyEvent" >Deny</button>
+
+
+						</div>
+
+
+						<div class="form-group" id="AllgEvents">
+
+							<div class="col-lg-5 col-lg-offset-4">
+
+								<button id='button15' type="button" class="btn btn-default btn-md DeleteEvent" >Delete</button>
+
+
+							</div>
+
+
+
+
+
+
+								<button id='button14' type="button" class="btn btn-default btn-mdclose createEventClose" data-dismiss="modal">Close</button>
+
+
+
+
+						</div>
+
+
+
 
 					</form>
 
@@ -1673,6 +2750,7 @@ var icon = "";
 								<select class="form-control" name="gender" id="gender">
 									<option value="Male">Male</option>
 									<option value="Female">Female</option>
+									<option value="Don't Want To Specify">Don't Want To Specify</option>
 								</select>
 							</div>
 						</div>
@@ -1751,50 +2829,1058 @@ var icon = "";
 
 	<div id = "tabs" >
 		<ul class="nav nav-pills helppills">
-			<li class="active"><a href="#tab1" data-toggle="pill">Active</a></li>
-			<li ><a href="#tab2" data-toggle="pill">Awaiting Acceptance</a></li>
-			<li ><a href="#tab3" data-toggle="pill">Archive</a></li>
+			<li class="active" ><a href="#tab1" id="Active" data-toggle="pill">Active</a></li>
+			<li ><a href="#tab2" id="AwaitingAcceptance" data-toggle="pill">Awaiting Acceptance</a></li>
+			<li ><a href="#tab3" id="Archive" data-toggle="pill">Archive</a></li>
 		</ul>
 	</div>
 
 
 	<div  >
 		<div class="tab-content fors" >
+			<div class="tab-pane active" id="tab1" >
+
+				<div id="Animal_Active" style="background-color:red">
+					<div>Animal Active</div>
 
 
+					<div class="carousel slide" id="myCarouselAnimalActive">
+						<div class="carousel-inner" id="Animal Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselAnimalActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselAnimalActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Children_Active" style="background-color:purple">
+					<div>Children Active</div>
 
 
-				<div id="carousel2" >
+					<div class="carousel slide" id="myCarouselChildrenActive">
+						<div class="carousel-inner" id="Children Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselChildrenActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselChildrenActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
 
-					<div class=".multiple-items">
-						<div>your content</div>
-						<div>your content</div>
-						<div>your content</div>
+				</div>
 
+				<div ></div>
+
+				<div id="Seniors_Active" style="background-color:blue">
+					<div>Seniors Active</div>
+
+
+					<div class="carousel slide" id="myCarouselSeniorsActive">
+						<div class="carousel-inner" id="Seniors Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselSeniorsActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselSeniorsActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
 					</div>
 
 				</div>
 
 
 
-			<div class="tab-pane" id="tab2" >
-				<div  id="carousel3">k</div>
+				<div ></div>
+
+				<div id="Environment_Active" style="background-color:pink">
+					<div>Environment Active</div>
+
+
+					<div class="carousel slide" id="myCarouselEnvironmentActive">
+						<div class="carousel-inner" id="Environment Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselEnvironmentActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselEnvironmentActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
 
 				<div ></div>
 
-				<div id="carousel4" >k</div>
+				<div id="Disaster_Relief_Active" style="background-color:orange">
+					<div>Disaster Relief Active</div>
+
+
+					<div class="carousel slide" id="myCarouselDisasterReliefActive">
+						<div class="carousel-inner" id="Disaster Relief Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselDisasterReliefActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselDisasterReliefActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Service_Homeless_Active" style="background-color:green">
+					<div>Service Homeless Active</div>
+
+
+					<div class="carousel slide" id="myCarouselServiceHomelessActive">
+						<div class="carousel-inner" id="Service Homeless Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselServiceHomelessActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselServiceHomelessActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Sports_Active" style="background-color:grey">
+					<div>Sports Active</div>
+
+
+					<div class="carousel slide" id="myCarouselSportsActive">
+						<div class="carousel-inner" id="Sports Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselSportsActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselSportsActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Hunger_Active" style="background-color:brown">
+					<div>Hunger Active</div>
+
+
+					<div class="carousel slide" id="myCarouselHungerActive">
+						<div class="carousel-inner" id="Hunger Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselHungerActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselHungerActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Creativity_Arts_Active" style="background-color:red">
+					<div>Creativity Arts Active</div>
+
+
+					<div class="carousel slide" id="myCarouselCreativityArtsActive">
+						<div class="carousel-inner" id="Creativity Arts Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselCreativityArtsActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselCreativityArtsActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="People_with_Disabilities_Active" style="background-color:blue">
+					<div>People with Disabilities Active</div>
+
+
+					<div class="carousel slide" id="myCarouselPeoplewithDisabilitiesActive">
+						<div class="carousel-inner" id="People with Disabilities Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselPeoplewithDisabilitiesActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselPeoplewithDisabilitiesActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Education_Active" style="background-color:pink">
+					<div>Education Active</div>
+
+
+					<div class="carousel slide" id="myCarouselEducationActive">
+						<div class="carousel-inner" id="Education Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselEducationActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselEducationActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Community_Active" style="background-color:green">
+					<div>Community Active</div>
+
+
+					<div class="carousel slide" id="myCarouselCommunityActive">
+						<div class="carousel-inner" id="Community Active">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselCommunityActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselCommunityActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+
+
 			</div>
 
-			<div class="tab-pane" id="tab3" >
-				<div id="carousel5" >k</div>
+			<div class="tab-pane" id="tab2" >
+
+
+				<div id="Animal_Awaiting_Approval" style="background-color:red">
+					<div>Animal Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselAnimalAwaitingApproval">
+						<div class="carousel-inner" id="Animal Awaiting Approval">
+							<div class="item active ">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselAnimalAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselAnimalAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
 
 				<div ></div>
 
-				<div id="carousel6">k</div>
+				<div id="Children_Awaiting_Approval " style="background-color:purple">
+					<div>Children Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselChildrenAwaitingApproval">
+						<div class="carousel-inner" id="Children Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselChildrenAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselChildrenAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Seniors_Awaiting_Approval" style="background-color:blue">
+					<div>Seniors Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselSeniorsAwaitingApproval">
+						<div class="carousel-inner" id="Seniors Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselSeniorsAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselSeniorsAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+
+				<div ></div>
+
+				<div id="Environment_Awaiting_Approval" style="background-color:pink">
+					<div>Environment Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselEnvironmentAwaitingApproval">
+						<div class="carousel-inner" id="Environment Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselEnvironmentAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselEnvironmentAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Disaster_Relief_Awaiting_Approval" style="background-color:orange">
+					<div>Disaster Relief Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselDisasterReliefAwaitingApproval">
+						<div class="carousel-inner" id="Disaster Relief Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselDisasterReliefAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselDisasterReliefAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Service_Homeless_Awaiting_Approval" style="background-color:green">
+					<div>Service Homeless Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselServiceHomelessAwaitingApproval">
+						<div class="carousel-inner" id="Service Homeless Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselServiceHomelessAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselServiceHomelessAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Sports_Awaiting_Approval" style="background-color:grey">
+					<div>Sports Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselSportsAwaitingApproval">
+						<div class="carousel-inner" id="Sports Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselSportsAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselSportsAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Hunger_Awaiting_Approval" style="background-color:brown">
+					<div>Hunger Awaiting_Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselHungerAwaitingApproval">
+						<div class="carousel-inner" id="Hunger Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselHungerAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselHungerAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Creativity_Arts_Awaiting_Approval" style="background-color:red">
+					<div>Creativity Arts Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselCreativityArtsAwaitingApproval">
+						<div class="carousel-inner" id="Creativity Arts Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselCreativityArtsAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselCreativityArtsAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="People_with_Disabilities_Awaiting_Approval" style="background-color:blue">
+					<div>People with Disabilities Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselPeoplewithDisabilitiesAwaitingApproval">
+						<div class="carousel-inner" id="People with Disabilities Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselPeoplewithDisabilitiesAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselPeoplewithDisabilitiesAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Education_Awaiting_Approval" style="background-color:pink">
+					<div>Education Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselEducationAwaitingApproval">
+						<div class="carousel-inner" id="Education Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselEducationAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselEducationAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Community_Awaiting_Approval" style="background-color:green">
+					<div>Community Awaiting Approval</div>
+
+
+					<div class="carousel slide" id="myCarouselCommunityAwaitingApproval">
+						<div class="carousel-inner" id="Community Awaiting Approval">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselCommunityAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselCommunityAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+
+
+			</div>
+
+
+
+
+			<div class="tab-pane" id="tab3" >
+
+
+
+				<div id="Animal_Archived" style="background-color:red">
+					<div>Animal Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselAnimalArchived">
+						<div class="carousel-inner" id="AnimalArchived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselAnimalArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselAnimalArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Children_Archived" style="background-color:purple">
+					<div>Children Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselChildrenArchived">
+						<div class="carousel-inner" id="Children Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselChildrenArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselChildrenArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Seniors_Archived" style="background-color:blue">
+					<div>Seniors Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselSeniorsArchived">
+						<div class="carousel-inner" id="Seniors Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselSeniorsArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselSeniorsArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+
+				<div ></div>
+
+				<div id="Environment_Archived" style="background-color:pink">
+					<div>Environment Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselEnvironmentArchived">
+						<div class="carousel-inner" id="Environment Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselEnvironmentArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselEnvironmentArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Disaster_Relief_Archived" style="background-color:orange">
+					<div>Disaster Relief Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselDisasterReliefArchived">
+						<div class="carousel-inner" id="Disaster Relief Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselDisasterReliefArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselDisasterReliefArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Service_Homeless_Archived" style="background-color:green">
+					<div>Service Homeless Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselServiceHomelessArchived">
+						<div class="carousel-inner" id="Service Homeless Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselServiceHomelessArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselServiceHomelessArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Sports_Archived" style="background-color:grey">
+					<div>Sports Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselSportsArchived">
+						<div class="carousel-inner" id="Sports Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselSportsArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselSportsArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Hunger_Archived" style="background-color:brown">
+					<div>Hunger Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselHungerArhived">
+						<div class="carousel-inner" id="Hunger Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselHungerArhived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselHungerArhived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Creativity_Arts_Archived" style="background-color:red">
+					<div>Creativity Arts Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselCreativityArtsArchived">
+						<div class="carousel-inner" id="Creativity Arts Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselCreativityArtsArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselCreativityArtsArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="People_with_Disabilities_Archived" style="background-color:blue">
+					<div>People with Disabilities Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselPeoplewithDisabilitiesArchived">
+						<div class="carousel-inner" id="People with Disabilities Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselPeoplewithDisabilitiesArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselPeoplewithDisabilitiesArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+				<div ></div>
+
+				<div id="Education_Archived" style="background-color:pink">
+					<div>Education Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselEducationArchived">
+						<div class="carousel-inner" id="Education Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselEducationArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselEducationArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+				<div ></div>
+
+				<div id="Community_Archived" style="background-color:green">
+					<div>Community Archived</div>
+
+
+					<div class="carousel slide" id="myCarouselCommunityArchived">
+						<div class="carousel-inner" id="Community Archived">
+							<div class="item active">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e477e4/fff&amp;text=2" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/eeeeee&amp;text=3" class="img-responsive"></a></div>
+							</div>
+							<div class="item">
+								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
+							</div>
+						</div>
+						<a class="left carousel-control" href="#myCarouselCommunityArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarouselCommunityArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
+
+				</div>
+
+
+
 			</div>
 		</div>
 	</div>
 
+	<div class="col-md-12 text-center"><h3>Bootstrap 3 Multiple Slide Carousel</h3></div>
+	<div class="col-md-6 col-md-offset-3">
+
+	</div>
+
+
+
+
 </div>
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+	</div>
+
 </body>
-</html>	
+
+
+
+
+</html>
