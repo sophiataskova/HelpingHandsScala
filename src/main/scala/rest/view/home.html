@@ -172,13 +172,10 @@ var icon = "";
 		$(document).ready(function() {
 
 
-		    $('.multiple-items').slick({
-	  		infinite: true,
-	  		slidesToShow: 3,
-	  		slidesToScroll: 3,
-	  		autoplaySpeed : true
-			});
-
+		 var containerObject = document.getElementById("tabs");
+		 containerObject.onload = function (){
+		 		getTabEvents(true,false,false);
+		 };
 		  var usernamelogout = sessionStorage.getItem("loggedusername");
 
 		  var profilelogout = sessionStorage.getItem("loggedprofile");
@@ -1130,19 +1127,6 @@ var icon = "";
 																	carouselInner.appendChild(newCarouselItem);
 
 
-																	var carouselInnerH = $(carouselInner);//convert to jQuery Element
-																	var carouselInnerJ = carouselInnerH[0];//convert to HTML Element
-
-
-
-																	console.log(catCarousel.length);
-																	/*
-																	document.getElementById(catCarousel).each(function(){
-																		consolelog(level1);
-																		var n = $(this).find('.item').length;
-																		console.log($('.item').length);
-																		//$(this).closest('.iso-post').find(".image-count").text("There are " + n + " images in this gallery.");
-																	   });*/
 
 
 
@@ -1275,60 +1259,11 @@ var icon = "";
 															   $('#Active').click(function(){
 															  console.log('gello');
 
-																$.ajax({
-																type:'POST',
-																url:'/populateEditProfile',
-																contentType: "application/json",
-
-																data:JSON.stringify({
-
-
-																'username': usernamelogout.toString(),
-																'userType': profilelogout.toString().toLowerCase(),
-
-
-
-																}),
-
-
-
-																success: function(data){
-
-
-																console.log(data.message);
-
-
-																console.log(data.message.organizationName);
-
-
-
-																 FlagActiveValue = "true";
+															  	 FlagActiveValue = "true";
 																 FlagExpiredValue = "false";
 																 FlagAwaitingValue = "false";
 
-
-																   getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
-
-
-																	},
-																error:function(data){
-
-
-																console.log(data.responseJSON.message);
-
-																 FlagActiveValue = "true";
-																 FlagExpiredValue = "false";
-																 FlagAwaitingValue = "false";
-
-
-
-																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
-
-
-																}
-
-															 });
-
+															   getTabEvents(FlagActiveValue,FlagExpiredValue,  FlagAwaitingValue);
 
 
 															  });
@@ -1340,63 +1275,12 @@ var icon = "";
 
 
 						   $('#AwaitingAcceptance').click(function(){
-															  console.log('gello');
 
-																$.ajax({
-																type:'POST',
-																url:'/populateEditProfile',
-																contentType: "application/json",
-
-																data:JSON.stringify({
-
-
-																'username': usernamelogout.toString(),
-																'userType': profilelogout.toString().toLowerCase(),
-
-
-
-																}),
-
-
-
-																success: function(data){
-
-
-																console.log(data.message);
-
-
-																console.log(data.message.organizationName);
-
-																 FlagActiveValue = "false";
+						   	 FlagActiveValue = "false";
 																 FlagExpiredValue = "false";
 																 FlagAwaitingValue = "true";
 
-
-
-																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
-
-
-																	},
-																error:function(data){
-
-
-																console.log(data.responseJSON.message);
-
-
-
-																 FlagActiveValue = "false";
-																 FlagExpiredValue = "false";
-																 FlagAwaitingValue = "true";
-
-
-
-																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
-
-																}
-
-															 });
-
-
+						    getTabEvents(FlagActiveValue,FlagExpiredValue,  FlagAwaitingValue);
 
 															  });
 
@@ -1410,7 +1294,21 @@ var icon = "";
 						   $('#Archive').click(function(){
 															  console.log('gello');
 
-																$.ajax({
+
+															   FlagActiveValue = "false";
+																 FlagExpiredValue = "true";
+																 FlagAwaitingValue = "false";
+
+																  getTabEvents(FlagActiveValue,FlagExpiredValue,  FlagAwaitingValue);
+																  //LoadingCarDom(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue, data);
+
+
+
+								});
+
+								function getTabEvents(FlagActiveValue,FlagExpiredValue,  FlagAwaitingValue){
+
+								$.ajax({
 																type:'POST',
 																url:'/populateEditProfile',
 																contentType: "application/json",
@@ -1430,33 +1328,24 @@ var icon = "";
 																success: function(data){
 
 
-																console.log(data.message);
+															//	console.log(data.message);
 
 
-																console.log(data.message.organizationName);
+																//console.log(data.message.organizationName);
 
-																 FlagActiveValue = "false";
-																 FlagExpiredValue = "true";
-																 FlagAwaitingValue = "false";
+																LoadingCarDom(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue, data);
 
 
-
-																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
 
 
 																	},
 																error:function(data){
 
 
-																console.log(data.responseJSON.message);
-
-																  FlagActiveValue = "false";
-																 FlagExpiredValue = "true";
-																 FlagAwaitingValue = "false";
+																//console.log(data.responseJSON.message);
 
 
-
-																  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
+																  //getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
 
 																}
 
@@ -1464,11 +1353,74 @@ var icon = "";
 
 
 
-								});
 
-								  function getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue, data) {
+								}
 
-															  console.log(data);
+								function LoadingCarDom(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue, data){
+
+								 var eventsAnimalObject =  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , "Animal", data);
+								 console.log(eventsAnimalObject);
+																 var eventsChildObject =  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , "Children", data);
+																 var eventsDSObject =  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , "DisasterRelief", data);
+																 var eventsSeniorObject =  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , "Seniors", data);
+
+																 var categoryObjectArray = [eventsAnimalObject, eventsChildObject, eventsDSObject, eventsSeniorObject];
+																 var categoryArray = ["Animal", "Children", "Disaster Relief", "Seniors"];
+																 console.log(categoryObjectArray+'whippe');
+																 var tabName ="";
+																 if(FlagActiveValue){
+																 	tabName = "Active";
+																 }
+																 else if(FlagExpiredValue){
+																 	tabName = "Archived";
+																 }
+
+																 else {
+																 	tabName = "Awaiting Approval";
+																 }
+
+																 for(i=0; i<categoryObjectArray[i].length; i++){
+																//console.log(categoryObjectArray[i]+'PRIYYYYAAA');
+																 	for(j=0; j<categoryArray[j].length; j++){
+																					//	console.log(categoryObjectArray[i][j]+'GOD HELP');
+																		var newCarouselItem = document.createElement("div");
+																		if(j == 0){
+																			newCarouselItem.className = "item active";
+																		}
+																		else{
+																			newCarouselItem.className = "item";
+
+																		}
+
+																	var insideCarousel = document.createElement("div");
+																	insideCarousel.className = "col-xs-3";
+																	var anchorCar = document.createElement("a");
+																	var pCar = document.createElement("p");
+																	pCar.innerHTML = "WORKING WOLA";
+
+
+																	pCar.innerHTML = "WORKING WOLA";
+
+																	anchorCar.appendChild(pCar);
+																	insideCarousel.appendChild(anchorCar);
+																	newCarouselItem.appendChild(insideCarousel);
+
+																	var categorybackend = categoryArray[i];
+
+																	var catCarousel = categorybackend+" "+tabName;
+
+																	var carouselInner = document.getElementById(catCarousel);
+
+																	carouselInner.appendChild(newCarouselItem);
+																 	}
+																 }
+
+
+								}
+
+								  function getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue, category, data) {
+
+															 // console.log(data);
 
 
 
@@ -1487,7 +1439,7 @@ var icon = "";
 																	"isActive": FlagActiveValue,
 																	 "expired": FlagExpiredValue,
 																	 "isAwaitingApproval": FlagAwaitingValue,
-
+																	 "category": category
 
 
 																	}),
@@ -1495,7 +1447,9 @@ var icon = "";
 																	success: function(data){
 
 
-																		console.log(data.message);
+																		//console.log(data.message);
+																	//	return data.message;
+																		//callback(data.message);
 
 
 
@@ -1503,12 +1457,14 @@ var icon = "";
 																	error:function(data){
 
 
-																	console.log(data.responseJSON.message);
+																	//console.log(data.responseJSON.message);
 
 
 																	}
 
 																 });
+
+																 return data.message;
 														}
 
 ///Volunteer Event
@@ -1535,10 +1491,10 @@ var icon = "";
 																success: function(data){
 
 
-																console.log(data.message);
+															//	console.log(data.message);
 
 
-																console.log(data.message.organizationName);
+																//console.log(data.message.organizationName);
 
 
 																EventVolunteerAction(data);
@@ -1553,7 +1509,7 @@ var icon = "";
 																error:function(data){
 
 
-																console.log(data.responseJSON.message);
+																//console.log(data.responseJSON.message);
 
 																EventVolunteerAction(data);
 
@@ -1571,7 +1527,7 @@ var icon = "";
 
 														 function EventVolunteerAction(data) {
 
-															  console.log(data);
+															  //console.log(data);
 
 
 
@@ -1587,11 +1543,11 @@ var icon = "";
 
 
 
-															console.log(typeof((volunteercount)))
+														//	console.log(typeof((volunteercount)))
 
-															console.log(((volunteercount)))
+															//console.log(((volunteercount)))
 
-															console.log(emaillogout + orgnamelogout + eventnamebackend +usernamelogout+profilelogout.toLowerCase()+volunteercount );
+															//console.log(emaillogout + orgnamelogout + eventnamebackend +usernamelogout+profilelogout.toLowerCase()+volunteercount );
 
 
 																	$.ajax({
@@ -1626,7 +1582,7 @@ var icon = "";
 
 
 
-																		console.log(volunteercount);
+																		//console.log(volunteercount);
 
 
 
@@ -1634,7 +1590,7 @@ var icon = "";
 																	error:function(data){
 
 
-																	console.log(data);
+																//	console.log(data);
 
 
 																	}
@@ -1656,7 +1612,7 @@ var icon = "";
 
 
 
-															console.log(eventnamebackend);
+															//console.log(eventnamebackend);
 
 															$('#event_userparticipating').removeAttr('readonly');
 
@@ -1664,9 +1620,9 @@ var icon = "";
 
 															var usercount = parseInt($('input[name=event_userparticipating]').val());
 
-															console.log(typeof(usercount));
+															//console.log(typeof(usercount));
 
-															console.log(orgnamelogout + eventnamebackend +'HHHHHH'+profilelogout.toLowerCase()+usercount +'attendevent');
+															//console.log(orgnamelogout + eventnamebackend +'HHHHHH'+profilelogout.toLowerCase()+usercount +'attendevent');
 
 
 																	$.ajax({
@@ -1699,7 +1655,7 @@ var icon = "";
 
 
 
-																		console.log(usercount);
+																		//console.log(usercount);
 
 																		$('#msgevent').removeClass('alert-danger').addClass('alert-success').html("You are Participating in this Event").show();
 
@@ -1710,7 +1666,7 @@ var icon = "";
 																	error:function(data){
 
 
-																	console.log(data);
+																//	console.log(data);
 
 
 																	}
@@ -1726,7 +1682,7 @@ var icon = "";
 
 														 function EventAttendAction(data) {
 
-															  console.log(data);
+															//  console.log(data);
 
 
 
@@ -1776,7 +1732,7 @@ var icon = "";
 																success: function(data){
 
 
-																console.log(data.message);
+																//console.log(data.message);
 
 
 																		$('#msgevent').removeClass('alert-danger').addClass('alert-success').html(data.message).show();
@@ -1787,7 +1743,7 @@ var icon = "";
 																error:function(data){
 
 
-																console.log(data.responseJSON.message);
+																//console.log(data.responseJSON.message);
 
 
 
@@ -2846,6 +2802,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselAnimalActive">
 						<div class="carousel-inner" id="Animal Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -2858,6 +2815,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselAnimalActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselAnimalActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -2873,6 +2831,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselChildrenActive">
 						<div class="carousel-inner" id="Children Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -2885,6 +2844,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselChildrenActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselChildrenActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -2900,6 +2860,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselSeniorsActive">
 						<div class="carousel-inner" id="Seniors Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -2912,6 +2873,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselSeniorsActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselSeniorsActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -2929,6 +2891,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselEnvironmentActive">
 						<div class="carousel-inner" id="Environment Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -2941,6 +2904,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselEnvironmentActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselEnvironmentActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -2957,6 +2921,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselDisasterReliefActive">
 						<div class="carousel-inner" id="Disaster Relief Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -2969,7 +2934,9 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
+
 						<a class="left carousel-control" href="#myCarouselDisasterReliefActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselDisasterReliefActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
 					</div>
@@ -2985,6 +2952,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselServiceHomelessActive">
 						<div class="carousel-inner" id="Service Homeless Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -2997,6 +2965,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselServiceHomelessActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselServiceHomelessActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3013,6 +2982,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselSportsActive">
 						<div class="carousel-inner" id="Sports Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3025,6 +2995,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselSportsActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselSportsActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3041,6 +3012,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselHungerActive">
 						<div class="carousel-inner" id="Hunger Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3053,6 +3025,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselHungerActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselHungerActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3068,6 +3041,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselCreativityArtsActive">
 						<div class="carousel-inner" id="Creativity Arts Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3080,6 +3054,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselCreativityArtsActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselCreativityArtsActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3096,6 +3071,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselPeoplewithDisabilitiesActive">
 						<div class="carousel-inner" id="People with Disabilities Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3108,6 +3084,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselPeoplewithDisabilitiesActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselPeoplewithDisabilitiesActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3124,6 +3101,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselEducationActive">
 						<div class="carousel-inner" id="Education Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3136,6 +3114,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselEducationActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselEducationActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3151,6 +3130,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselCommunityActive">
 						<div class="carousel-inner" id="Community Active">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3163,6 +3143,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselCommunityActive" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselCommunityActive" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3184,6 +3165,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselAnimalAwaitingApproval">
 						<div class="carousel-inner" id="Animal Awaiting Approval">
+							<!--
 							<div class="item active ">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3196,6 +3178,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselAnimalAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselAnimalAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3211,6 +3194,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselChildrenAwaitingApproval">
 						<div class="carousel-inner" id="Children Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3223,6 +3207,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselChildrenAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselChildrenAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3238,6 +3223,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselSeniorsAwaitingApproval">
 						<div class="carousel-inner" id="Seniors Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3250,6 +3236,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselSeniorsAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselSeniorsAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3267,6 +3254,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselEnvironmentAwaitingApproval">
 						<div class="carousel-inner" id="Environment Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3279,6 +3267,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselEnvironmentAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselEnvironmentAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3295,6 +3284,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselDisasterReliefAwaitingApproval">
 						<div class="carousel-inner" id="Disaster Relief Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3307,6 +3297,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselDisasterReliefAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselDisasterReliefAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3323,6 +3314,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselServiceHomelessAwaitingApproval">
 						<div class="carousel-inner" id="Service Homeless Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3335,6 +3327,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselServiceHomelessAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselServiceHomelessAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3351,6 +3344,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselSportsAwaitingApproval">
 						<div class="carousel-inner" id="Sports Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3363,6 +3357,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselSportsAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselSportsAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3379,6 +3374,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselHungerAwaitingApproval">
 						<div class="carousel-inner" id="Hunger Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3391,6 +3387,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselHungerAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselHungerAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3406,6 +3403,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselCreativityArtsAwaitingApproval">
 						<div class="carousel-inner" id="Creativity Arts Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3418,6 +3416,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselCreativityArtsAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselCreativityArtsAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3434,6 +3433,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselPeoplewithDisabilitiesAwaitingApproval">
 						<div class="carousel-inner" id="People with Disabilities Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3446,6 +3446,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselPeoplewithDisabilitiesAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselPeoplewithDisabilitiesAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3462,6 +3463,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselEducationAwaitingApproval">
 						<div class="carousel-inner" id="Education Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3474,6 +3476,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselEducationAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselEducationAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3489,6 +3492,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselCommunityAwaitingApproval">
 						<div class="carousel-inner" id="Community Awaiting Approval">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3501,6 +3505,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselCommunityAwaitingApproval" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselCommunityAwaitingApproval" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
@@ -3526,6 +3531,7 @@ var icon = "";
 
 					<div class="carousel slide" id="myCarouselAnimalArchived">
 						<div class="carousel-inner" id="AnimalArchived">
+							<!--
 							<div class="item active">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/e499e4/fff&amp;text=1" class="img-responsive"></a></div>
 							</div>
@@ -3538,6 +3544,7 @@ var icon = "";
 							<div class="item">
 								<div class="col-xs-3"><a href="#"><img src="http://placehold.it/500/f4f4f4&amp;text=4" class="img-responsive"></a></div>
 							</div>
+							-->
 						</div>
 						<a class="left carousel-control" href="#myCarouselAnimalArchived" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
 						<a class="right carousel-control" href="#myCarouselAnimalArchived" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
