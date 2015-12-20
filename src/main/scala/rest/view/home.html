@@ -45,10 +45,10 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick.min.js"></script>
 
 
-
-
-
-
+	<link rel="stylesheet" href="owl-carousel/owl.carousel.css">
+	<link rel="stylesheet" href="owl-carousel/owl.theme.css">
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="owl-carousel/owl.carousel.js"></script>
 
 </head>
 
@@ -1369,7 +1369,7 @@ var icon = "";
 								function renderEventsIntoCarousel(categoryObjectArray) {
 								    // var categoryObjectArray = [eventsAnimalObject, eventsChildObject, eventsDSObject, eventsSeniorObject];
                                     var categoryArray = ["Animal", "Children", "Disaster Relief", "Seniors"];
-                                     console.log(categoryObjectArray+'whippe');
+                                     
                                      var tabName ="";
                                      if(FlagActiveValue){
                                         tabName = "Active";
@@ -1382,12 +1382,10 @@ var icon = "";
                                         tabName = "Awaiting Approval";
                                      }
 
-                                     for(i=0; i<categoryObjectArray[i].length; i++){
-
-                                        for(j=0; j<categoryArray[j].length; j++){
+                                     for(var i=0; i<categoryObjectArray.length; i++){
                                                         //	console.log(categoryObjectArray[i][j]+'GOD HELP');
                                             var newCarouselItem = document.createElement("div");
-                                            if(j == 0){
+                                            if(i == 0){
                                                 newCarouselItem.className = "item active";
                                             }
                                             else{
@@ -1395,27 +1393,31 @@ var icon = "";
 
                                             }
 
-                                        var insideCarousel = document.createElement("div");
-                                        insideCarousel.className = "col-xs-3";
-                                        var anchorCar = document.createElement("a");
-                                        var pCar = document.createElement("p");
-                                        pCar.innerHTML = "WORKING WOLA";
+                                        var responsiveCarousel = document.getElementById(responsive_carousel);
+                                        responsive_carousel.appendChild(newCarouselItem);
+                                        responsive_carousel.owlCarousel();
+
+                                        // var insideCarousel = document.createElement("div");
+                                        // insideCarousel.className = "col-xs-3";
+                                        // var anchorCar = document.createElement("a");
+                                        // var pCar = document.createElement("p");
+                                        // pCar.innerHTML = "WORKING WOLA";
 
 
-                                        pCar.innerHTML = "WORKING WOLA";
+                                        // pCar.innerHTML = "WORKING WOLA";
 
-                                        anchorCar.appendChild(pCar);
-                                        insideCarousel.appendChild(anchorCar);
-                                        newCarouselItem.appendChild(insideCarousel);
+                                        // anchorCar.appendChild(pCar);
+                                        // insideCarousel.appendChild(anchorCar);
+                                        // newCarouselItem.appendChild(insideCarousel);
 
-                                        var categorybackend = categoryArray[i];
+                                        // var categorybackend = categoryArray[i];
 
-                                        var catCarousel = categorybackend+" "+tabName;
+                                        // var catCarousel = categorybackend+" "+tabName;
 
-                                        var carouselInner = document.getElementById(catCarousel);
+                                        // var carouselInner = document.getElementById(catCarousel);
 
-                                        carouselInner.appendChild(newCarouselItem);
-                                        }
+                                        // carouselInner.appendChild(newCarouselItem);
+                                        
                                      }
 								}
 
@@ -1436,11 +1438,11 @@ var icon = "";
 
 																	data:JSON.stringify({
 
-																	'organization': orgnamelogout.toString(),
+																	//'organization': orgnamelogout.toString(),
 																	"isActive": FlagActiveValue,
 																	 "expired": FlagExpiredValue,
-																	 "isAwaitingApproval": FlagAwaitingValue,
-																	 "category": category
+																	 "isAwaitingApproval": FlagAwaitingValue
+																	 //,"category": category
 
 
 																	}),
@@ -2783,7 +2785,9 @@ var icon = "";
 	</div>
 
 	<div style="height:50px;"><br/></div>
-
+	<div class="owl-carousel" data-transition="slide" id="responsive_carousel">
+				
+			</div>
 	<div id = "tabs" >
 		<ul class="nav nav-pills helppills">
 			<li class="active" ><a href="#tab1" id="Active" data-toggle="pill">Active</a></li>
@@ -2796,6 +2800,15 @@ var icon = "";
 	<div  >
 		<div class="tab-content fors" >
 			<div class="tab-pane active" id="tab1" >
+			
+
+
+
+
+
+
+
+
 
 				<div id="Animal_Active" style="background-color:red">
 					<div>Animal Active</div>
