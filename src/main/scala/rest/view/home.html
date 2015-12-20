@@ -1364,58 +1364,59 @@ var icon = "";
 																 var eventsDSObject =  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , "DisasterRelief", data);
 																 var eventsSeniorObject =  getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , "Seniors", data);
 
-																 var categoryObjectArray = [eventsAnimalObject, eventsChildObject, eventsDSObject, eventsSeniorObject];
-																 var categoryArray = ["Animal", "Children", "Disaster Relief", "Seniors"];
-																 console.log(categoryObjectArray+'whippe');
-																 var tabName ="";
-																 if(FlagActiveValue){
-																 	tabName = "Active";
-																 }
-																 else if(FlagExpiredValue){
-																 	tabName = "Archived";
-																 }
+								}
 
-																 else {
-																 	tabName = "Awaiting Approval";
-																 }
+								function renderEventsIntoCarousel(categoryObjectArray) {
+								    // var categoryObjectArray = [eventsAnimalObject, eventsChildObject, eventsDSObject, eventsSeniorObject];
+                                    var categoryArray = ["Animal", "Children", "Disaster Relief", "Seniors"];
+                                     console.log(categoryObjectArray+'whippe');
+                                     var tabName ="";
+                                     if(FlagActiveValue){
+                                        tabName = "Active";
+                                     }
+                                     else if(FlagExpiredValue){
+                                        tabName = "Archived";
+                                     }
 
-																 for(i=0; i<categoryObjectArray[i].length; i++){
-																
-																 	for(j=0; j<categoryArray[j].length; j++){
-																					//	console.log(categoryObjectArray[i][j]+'GOD HELP');
-																		var newCarouselItem = document.createElement("div");
-																		if(j == 0){
-																			newCarouselItem.className = "item active";
-																		}
-																		else{
-																			newCarouselItem.className = "item";
+                                     else {
+                                        tabName = "Awaiting Approval";
+                                     }
 
-																		}
+                                     for(i=0; i<categoryObjectArray[i].length; i++){
 
-																	var insideCarousel = document.createElement("div");
-																	insideCarousel.className = "col-xs-3";
-																	var anchorCar = document.createElement("a");
-																	var pCar = document.createElement("p");
-																	pCar.innerHTML = "WORKING WOLA";
+                                        for(j=0; j<categoryArray[j].length; j++){
+                                                        //	console.log(categoryObjectArray[i][j]+'GOD HELP');
+                                            var newCarouselItem = document.createElement("div");
+                                            if(j == 0){
+                                                newCarouselItem.className = "item active";
+                                            }
+                                            else{
+                                                newCarouselItem.className = "item";
 
+                                            }
 
-																	pCar.innerHTML = "WORKING WOLA";
-
-																	anchorCar.appendChild(pCar);
-																	insideCarousel.appendChild(anchorCar);
-																	newCarouselItem.appendChild(insideCarousel);
-
-																	var categorybackend = categoryArray[i];
-
-																	var catCarousel = categorybackend+" "+tabName;
-
-																	var carouselInner = document.getElementById(catCarousel);
-
-																	carouselInner.appendChild(newCarouselItem);
-																 	}
-																 }
+                                        var insideCarousel = document.createElement("div");
+                                        insideCarousel.className = "col-xs-3";
+                                        var anchorCar = document.createElement("a");
+                                        var pCar = document.createElement("p");
+                                        pCar.innerHTML = "WORKING WOLA";
 
 
+                                        pCar.innerHTML = "WORKING WOLA";
+
+                                        anchorCar.appendChild(pCar);
+                                        insideCarousel.appendChild(anchorCar);
+                                        newCarouselItem.appendChild(insideCarousel);
+
+                                        var categorybackend = categoryArray[i];
+
+                                        var catCarousel = categorybackend+" "+tabName;
+
+                                        var carouselInner = document.getElementById(catCarousel);
+
+                                        carouselInner.appendChild(newCarouselItem);
+                                        }
+                                     }
 								}
 
 								  function getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue, category, data) {
@@ -1446,8 +1447,8 @@ var icon = "";
 
 																	success: function(data){
 
-
-																		//console.log(data.message);
+                                                                        renderEventsIntoCarousel(data.message);
+																		console.log(data.message);
 																	//	return data.message;
 																		//callback(data.message);
 
