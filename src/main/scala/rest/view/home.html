@@ -231,11 +231,6 @@ $(document).ready(function() {
 
     }
 
-
-    alert(usernamelogout);
-    alert(profilelogout);
-    alert(typeof(profilelogout));
-
     document.getElementById("user_logged").innerHTML = usernamelogout;
 
     google.maps.event.addDomListener(window, 'load', initialize);
@@ -920,7 +915,7 @@ $(document).ready(function() {
 
             success: function(data) {
 
-
+				userData = data;
                 //console.log(data.message);
 
 
@@ -1150,7 +1145,6 @@ $(document).ready(function() {
         // Prevent submit form
         e.preventDefault();
 
-        alert('hi');
         var $form = $(e.target);
         validator = $form.data('bootstrapValidator');
 
@@ -1586,8 +1580,8 @@ $(document).ready(function() {
             newEventItem.className = "eventItem";
 
 			var event = new Event(categoryObjectArray[i].eventName, categoryObjectArray[i].category,
-			    categoryObjectArray[i].organization,categoryObjectArray[i].usersParticipating,
-			    categoryObjectArray[i].volunteersRequired, categoryObjectArray[i].locationNearby);
+			    categoryObjectArray[i].organization, categoryObjectArray[i].description,categoryObjectArray[i].from,categoryObjectArray[i].to, categoryObjectArray[i].usersParticipating,
+			    categoryObjectArray[i].volunteersParticipating, categoryObjectArray[i].locationNearby);
 
 			displayEvent(event, newEventItem);
             parent.appendChild(newEventItem);
@@ -1595,13 +1589,16 @@ $(document).ready(function() {
         }
     }
 
-    function Event(e_title, e_category, e_organization, e_usersParticipating, e_volunteersRequired, e_location) {
+    function Event(e_title, e_category, e_organization, e_desc, e_start, e_end, e_usersParticipating, e_volunteersRequired, e_location) {
 		this.event_title = e_title;
 		this.category = e_category;
 		this.organization = e_organization;
 		this.usersParticipating = e_usersParticipating;
 		this.volunteersRequired = e_volunteersRequired;
 		this.event_location = e_location;
+		this.desc = e_desc;
+		this.startDate = e_start;
+		this.endDate = e_end;
 
 		var red = Math.round(Math.random()*(255));
     	var blue = Math.round(Math.random()*(255));
@@ -1611,12 +1608,54 @@ $(document).ready(function() {
     }
 
     function displayEvent(Event, newEventItem) {
+    	var userType = profilelogout.toString().toLowerCase();
+
+    	newEventItem.setAttribute("data-toggle", "modal");
+    	newEventItem.setAttribute("data-target", "#create_event_modal-1");
+    	var clickHandler =  function(event) {
+    		$('#createEventForm').show();
+
+			$('#createEventForm').bootstrapValidator('resetForm', true);
+			$('#eventname').val(Event.event_title);
+			$('#orgname_event').val(Event.organization);
+
+			$('#startdate').val(Event.startDate);
+			$('#enddate').val(Event.endDate);
+
+			$('#eventloc').val(Event.event_location);
+			$("#eventlocnearby").find(":selected").text(Event.event_location);
+
+			$("#category").find(":selected").text(Event.category);
+			$('textarea#eventdesc').val(Event.desc);
+
+			$('#event_volunteersreq').val(Event.volunteersRequired);
+
+			$('#event_volunteersinterested').val(Event.usersParticipating);
+
+			if (userType === "student") {
+				document.getElementById("modtitle_event").textContent="RSVP";
+				$('#button5').hide('fast');
+				$('#button6').hide('fast');
+				$('#button12').hide('fast');
+				$('#button13').hide('fast');
+				$('#button15').hide('fast');
+				var readonlyFields = $('#createEventForm .form-control');
+				for (var i = 0; i < readonlyFields.length; i++) {
+					readonlyFields[i].setAttribute("readonly","readonly");
+				}
+			}
+
+		}
+
     	newEventItem.innerHTML =
     	 "<div style='height:inherit;width:inherit;background-color:" + Event.color + "'>" + "<div class = 'event_shade'>" +
     	 "<h3 class = 'event_title'>"+Event.event_title +"</h3>"+ "<div class = event_desc> Category: "+Event.category + "</div>" + "<br>"+"<div class = event_desc> Location: "+Event.event_location + "</div>" + "<br>"+
     	 "<div class = event_desc> Organization: " + Event.organization + "</div>" + "<br>"+"<div class = event_desc> Participants: " + Event.usersParticipating + "</div>" + "<br>"+
     	 "<div class = event_desc> Requires " + Event.volunteersRequired + " volunteers</div>" + "</div>" + "</div>";
+
+    	 newEventItem.addEventListener("click", clickHandler, false);
     }
+
 
 
     function getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, eventCategory, nearbyLocation, data) {
@@ -1689,48 +1728,9 @@ $(document).ready(function() {
 
     ///Volunteer Event
     $('#button9').click(function() {
-
-
-        $.ajax({
-            type: 'POST',
-            url: '/populateEditProfile',
-            contentType: "application/json",
-
-            data: JSON.stringify({
-
-                'username': usernamelogout.toString(),
-                'userType': profilelogout.toString().toLowerCase()
-            }),
-
-
-
-            success: function(data) {
-
-
-                EventVolunteerAction(data);
-
-
-                $('#msgevent').removeClass('alert-danger').addClass('alert-success').html("You are Volunteering for this Event").show();
-
-
-
-
-            },
-            error: function(data) {
-
-
-                //console.log(data.responseJSON.message);
-
-                EventVolunteerAction(data);
-
-
-
-
-            }
-
-        });
-
-
+		var organizationName = $('#orgname_event').val();
+        EventVolunteerAction(userData, organizationName);
+        alert("Your response has been recorded. Thank you!");
 
     });
 
@@ -1738,11 +1738,9 @@ $(document).ready(function() {
     ///////
 
 
-    function EventVolunteerAction(data) {
+    function EventVolunteerAction(data, orgName) {
 
         emaillogout = data.message.emailId;
-
-        orgnamelogout = data.message.organizationName;
 
         var eventnamebackend = $('input[name=eventname]').val();
 
@@ -1754,7 +1752,7 @@ $(document).ready(function() {
 
             data: JSON.stringify({
 
-                "organization": orgnamelogout.toString(),
+                "organization": orgName,
                 "eventName": eventnamebackend.toString(),
 
                 "emailId": emaillogout.toString(),
@@ -1767,7 +1765,7 @@ $(document).ready(function() {
             success: function() {
 
 
-                getvolusercount(eventnamebackend, orgnamelogout);
+                getvolusercount(eventnamebackend, orgName);
 
 
             },
@@ -1789,12 +1787,11 @@ $(document).ready(function() {
 
     $('#button10').click(function() {
 
-
-        orgnamelogout = $('input[name=orgname_event]').val();
+		var organizationName = $('#orgname_event').val();
 
         var eventnamebackend = $('input[name=eventname]').val();
 
-
+		alert("Your response has been recorded. Thank you!");
         $.ajax({
             type: 'POST',
             url: '/attendEvent',
@@ -1802,7 +1799,7 @@ $(document).ready(function() {
 
             data: JSON.stringify({
 
-                "organization": orgnamelogout.toString(),
+                "organization": organizationName.toString(),
                 "eventName": eventnamebackend.toString(),
 
 
@@ -1820,7 +1817,7 @@ $(document).ready(function() {
                 $('#msgevent').removeClass('alert-danger').addClass('alert-success').html("You are Participating in this Event").show();
 
 
-                getvolusercount(eventnamebackend, orgnamelogout);
+                getvolusercount(eventnamebackend, organizationName);
             },
             error: function(data) {
 
@@ -2093,7 +2090,7 @@ $(document).ready(function() {
 
                 //console.log(data);
 
-                alert('data' + sarch);
+                //alert('data' + sarch);
 
 
 
@@ -2722,25 +2719,6 @@ $(document).ready(function() {
 
 										<input type="date" id="startdate" class="form-control" name="startdate" placeholder="date">
 
-										<!--
-
-                                                                        <div class='input-group date' id='startdate'>
-                                                                            <input type='text' class="form-control" />
-                                                                                <span class="input-group-addon">
-                                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                                </span>
-                                                                        </div>
-
-
-
-                                                                                                        <div class='input-group date' id='startdate' name="startdate">
-                                                                                                            <input type='text' class="form-control" name="startdatetext"/>
-                                                                                        <span class="input-group-addon">
-                                                                                            <span class="glyphicon glyphicon-calendar"></span>
-                                                                                        </span>
-                                                                                                        </div>
-                                                                        -->
-
 									</div>
 								</div>
 
@@ -2750,23 +2728,6 @@ $(document).ready(function() {
 									<div class="col-lg-6">
 
 										<input type="date" id="enddate" class="form-control" name="enddate" placeholder="date">
-
-
-										<!--<div class='input-group date' id='endate'>
-                                            <input type='text' class="form-control" />
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                        </div>
-
-                        <!--
-                            <div class='input-group date' id='enddate' name="enddate">
-                                <input type='text' class="form-control" name="enddatetext"/>
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-                            </div>
-                            -->
 
 									</div>
 								</div>
@@ -2875,12 +2836,12 @@ $(document).ready(function() {
 								<div class="form-group" id="ApprovedEvents">
 									<div class="col-lg-5 col-lg-offset-4">
 
-										<button id='button9' type="button" class="btn btn-default btn-md VolunteerEvent">Volunteer Event</button>
+										<button id='button9' type="button" class="btn btn-default btn-md VolunteerEvent" data-dismiss="modal">Volunteer Event</button>
 									</div>
 
 
 
-									<button id='button10' type="button" class="btn btn-default btn-md AttendEvent">Attend Event</button>
+									<button id='button10' type="button" class="btn btn-default btn-md AttendEvent" data-dismiss="modal">Attend Event</button>
 
 
 
