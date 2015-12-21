@@ -1526,7 +1526,10 @@ $(document).ready(function() {
 
             newEventItem.className = "eventItem";
 
-			var event = new Event(categoryObjectArray[i].eventName, categoryObjectArray[i].category, categoryObjectArray[i].usersParticipating, categoryObjectArray[i].volunteersRequired, categoryObjectArray[i].locationNearby);
+			var event = new Event(categoryObjectArray[i].eventName, categoryObjectArray[i].category,
+			    categoryObjectArray[i].organization,categoryObjectArray[i].usersParticipating,
+			    categoryObjectArray[i].volunteersRequired, categoryObjectArray[i].locationNearby);
+
 			displayEvent(event, newEventItem);
             parent.appendChild(newEventItem);
 
@@ -1541,19 +1544,19 @@ $(document).ready(function() {
 		this.volunteersRequired = e_volunteersRequired;
 		this.location = e_location;
 
-		var red = Math.round(Math.random()*(max));
-    	var blue = Math.round(Math.random()*(max));
-    	var green = Math.round(Math.random()*(max));
+		var red = Math.round(Math.random()*(255));
+    	var blue = Math.round(Math.random()*(255));
+    	var green = Math.round(Math.random()*(255));
 
 		this.color = 'rgb(' + [red,green,blue].join(',') + ')';
     }
 
     function displayEvent(Event, newEventItem) {
     	newEventItem.innerHTML =
-    	"<div style='background-color:'" + Event.color + ">" +
-    	 Event.event_title + "<br>"+Event.category + "<br>"+
-    	 Event.organization + "<br>"+Event.usersParticipating + "<br>"+
-    	 Event.volunteersRequired + "<br>"+ "</div>";
+    	 "<div style='height:inherit;width:inherit;background-color:" + Event.color + "'>" + "<div class = 'event_shade'>" +
+    	 "<h3 class = 'event_title'>"+Event.event_title +"</h3>"+ "<div class = event_desc> Category: "+Event.category + "</div>" + "<br>"+
+    	 "<div class = event_desc> Organization: " + Event.organization + "</div>" + "<br>"+"<div class = event_desc> Participants: " + Event.usersParticipating + "</div>" + "<br>"+
+    	 "<div class = event_desc> Requires " + Event.volunteersRequired + " volunteers</div>" + "</div>" + "</div>";
     }
 
 
@@ -2080,6 +2083,55 @@ $(document).ready(function() {
 	padding: 0px;
 	border-color:red;
 	}
+
+    .eventItem {
+    width:300px;
+    height:238px;
+    margin:10px;
+    display:inline-block !important;
+    }
+
+    .event_body {
+        padding 5px 15px;
+        font-size: 15px;
+        line-height: 22px;
+        font-weight: 400;
+        letter-spacing: .5px;
+        font-family: "Benton Sans","Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;
+
+    }
+
+    .event_title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    overflow: hidden;
+    margin:0px;
+    color: #9b9ea7;
+    font-size: 15px;
+    line-height: 18px;
+    height: 36px;
+    max-height: 36px;
+    font-weight: 700;
+    letter-spacing: 0;
+    padding: 0;
+    }
+
+    .event_desc {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #9b9ea7;
+    font-size: 12px;
+    line-height: 18px;
+    padding: 5px 0 0;
+    }
+
+    .event_shade {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    }
 
 	.jumbotron{
 	padding:1em 1em;
@@ -2923,7 +2975,7 @@ $(document).ready(function() {
 				</div>
 			</div>
 
-			<div class="col-md-12 text-center"><h3>Bootstrap 3 Multiple Slide Carousel</h3></div>
+			<!--<div class="col-md-12 text-center"><h3>Bootstrap 3 Multiple Slide Carousel</h3></div>-->
 			<div class="col-md-6 col-md-offset-3">
 
 			</div>
