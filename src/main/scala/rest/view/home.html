@@ -182,13 +182,15 @@ $(document).ready(function() {
 
     var emailorgname;
 
-    var FlagActiveValue;
-    var FlagExpiredValue;
-    var FlagAwaitingValue;
+    var FlagActiveValue = true;
+    var FlagExpiredValue = false;
+    var FlagAwaitingValue = false;
 
     var LocationValue;
 
     var CategoryValue;
+
+    var userData;
 
 
 
@@ -283,6 +285,86 @@ $(document).ready(function() {
 
     });
 
+    $('#cat1').click(function() {
+        CategoryValue = "DisasterRelief";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+
+    $('#cat2').click(function() {
+        CategoryValue = "Animals";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+
+    $('#cat3').click(function() {
+        CategoryValue = "Hunger";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+
+    $('#cat4').click(function() {
+        CategoryValue = "People with Disabilities";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+    $('#cat5').click(function() {
+        CategoryValue = "Seniors";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+    $('#cat6').click(function() {
+        CategoryValue = "Service for Homeless";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+
+
+    $('#cat7').click(function() {
+        CategoryValue = "Children";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+
+    $('#cat8').click(function() {
+        CategoryValue = "Education";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+
+    $('#cat9').click(function() {
+        CategoryValue = "Environment";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+
+    $('#cat10').click(function() {
+        CategoryValue = "Sports";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+    $('#cat11').click(function() {
+        CategoryValue = "Creativity Arts";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
+    $('#cat12').click(function() {
+        CategoryValue = "Community";
+        var nearbyLocation = null;
+        var data = null;
+        getEvents(FlagActiveValue.toString(), FlagExpiredValue.toString(), FlagAwaitingValue.toString(), CategoryValue, LocationValue, userData);
+    });
 
 
     $("#advsearchbutton").click(function() {
@@ -298,9 +380,17 @@ $(document).ready(function() {
     });
 
 
+	$("#all_locations").click(function() {
+		LocationValue = null;
 
+    	getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, CategoryValue, LocationValue, userData);
+	});
 
     $("#sanfrancisco").click(function() {
+
+    	LocationValue = "San Francisco";
+
+    	getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, CategoryValue, LocationValue, userData);
 
         if ($('#sanfrancisco').is(':checked')) {
 
@@ -344,7 +434,9 @@ $(document).ready(function() {
     $("#paloalto").click(function() {
 
 
+		LocationValue = "Palo Alto";
 
+    	getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, CategoryValue, LocationValue, userData);
 
         if ($('#paloalto').is(':checked')) {
 
@@ -386,6 +478,10 @@ $(document).ready(function() {
     });
 
     $("#mountainview").click(function() {
+    	LocationValue = "Mountain View";
+
+    	getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, CategoryValue, LocationValue, userData);
+
         if ($('#mountainview').is(':checked')) {
 
             if ($("#sanfrancisco").prop('checked') == true) {
@@ -427,6 +523,9 @@ $(document).ready(function() {
     });
 
     $("#santaclara").click(function() {
+    	LocationValue = "Santa Clara";
+
+    	getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, CategoryValue, LocationValue, userData);
         if ($('#santaclara').is(':checked')) {
 
             if ($("#sanfrancisco").prop('checked') == true) {
@@ -468,7 +567,9 @@ $(document).ready(function() {
     });
 
     $("#sanjose").click(function() {
+		LocationValue = "San Jose";
 
+    	getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, CategoryValue, LocationValue, userData);
         if ($('#sanjose').is(':checked')) {
 
             if ($("#sanfrancisco").prop('checked') == true) {
@@ -512,6 +613,9 @@ $(document).ready(function() {
 
 
     $("#oakland").click(function() {
+    	LocationValue = "Oakland";
+
+    	getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, CategoryValue, LocationValue, userData);
         if ($('#oakland').is(':checked')) {
 
             if ($("#sanfrancisco").prop('checked') == true) {
@@ -805,7 +909,7 @@ $(document).ready(function() {
 
 
                 'username': usernamelogout.toString(),
-                'userType': profilelogout.toString().toLowerCase(),
+                'userType': profilelogout.toString().toLowerCase()
                 //'emailId': emaillogout.toString()
 
 
@@ -826,7 +930,7 @@ $(document).ready(function() {
             error: function(data) {
 
 
-                //console.log(data.responseJSON.message);
+                console.log(data.responseJSON.message);
 
 
             }
@@ -1142,7 +1246,7 @@ $(document).ready(function() {
             data: JSON.stringify({
 
                 'username': usernamelogout.toString(),
-                'userType': profilelogout.toString().toLowerCase(),
+                'userType': profilelogout.toString().toLowerCase()
                 //'emailId': emaillogout.toString()
 
             }),
@@ -1233,8 +1337,7 @@ $(document).ready(function() {
                 "volunteersInterested": '0',
 
 
-                "userType": profilelogout.toString().toLowerCase(),
-
+                "userType": profilelogout.toString().toLowerCase()
 
 
             }),
@@ -1430,21 +1533,26 @@ $(document).ready(function() {
 
 
     $('#Archive').click(function() {
-        //console.log('gello');
-
 
         FlagActiveValue = "false";
         FlagExpiredValue = "true";
         FlagAwaitingValue = "false";
 
         getTabEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue);
-        //LoadingCarDom(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue, data);
-
-
 
     });
 
+    function eraseResults() {
+        var throwawayElem = document.getElementsByClassName('eventItem');
+
+        while (throwawayElem[0]) {
+            throwawayElem[0].parentElement.removeChild(throwawayElem[0]);
+        }
+    }
+
     function getTabEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue) {
+        var eventCategory = null;
+        var nearbyLocation = null;
 
         $.ajax({
             type: 'POST',
@@ -1452,70 +1560,21 @@ $(document).ready(function() {
             contentType: "application/json",
 
             data: JSON.stringify({
-
-
                 'username': usernamelogout.toString(),
-                'userType': profilelogout.toString().toLowerCase(),
-
-
-
+                'userType': profilelogout.toString().toLowerCase()
             }),
 
-
-
             success: function(data) {
-
-
-                //	console.log(data.message);
-
-
-                //console.log(data.message.organizationName);
-
-                LoadingCarDom(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, data);
-
-
-
-
+                userData = data;
+                getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, eventCategory, LocationValue, data);
             },
             error: function(data) {
-
-
-                //console.log(data.responseJSON.message);
-
-
-                //getEvents(FlagActiveValue, FlagExpiredValue ,FlagAwaitingValue , data);
-
+                console.log(data.responseJSON.message);
             }
-
         });
-
-
-
-
-    }
-
-    function LoadingCarDom(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, data) {
-
-        var eventsAnimalObject = getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, "Animal", data);
-        console.log(eventsAnimalObject);
-        var eventsChildObject = getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, "Children", data);
-        var eventsDSObject = getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, "DisasterRelief", data);
-        var eventsSeniorObject = getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, "Seniors", data);
-
     }
 
     function renderEventsIntoCarousel(categoryObjectArray) {
-        // var categoryObjectArray = [eventsAnimalObject, eventsChildObject, eventsDSObject, eventsSeniorObject];
-        var categoryArray = ["Animal", "Children", "Disaster Relief", "Seniors"];
-
-        var tabName = "";
-        if (FlagActiveValue) {
-            tabName = "Active";
-        } else if (FlagExpiredValue) {
-            tabName = "Archived";
-        } else {
-            tabName = "Awaiting Approval";
-        }
 
         var sibling = document.getElementById('tabs');
         var parent = sibling.parentElement;
@@ -1542,7 +1601,7 @@ $(document).ready(function() {
 		this.organization = e_organization;
 		this.usersParticipating = e_usersParticipating;
 		this.volunteersRequired = e_volunteersRequired;
-		this.location = e_location;
+		this.event_location = e_location;
 
 		var red = Math.round(Math.random()*(255));
     	var blue = Math.round(Math.random()*(255));
@@ -1554,67 +1613,73 @@ $(document).ready(function() {
     function displayEvent(Event, newEventItem) {
     	newEventItem.innerHTML =
     	 "<div style='height:inherit;width:inherit;background-color:" + Event.color + "'>" + "<div class = 'event_shade'>" +
-    	 "<h3 class = 'event_title'>"+Event.event_title +"</h3>"+ "<div class = event_desc> Category: "+Event.category + "</div>" + "<br>"+
+    	 "<h3 class = 'event_title'>"+Event.event_title +"</h3>"+ "<div class = event_desc> Category: "+Event.category + "</div>" + "<br>"+"<div class = event_desc> Location: "+Event.event_location + "</div>" + "<br>"+
     	 "<div class = event_desc> Organization: " + Event.organization + "</div>" + "<br>"+"<div class = event_desc> Participants: " + Event.usersParticipating + "</div>" + "<br>"+
     	 "<div class = event_desc> Requires " + Event.volunteersRequired + " volunteers</div>" + "</div>" + "</div>";
     }
 
 
-    function getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, category, data) {
-
+    function getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, eventCategory, nearbyLocation, data) {
+        eraseResults();
         orgnamelogout = data.message.organizationName;
         var userType = profilelogout.toString().toLowerCase();
 
+        var stringifiedParams;
+
         if (userType === "ngo") {
+            if ((eventCategory != null)||(nearbyLocation != null)) {
+                if ((nearbyLocation != null)&&(eventCategory == null)) {
+                    stringifiedParams = JSON.stringify({'organization': orgnamelogout.toString(), 'isActive': FlagActiveValue.toString() , 'isAwaitingApproval': FlagAwaitingValue.toString() , 'expired': FlagExpiredValue.toString() , 'location':nearbyLocation});
+                } else if ((nearbyLocation == null)&&(eventCategory != null)) {
+                    stringifiedParams = JSON.stringify({'organization': orgnamelogout.toString(), 'isActive': FlagActiveValue.toString() , 'isAwaitingApproval': FlagAwaitingValue.toString() , 'expired': FlagExpiredValue.toString() , 'category':eventCategory});
+                } else  {
+                    stringifiedParams = JSON.stringify({'organization': orgnamelogout.toString(), 'isActive': FlagActiveValue.toString() , 'isAwaitingApproval': FlagAwaitingValue.toString() , 'expired': FlagExpiredValue.toString() , 'category':eventCategory, 'location':nearbyLocation});
+                }
+            } else {
+                stringifiedParams = JSON.stringify({'organization': orgnamelogout.toString(), 'isActive': FlagActiveValue.toString() , 'isAwaitingApproval': FlagAwaitingValue.toString() , 'expired': FlagExpiredValue.toString()});
+            }
 
             $.ajax({
                 type: 'POST',
                 url: '/viewEvents',
                 contentType: "application/json",
 
-                data: JSON.stringify({
-                    'organization': orgnamelogout.toString()
-                }),
+                data: stringifiedParams,
 
                 success: function(data) {
+                    document.getElementById("error_message").style.visibility = "hidden";
                     renderEventsIntoCarousel(data.message);
                 },
                 error: function(data) {
-                    console.log(data.responseJSON.message);
+                    document.getElementById("error_message").style.visibility = "visible";
                 }
             });
-        } else if (userType === "student") {
-            $.ajax({
-                type: 'POST',
-                url: '/viewEvents',
-                contentType: "application/json",
-
-                data: JSON.stringify({
-                    'isActive': 'true'
-                }),
-
-                success: function(data) {
-                    renderEventsIntoCarousel(data.message);
-                },
-                error: function(data) {
-                    console.log(data.responseJSON.message);
+        } else if ((userType === "student")||(userType === "admin")) {
+        	if ((eventCategory != null)||(nearbyLocation != null)) {
+                if ((nearbyLocation != null)&&(eventCategory == null)) {
+                    stringifiedParams = JSON.stringify({'isActive': FlagActiveValue.toString() , 'isAwaitingApproval': FlagAwaitingValue.toString() , 'expired': FlagExpiredValue.toString() , 'location':nearbyLocation});
+                } else if ((nearbyLocation == null)&&(eventCategory != null)) {
+                    stringifiedParams = JSON.stringify({'isActive': FlagActiveValue.toString() , 'isAwaitingApproval': FlagAwaitingValue.toString() , 'expired': FlagExpiredValue.toString() , 'category':eventCategory});
+                } else  {
+                    stringifiedParams = JSON.stringify({'isActive': FlagActiveValue.toString() , 'isAwaitingApproval': FlagAwaitingValue.toString() , 'expired': FlagExpiredValue.toString() , 'category':eventCategory, 'location':nearbyLocation});
                 }
-            });
-        } else if (userType === "admin") {
+            } else {
+                stringifiedParams = JSON.stringify({'isActive': FlagActiveValue.toString() , 'isAwaitingApproval': FlagAwaitingValue.toString() , 'expired': FlagExpiredValue.toString()});
+            }
+
             $.ajax({
                 type: 'POST',
                 url: '/viewEvents',
                 contentType: "application/json",
 
-                data: JSON.stringify({
-                    'isDenied': 'false'
-                }),
+                data: stringifiedParams,
 
                 success: function(data) {
+                    document.getElementById("error_message").style.visibility = "hidden";
                     renderEventsIntoCarousel(data.message);
                 },
                 error: function(data) {
-                    console.log(data.responseJSON.message);
+                    document.getElementById("error_message").style.visibility = "visible";
                 }
             });
         }
@@ -1633,12 +1698,8 @@ $(document).ready(function() {
 
             data: JSON.stringify({
 
-
                 'username': usernamelogout.toString(),
-                'userType': profilelogout.toString().toLowerCase(),
-
-
-
+                'userType': profilelogout.toString().toLowerCase()
             }),
 
 
@@ -2084,9 +2145,43 @@ $(document).ready(function() {
 	border-color:red;
 	}
 
+    .categories_list {
+        list-style-type:none;
+        display:block;
+        height: 200px;
+    }
+
+    .categories_list li {
+        float:left;
+        margin:0 5px 0 0;
+        position:relative;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+    }
+
+    .categories_list input[type="radio"] {
+    
+    z-index:100;
+    }
+
+    .categories_list input[type="radio"]:checked + label {
+    background-image: url('http://www.servicedogstories.com/images/small_paw.gif');
+    }
+
+    #error_message {
+        padding:10px;
+        color:red;
+        visibility: hidden;
+    }
+
     .eventItem {
     width:300px;
-    height:238px;
+    height:248px;
     margin:10px;
     display:inline-block !important;
     }
@@ -2125,7 +2220,6 @@ $(document).ready(function() {
     color: #9b9ea7;
     font-size: 12px;
     line-height: 18px;
-    padding: 5px 0 0;
     }
 
     .event_shade {
@@ -2251,7 +2345,7 @@ $(document).ready(function() {
 	background-repeat: no-repeat;
 	}
 
-	#cat1{
+    #cat1{
 	background-image: url('http://img.static.reliefweb.int/sites/reliefweb.int/files/styles/attachment-large/public/topics-icon---storms.png?itok=YlSx_48V');
 	background-repeat: no-repeat;
 	background-size: 65px 60px;
@@ -2344,7 +2438,7 @@ $(document).ready(function() {
 	}
 
 	#cat10{
-	background-image: url('https://cdn0.iconfinder.com/data/icons/customicondesign-office6-shadow/256/basketball.png');
+	background-image: url('http://www.payamafraz.com/wp-content/uploads/2014/11/Small-Features-Competition-Icon.png');
 	background-repeat: no-repeat;
 	background-size: 75px 75px;
 
@@ -2476,29 +2570,32 @@ $(document).ready(function() {
 							<div ><h4 style="text-align:center;font-weight:bold;background-color:#01401e ;color:white">Location</h4></div>
 							<div class="col-md-6" style="">
 								<label >
-									<input type="checkbox" class="myCheckbox" id="sanfrancisco" name="location" value="sanfrancisco" /> San Francisco
+									<input type="radio" class="myCheckbox" id="sanfrancisco" name="location" value="sanfrancisco" /> San Francisco
 								</label>
 
 								<label >
-									<input type="checkbox" id="sanjose" class="myCheckbox" name="location" value="sanjose" /> San Jose
+									<input type="radio" id="sanjose" class="myCheckbox" name="location" value="sanjose" /> San Jose
 								</label>
 								<label >
-									<input type="checkbox" id="santaclara" class="myCheckbox" name="location" value="santaclara" /> Santa Clara
+									<input type="radio" id="santaclara" class="myCheckbox" name="location" value="santaclara" /> Santa Clara
 
 								</label>
 
 							</div>
 							<div class="col-md-6" style="">
 								<label >
-									<input type="checkbox" id="mountainview" class="myCheckbox" name="location" value="mountainview" /> Mountain View
+									<input type="radio" id="mountainview" class="myCheckbox" name="location" value="mountainview" /> Mountain View
 
 								</label>
 								<label >
-									<input type="checkbox" id="paloalto" class="myCheckbox" name="location" value="paloalto" /> Palo Alto
+									<input type="radio" id="paloalto" class="myCheckbox" name="location" value="paloalto" /> Palo Alto
 
 								</label>
 								<label >
-									<input type="checkbox" id="oakland" class="myCheckbox" name="location" value="oakland" /> Oakland
+									<input type="radio" id="oakland" class="myCheckbox" name="location" value="oakland" /> Oakland
+								</label>
+								<label >
+									<input type="radio" class="myCheckbox" id="all_locations" name="location" value="all" /> All locations
 								</label>
 							</div>
 						</form>
@@ -2512,49 +2609,64 @@ $(document).ready(function() {
 				</div>
 
 				<div>
+
 					<form autocomplete="off" id="AdvSearchForm2" method="post" class="form-horizontal col-md-4" action="" >
-						<div ><h4 style="text-align:center;font-weight:bold;background-color:#01401e;color:white ">Category</h4></div>
+						<div><h4 style="text-align:center;font-weight:bold;background-color:#01401e;color:white ">Category</h4></div>
+                            <div>
+							<ul class="categories_list" style="padding:10px 2px 10px 22px;">
+                                <li id="cat1">
+								<input type="radio" class="btn btn-default btn-circle btn-xl" name="category" title="Disaster Relief"/>
+                                    <label for="cat1"></label>
+                                </li>
+                                <li id="cat2">
+								<input type="radio"  class="btn btn-primary btn-circle btn-xl" name="category" title="Animals"/>
+                                    <label for="cat2"></label>
+                                </li>
+                                <li  id="cat3">
+								<input type="radio" class="btn btn-default btn-circle btn-xl" name="category" title="Hunger"/>
+                                    <label for="cat3"></label>
+                                </li>
+                                <li id="cat4">
+								<input type="radio"  class="btn btn-primary btn-circle btn-xl" name="category" title="People with Disabilities"/>
+                                    <label for="cat4"></label>
+                                </li>
 
-						<div>
+                                <li id="cat5">
+								<input type="radio"  class="btn btn-default btn-circle btn-xl" name="category" title="Seniors"/>
+                                    <label for="cat5"></label>
+                                </li>
+                                <li id="cat6">
+								<input type="radio"  class="btn btn-primary btn-circle btn-xl" name="category" title="Service for Homeless"/>
+                                    <label for="cat6"></label>
+                                </li>
+                                <li  id="cat7">
+								<input type="radio" class="btn btn-default btn-circle btn-xl" name="category" title="Children"/>
+                                    <label for="cat7"></label>
+                                </li>
+                                <li id="cat8">
+								<input type="radio"  class="btn btn-primary btn-circle btn-xl" name="category" title="Education"/>
+                                    <label for="cat8"></label>
+                                </li>
 
-							<div class="col-md-4" style="padding:10px 2px 10px 22px;">
-
-								<button type="button" id="cat1" class="btn btn-default btn-circle btn-xl" title="Disaster Relief"></button>
-
-								<button type="button" id="cat2" class="btn btn-primary btn-circle btn-xl" title="Animals"></button>
-
-								<button type="button" id="cat3" class="btn btn-default btn-circle btn-xl" title="Hunger"></button>
-
-								<button type="button" id="cat4" class="btn btn-primary btn-circle btn-xl" title="People with Disabilities"></button>
-
-							</div>
-
-							<div class="col-md-4" style="padding:10px 2px 10px 22px;">
-
-								<button type="button" id="cat5" class="btn btn-default btn-circle btn-xl" title="Seniors"></button>
-
-								<button type="button" id="cat6" class="btn btn-primary btn-circle btn-xl" title="Service for Homeless"></button>
-
-								<button type="button" id="cat7" class="btn btn-default btn-circle btn-xl" title="Children"></button>
-
-								<button type="button" id="cat8" class="btn btn-primary btn-circle btn-xl" title="Education"></button>
-
-							</div>
-
-							<div class="col-md-4" style="padding:10px 2px 10px 22px;">
-
-								<button type="button" id="cat9" class="btn btn-default btn-circle btn-xl" title="Environment"></button>
-
-								<button type="button" id="cat10" class="btn btn-primary btn-circle btn-xl" title="Sports"></button>
-
-								<button type="button" id="cat11" class="btn btn-default btn-circle btn-xl" title="Creativity Arts"></button>
-
-								<button type="button" id="cat12" class="btn btn-primary btn-circle btn-xl" title="Community"></button>
-
-							</div>
-
-						</div>
-
+                                <li id="cat9">
+								<input type="radio"  class="btn btn-default btn-circle btn-xl" name="category" title="Environment"/>
+                                    <label for="cat9"></label>
+                                </li>
+                                <li id="cat10">
+								<input type="radio"  class="btn btn-primary btn-circle btn-xl" name="category" title="Sports"/>
+                                    <label for="cat10"></label>
+                                </li>
+                                <li id="cat11">
+								<input type="radio"  class="btn btn-default btn-circle btn-xl" name="category" title="Creativity Arts"/>
+                                    <label for="cat11"></label>
+                                </li>
+                                <li id="cat12">
+								<input type="radio"  class="btn btn-primary btn-circle btn-xl" name="category" title="Community"/>
+                                    <label for="cat12"></label>
+                                </li>
+							</ul>
+                        </div>
+                        <br>
 					</form>
 				</div>
 			</div>
@@ -2955,7 +3067,7 @@ $(document).ready(function() {
 				</ul>
 			</div>
 
-
+            <div id="error_message">It appears that you have no events under this category.</div>
 			<div  >
 				<div class="tab-content fors" >
 					<div class="tab-pane active" id="tab1" >
