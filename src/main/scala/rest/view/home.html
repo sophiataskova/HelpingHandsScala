@@ -1526,12 +1526,36 @@ $(document).ready(function() {
 
             newEventItem.className = "eventItem";
 
-            newEventItem.innerHTML = categoryObjectArray[i].eventName;
-
+			var event = new Event(categoryObjectArray[i].eventName, categoryObjectArray[i].category, categoryObjectArray[i].usersParticipating, categoryObjectArray[i].volunteersRequired, categoryObjectArray[i].locationNearby);
+			displayEvent(event, newEventItem);
             parent.appendChild(newEventItem);
 
         }
     }
+
+    function Event(e_title, e_category, e_organization, e_usersParticipating, e_volunteersRequired, e_location) {
+		this.event_title = e_title;
+		this.category = e_category;
+		this.organization = e_organization;
+		this.usersParticipating = e_usersParticipating;
+		this.volunteersRequired = e_volunteersRequired;
+		this.location = e_location;
+
+		var red = Math.round(Math.random()*(max));
+    	var blue = Math.round(Math.random()*(max));
+    	var green = Math.round(Math.random()*(max));
+
+		this.color = 'rgb(' + [red,green,blue].join(',') + ')';
+    }
+
+    function displayEvent(Event, newEventItem) {
+    	newEventItem.innerHTML =
+    	"<div style='background-color:'" + Event.color + ">" +
+    	 Event.event_title + "<br>"+Event.category + "<br>"+
+    	 Event.organization + "<br>"+Event.usersParticipating + "<br>"+
+    	 Event.volunteersRequired + "<br>"+ "</div>";
+    }
+
 
     function getEvents(FlagActiveValue, FlagExpiredValue, FlagAwaitingValue, category, data) {
 
