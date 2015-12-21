@@ -547,13 +547,13 @@ $('#registrationForm').on('success.form.bv', function(e) {
 	 	var phonenumberbackend = $('input[name=phonenumber]').val();
 		var securityquestionbackend = $( "#question" ).find(":selected").val();
 		var answerbackend = $('input[name=answer]').val();
-    alert(securityquestionbackend + ' ttttt' +genderbackend);
+
 
      	var orgnamebackend = $('input[name=organizationname]').val();
   	   	var orgdescbackend = $('textarea#description').val();
   	   	var orgurlbackend = $('input[name=website]').val();
 
-  	   	alert(orgdescbackend);
+
 
 
 
@@ -612,7 +612,7 @@ $.ajax({
 	console.log(data.message);
 
 
-		alert('hi');
+
 		/*
 		$form.find('#msgreg').removeClass('alert-danger').addClass('alert-success').html('Thanks for registring! Now you can sign in as ' +validator.getFieldElements
 				('username').val()+ '. Please go to Sign In Tab and enter your credentials').show();
@@ -627,8 +627,6 @@ $.ajax({
 
 	var usernamevar = document.getElementById('username').value;
 
-	alert(usernamevar);
-	alert(profilevar);
 	sessionStorage.setItem("loggedusername",usernamevar );
 	sessionStorage.setItem("loggedprofile",profilevar );
 	sessionStorage.setItem("loggedemail",emailvar );
@@ -684,29 +682,22 @@ $('#loginForm').on('success.form.bv', function(e) {
 
      var usernamebackend = $('input[name=username2]').val();
   	   var passwordbackend = $('input[name=password2]').val();
-			alert(usernamebackend);
-			alert(passwordbackend);
+
 
   	   if ($("#studentlogin:checked").length > 0){
 
 		var profilebackend = $('input[name=profile3]').val();
 		var profilevar = profilebackend;
-			alert(profilevar);
-			alert($('input[name=profile3]').val());
 		}
 		else if ($("#ngologin:checked").length > 0){
 
 		var profilebackend = $('input[name=profile4]').val();
 		var profilevar = profilebackend;
-			alert(profilevar);
-			alert($('input[name=profile3]').val());
 		}
 		else {
 
 		var profilebackend = $('input[name=profile5]').val();
 		var profilevar = profilebackend;
-			alert(profilevar);
-			alert($('input[name=profile3]').val());
 
 		}
 
@@ -735,13 +726,13 @@ $('#loginForm').on('success.form.bv', function(e) {
 				var txt2 = data.message;
 
 
-					alert('hi');
+
 
 				var usernamevar = document.getElementById('username2').value;
 
 				sessionStorage.setItem("loggedusername",usernamevar );
 				sessionStorage.setItem("loggedprofile",profilevar );
-				alert(usernamevar);
+
 			window.location.href="home/";
 
 			/*enter viewevents ajax call*/
@@ -781,7 +772,7 @@ $('#resetForm').on('success.form.bv', function(e) {
 
 		var answerbackend = $('input[name=answer2]').val();
 
-		alert(usernamebackend + ' ' + passwordbackend + ' ' + securityquestionbackend + ' ' +answerbackend);
+
 
 
 
@@ -790,20 +781,20 @@ $('#resetForm').on('success.form.bv', function(e) {
 
 		var profilebackend = $('input[name=profile3]').val();
 		var profilevar = profilebackend;
-			alert(profilebackend);
+
 		}
      	else if ($("#ngologin:checked").length > 0)
      		{
 
 		var profilebackend = $('input[name=profile4]').val();
 		var profilevar = profilebackend;
-			alert(profilebackend);
+
 		}
      	else
      		{
 
      		var profilebackend = $('input[name=profile5]').val();
-		alert(profilebackend);
+
      		}
 
 
@@ -834,7 +825,7 @@ $('#resetForm').on('success.form.bv', function(e) {
 				var txt2 = data.message;
 
 
-					alert('hi');
+					
 
 					$form.find('#msgpwd').removeClass('alert-danger').addClass('alert-success').html(txt2).show();
 

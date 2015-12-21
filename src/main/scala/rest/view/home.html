@@ -261,7 +261,6 @@ $(document).ready(function() {
 
 
                 sessionStorage.clear();
-                alert('successful logout');
 
                 window.location.href = "http://localhost:8000/";
 
@@ -888,6 +887,8 @@ $(document).ready(function() {
 
 
     $('#createEventButton').click(function() {
+
+    	var userType = profilelogout.toString().toLowerCase();
 
         $('#createEventForm').bootstrapValidator('resetForm', true);
 
@@ -1644,6 +1645,14 @@ $(document).ready(function() {
 					readonlyFields[i].setAttribute("readonly","readonly");
 				}
 			}
+			if (userType === "ngo") {
+				document.getElementById("modtitle_event").textContent="Edit Event";
+				$('#button6').hide('fast');
+				$('#button9').hide('fast');
+				$('#button10').hide('fast');
+				$('#button12').hide('fast');
+				$('#button13').hide('fast');
+			}
 
 		}
 
@@ -1662,6 +1671,30 @@ $(document).ready(function() {
         eraseResults();
         orgnamelogout = data.message.organizationName;
         var userType = profilelogout.toString().toLowerCase();
+
+        if (userType === "student") {
+			document.getElementById("modtitle_event").textContent="RSVP";
+			$('#button5').hide('fast');
+			$('#button6').hide('fast');
+			$('#button12').hide('fast');
+			$('#button13').hide('fast');
+			$('#button15').hide('fast');
+			var readonlyFields = $('#createEventForm .form-control');
+			for (var i = 0; i < readonlyFields.length; i++) {
+				readonlyFields[i].setAttribute("readonly","readonly");
+			}
+		}
+		if (userType === "ngo") {
+			$('#button6').hide('fast');
+			$('#button9').hide('fast');
+			$('#button10').hide('fast');
+			$('#button12').hide('fast');
+			$('#button13').hide('fast');
+		}
+
+        if (userType === "student") {
+        	$('#createEventButton')[0].setAttribute("style", "display:none !important");
+        }
 
         var stringifiedParams;
 
@@ -2538,7 +2571,7 @@ $(document).ready(function() {
 
 <div class="container" >
 	<div class="jumbotron c2">
-		<h1 style="text-align:center">"Helping Hands is a community service application, designed specially for the ITUs. It will open doors for the ITUs, to volunteer for different community service activities and drives organized by the NGOs in the Bay Area. ITU and its SGA organizes several drives and community service activities every year. Helping Hands will help them in acquiring more information about the upcoming events and will be able to be help the society in more efficient manner!</h1>
+		<h1 style="text-align:center">Helping Hands is a community service application, designed specially for the ITUs. It will open doors for the ITUs, to volunteer for different community service activities and drives organized by the NGOs in the Bay Area. ITU and its SGA organizes several drives and community service activities every year. Helping Hands will help them in acquiring more information about the upcoming events and will be able to be help the society in more efficient manner!</h1>
 	</div>
 
 
@@ -2561,12 +2594,9 @@ $(document).ready(function() {
 
 
 		<div id = "main_content">
-			<div class="col-md-12 hidden" >
+			<div class="col-md-12 " >
 				<!-- Do NOT use name="submit" or id="submit" for the Submit button -->
-				<button id='advsearchbutton' type="button" class="btn btn-default btn-md advancedsearch">Advanced Search</button>
-
-
-
+				<button id='advsearchbutton' type="button" class="btn btn-default btn-md advancedsearch hidden">Advanced Search</button>
 
 				<button id='createEventButton'  type="button" class="btn btn-default btn-md create_event  pull-right" data-toggle="modal"  data-target="#create_event_modal-1" >Create Event</button>
 			</div>
