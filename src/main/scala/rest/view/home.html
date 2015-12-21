@@ -2228,11 +2228,23 @@ $(document).ready(function() {
 	padding:1em 1em;
 	}
 
+	.jumbotron.c2 h1{
+		font-size: 15px;
+	}
+
 	.jbbg {
 	background-color: green ;
 	}
 
-
+	.scrollToTop{
+	width:40px;
+	height: 40px;
+	background-image: url('http://cdn.webdesignerhut.com/wp-content/uploads/2015/06/arrow.png');
+	position:fixed;
+	right:30px;
+	bottom:30px;
+	display:none;
+	}
 	#topnav{
 	min-height:40px !important;
 	background-color: darkgreen ;
@@ -2526,17 +2538,17 @@ $(document).ready(function() {
 
 <div class="container" >
 	<div class="jumbotron c2">
-		<h1 style="text-align:center">STATIC TEXT OF ITU</h1>
+		<h1 style="text-align:center">"Helping Hands is a community service application, designed specially for the ITUs. It will open doors for the ITUs, to volunteer for different community service activities and drives organized by the NGOs in the Bay Area. ITU and its SGA organizes several drives and community service activities every year. Helping Hands will help them in acquiring more information about the upcoming events and will be able to be help the society in more efficient manner!</h1>
 	</div>
 
 
 	<div>
 		<div class="form-group">
-			<div class="col-md-3 col-md-offset-4">
+			<div class="col-md-3 col-md-offset-4 hidden">
 				<input type="text" id="searchtext" class="form-control" placeholder="Search" name="search">
 			</div>
 
-			<div class="col-md-1">
+			<div class="col-md-1 hidden">
 
 				<button id='search' type="button" class="btn btn-default btn-md Search">Search</button>
 			</div>
@@ -2549,7 +2561,7 @@ $(document).ready(function() {
 
 
 		<div id = "main_content">
-			<div class="col-md-12" >
+			<div class="col-md-12 hidden" >
 				<!-- Do NOT use name="submit" or id="submit" for the Submit button -->
 				<button id='advsearchbutton' type="button" class="btn btn-default btn-md advancedsearch">Advanced Search</button>
 
